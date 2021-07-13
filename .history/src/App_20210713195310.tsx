@@ -13,15 +13,8 @@ import { SizeItUpView } from "./views/SizeItUpView/SizeItUpView";
 import { PlatformModel } from "./staticModels/PlatformModel";
 import classNames from "classnames";
 import SignUp from './views/Authentication/SignUp';
-import LogIn from './views/Authentication/LogIn';
-import ForgotPassword from './views/Authentication/ForgotPassword';
-import Dashboard from './views/Dashboard/Dashboard';
-import UpdateProfile from './views/Profile/UpdateProfile';
 import { Container } from 'react-bootstrap'
 import { AuthProvider } from './logic/context/AuthContext';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-import PrivateRoute from './views/PrivateRoutes/PrivateRoute'
-
 
 interface IProps {
     projectType: ProjectType;
@@ -46,23 +39,13 @@ const App: React.FC<IProps> = ({ projectType, windowSize, ObjectDetectorLoaded, 
     };
 
     return (
-        <Router>
-            <AuthProvider>
-                <Switch>
-
-                    <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: "100vh" }}>
-                        <div className="w-100" style={{ maxWidth: '400px' }}><PrivateRoute exact path="/" component={Dashboard} />
-                            <PrivateRoute path="/update-profile" component={UpdateProfile} />
-                            <Route path="/signup" component={SignUp} />
-                            <Route path="/login" component={LogIn} />
-                            <Route path="/forgot-password" component={ForgotPassword} />
-
-                        </div>
-                    </Container>
-
-                </Switch>
-            </AuthProvider>
-        </Router>
+        <AuthProvider>
+            <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: "100vh" }}>
+                <div className="w-100" style={{ maxWidth: '400px' }}>
+                    <SignUp></SignUp>
+                </div>
+            </Container>
+        </AuthProvider>
     );
 };
 
