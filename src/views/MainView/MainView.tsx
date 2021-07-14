@@ -10,8 +10,26 @@ import {Tooltip} from "@material-ui/core";
 import Fade from "@material-ui/core/Fade";
 import withStyles from "@material-ui/core/styles/withStyles";
 import ImagesDropZone from "./ImagesDropZone/ImagesDropZone";
+import { Button } from 'react-bootstrap'
+import { useAuth } from '../../logic/context/AuthContext'
+import { useHistory } from 'react-router-dom'
 
 const MainView: React.FC = () => {
+    const [error, setError] = useState('')
+    const { currentUser, logout } = useAuth()
+    const history = useHistory()
+
+    async function handleLogout(){
+        setError('')
+
+        try {
+            await logout()
+            history.pushState('/login')
+        } catch (error) {
+            setError(error.message)
+        }
+    }
+
     const [projectInProgress, setProjectInProgress] = useState(false);
     const [projectCanceled, setProjectCanceled] = useState(false);
 
@@ -129,6 +147,10 @@ const MainView: React.FC = () => {
                 {!projectInProgress && <TextButton
                     label={"Get Started"}
                     onClick={startProject}
+                />}
+                {!projectInProgress && <TextButton
+                    label={"Log Out"}
+                    onClick={handleLogout}
                 />}
             </div>
         </div>
