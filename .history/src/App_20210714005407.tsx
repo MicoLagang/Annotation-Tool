@@ -46,26 +46,26 @@ const App: React.FC<IProps> = ({ projectType, windowSize, ObjectDetectorLoaded, 
     };
 
     return (
-        <Router>
-            <AuthProvider>
-                <Switch>
-                    <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: "100vh" }}>
-                        <div className="w-100" style={{ maxWidth: '400px' }}><PrivateRoute exact path="/" component={Dashboard} />
-                            <PrivateRoute path="/update-profile" component={UpdateProfile} />
-                            <Route path="/signup" component={SignUp} />
-                            <Route path="/login" component={LogIn} />
-                            <Route path="/forgot-password" component={ForgotPassword} />
-                        </div>
-                    </Container>
-                </Switch>
-            </AuthProvider>
-        </Router>
-        // <div className={classNames("App", { "AI": ObjectDetectorLoaded || PoseDetectionLoaded })}
-        //     draggable={false}
-        // >
-        //     {selectRoute()}
-        //     <PopupView />
-        // </div>
+        // <Router>
+        //     <AuthProvider>
+        //         <Switch>
+        //             <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: "100vh" }}>
+        //                 <div className="w-100" style={{ maxWidth: '400px' }}><PrivateRoute exact path="/" component={Dashboard} />
+        //                     <PrivateRoute path="/update-profile" component={UpdateProfile} />
+        //                     <Route path="/signup" component={SignUp} />
+        //                     <Route path="/login" component={LogIn} />
+        //                     <Route path="/forgot-password" component={ForgotPassword} />
+        //                 </div>
+        //             </Container>
+        //         </Switch>
+        //     </AuthProvider>
+        // </Router>
+        <div className={classNames("App", { "AI": ObjectDetectorLoaded || PoseDetectionLoaded })}
+            draggable={false}
+        >
+            {selectRoute()}
+            <PopupView />
+        </div>
     );
 };
 
