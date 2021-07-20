@@ -63,14 +63,14 @@ const TopNavigationBar: React.FC<IProps> = ({ updateActivePopupType, updateProje
                         onFocus={onFocus}
                     />
                 </div>
-                {/* <div className="NavigationBarGroupWrapper">
+                <div className="NavigationBarGroupWrapper">
                     <ImageButton
                         image={"ico/github-logo.png"}
                         imageAlt={"github-logo.png"}
                         buttonSize={{ width: 30, height: 30 }}
                         href={Settings.GITHUB_URL}
                     />
-                </div> */}
+                </div>
             </div>
         </div>
     );

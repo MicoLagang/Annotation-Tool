@@ -104,6 +104,12 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('../src/serviceWorker.ts')
+    }
+  </script>
 </body>
 
 </html>

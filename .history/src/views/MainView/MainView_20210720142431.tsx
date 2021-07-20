@@ -132,6 +132,10 @@ const MainView: React.FC = () => {
                 <div className="TriangleVertical">
                     <div className="TriangleVerticalContent" />
                 </div>
+                <TextButton
+                    label={"Profile"}
+                    onClick={handleLogout}
+                />
                 {projectInProgress && <TextButton
                     label={"Log Out"}
                     onClick={handleLogout}
@@ -141,7 +145,7 @@ const MainView: React.FC = () => {
                 <div />
                 <ImagesDropZone />
                 <div className="SocialMediaWrapper">
-                    {/* {getSocialMediaButtons({ width: 30, height: 30 })} */}
+                    {getSocialMediaButtons({ width: 30, height: 30 })}
                 </div>
                 {!projectInProgress && <TextButton
                     label={"Get Started"}

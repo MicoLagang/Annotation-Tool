@@ -132,6 +132,10 @@ const MainView: React.FC = () => {
                 <div className="TriangleVertical">
                     <div className="TriangleVerticalContent" />
                 </div>
+                <TextButton
+                    label={"Profile"}
+                    onClick={handleLogout}
+                />
                 {projectInProgress && <TextButton
                     label={"Log Out"}
                     onClick={handleLogout}

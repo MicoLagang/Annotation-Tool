@@ -123,7 +123,7 @@ const MainView: React.FC = () => {
                     <img
                         draggable={false}
                         alt={"main-logo"}
-                        src={"ico/ilabel-white.png"}
+                        src={"ico/main-image-color.png"}
                     />
                 </div>
                 <div className="EditorFeaturesWrapper">
@@ -133,8 +133,8 @@ const MainView: React.FC = () => {
                     <div className="TriangleVerticalContent" />
                 </div>
                 {projectInProgress && <TextButton
-                    label={"Log Out"}
-                    onClick={handleLogout}
+                    label={"Go Back"}
+                    onClick={endProject}
                 />}
             </div>
             <div className="RightColumn">
