@@ -83,10 +83,10 @@ export default function Dashboard() {
                     <Row>
                         <Col>
                             <Row>
-                                {/* <Col><TeamList></TeamList></Col> */}
+                                <Col><TeamList></TeamList></Col>
                                 <Col><Link to="/new">New</Link></Col>
                             </Row>
-                            {/* {
+                            {
                                 Object.keys(teamsObjects).map(id => {
                                     return (
                                         <Row>
@@ -97,7 +97,7 @@ export default function Dashboard() {
                                         </Row>
                                     )
                                 })
-                            } */}
+                            }
                         </Col>
                         <Col xs={10}>
                             {/* <CreateTeam {...({ addOrEdit, currentId, teamsObjects })} /> */}

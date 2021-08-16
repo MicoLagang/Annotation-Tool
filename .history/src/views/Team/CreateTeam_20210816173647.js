@@ -65,15 +65,15 @@ export default class CreateTeam extends Component {
             <div className="submit-form">
                 <div>
                     <h2 className="text-center mb-4">Create your team</h2>
-                    <Form >
+                    <Form onSubmit={this.saveTeam}>
                         <Form.Group className="mb-3">
                             <Form.Control
                                 type="text"
                                 className="form-control"
                                 id="name"
                                 required
-                                onChange={this.onChangeName}
                                 value={this.state.name}
+                                onChange={this.onChangeName}
                                 placeholder="Team account name"
                                 name="name"/>
                         </Form.Group>
@@ -84,13 +84,13 @@ export default class CreateTeam extends Component {
                                 className="form-control"
                                 id="contactEmail"
                                 required
-                                onChange={this.onChangeContactEmail}
                                 value={this.state.contactEmail}
+                                onChange={this.onChangeContactEmail}
                                 placeholder="Contact Email"
                                 name="contactEmail"/>
                         </Form.Group>
                         
-                        <Button onClick={this.saveTeam} variant="primary" className="w-100" type="submit">
+                        <Button variant="primary" className="w-100" type="submit">
                             Create
                         </Button>
                     </Form>

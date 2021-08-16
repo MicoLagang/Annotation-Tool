@@ -89,11 +89,17 @@ export default class TeamList extends Component {
                       onClick={() => this.setActiveTeam(team, index)}
                       key={index}
                     >
-                      {team.name}
+                      {team.title}
                     </li>
-                  ))
-                }
+                  ))}
               </ul>
+    
+              <button
+                className="m-3 btn btn-sm btn-danger"
+                onClick={this.removeAllTeams}
+              >
+                Remove All
+              </button>
             </div>
             <div className="col-md-6">
               {currentTeam ? (
@@ -104,7 +110,7 @@ export default class TeamList extends Component {
               ) : (
                 <div>
                   <br />
-                  <p>No team to display</p>
+                  <p>Please click on a Tutorial...</p>
                 </div>
               )}
             </div>

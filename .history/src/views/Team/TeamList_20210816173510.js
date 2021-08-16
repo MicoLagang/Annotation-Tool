@@ -104,7 +104,7 @@ export default class TeamList extends Component {
               ) : (
                 <div>
                   <br />
-                  <p>No team to display</p>
+                  <p>Please click on a Tutorial...</p>
                 </div>
               )}
             </div>

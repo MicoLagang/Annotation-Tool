@@ -83,7 +83,7 @@ export default function Dashboard() {
                     <Row>
                         <Col>
                             <Row>
-                                {/* <Col><TeamList></TeamList></Col> */}
+                                <Col><TeamList></TeamList></Col>
                                 <Col><Link to="/new">New</Link></Col>
                             </Row>
                             {/* {
