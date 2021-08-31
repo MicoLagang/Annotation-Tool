@@ -13,8 +13,7 @@ import { AcceptedFileType } from "../../../data/enums/AcceptedFileType";
 import { ProjectData } from "../../../store/general/types";
 import { ImageDataUtil } from "../../../utils/ImageDataUtil";
 import { storage } from "../../../firebase"
-
-import { google } from 'googleapis'
+import { gapi } from 'gapi-script';
 
 interface IProps {
     updateActiveImageIndex: (activeImageIndex: number) => any;
@@ -43,6 +42,93 @@ const ImagesFromCloud: React.FC<IProps> = ({ updateActiveImageIndex, addImageDat
     };
 
 
+
+
+    const [isLoadingGoogleDriveApi, setIsLoadingGoogleDriveApi] = useState(false);
+    const [isFetchingGoogleDriveFiles, setIsFetchingGoogleDriveFiles] = useState(false);
+    const [listDocumentsVisibility, setListDocumentsVisibility] = useState(false);
+    const [signedInUser, setSignedInUser] = useState('');
+    const [documents, setDocuments] = useState([]);
+
+
+    // Array of API discovery doc URLs for APIs
+    const DISCOVERY_DOCS = ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'];
+
+    // Authorization scopes required by the API; multiple scopes can be
+    // included, separated by spaces.
+    const SCOPES = 'https://www.googleapis.com/auth/drive.metadata.readonly';
+
+    const handleClientLoad = () => {
+        gapi.load('client:auth2', initClient);
+    };
+
+    const initClient = () => {
+        setIsLoadingGoogleDriveApi(true);
+        gapi.client
+            .init({
+                apiKey: process.env.REACT_APP_GOOGLE_DRIVE_API_KEY,
+                clientId: process.env.REACT_APP_GOOGLE_DRIVE_CLIENT_ID,
+                discoveryDocs: DISCOVERY_DOCS,
+                scope: SCOPES,
+            })
+            .then(
+                function () {
+                    // Listen for sign-in state changes.
+                    gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+
+                    // Handle the initial sign-in state.
+                    updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+                },
+                function (error) { }
+            );
+    };
+
+    /**
+ *  Called when the signed in status changes, to update the UI
+ *  appropriately. After a sign-in, the API is called.
+ */
+    const updateSigninStatus = (isSignedIn) => {
+        if (isSignedIn) {
+            // Set the signed in user
+            setSignedInUser(gapi.auth2.getAuthInstance().currentUser.je.Qt);
+            setIsLoadingGoogleDriveApi(false);
+            // list files if user is authenticated
+            listFiles();
+        } else {
+            // prompt user to sign in
+            //   handleAuthClick();
+        }
+    };
+
+    /**
+    * List files.
+    */
+    const listFiles = (searchTerm = null) => {
+        setIsFetchingGoogleDriveFiles(true);
+        gapi.client.drive.files
+            .list({
+                pageSize: 10,
+                fields: 'nextPageToken, files(id, name, mimeType, modifiedTime)',
+                q: searchTerm,
+            })
+            .then(function (response) {
+                setIsFetchingGoogleDriveFiles(false);
+                setListDocumentsVisibility(true);
+                const res = JSON.parse(response.body);
+                setDocuments(res.files);
+            });
+    };
+
+    /**
+     *  Sign in the user upon button click.
+     */
+    const handleAuthClick = (event) => {
+        gapi.auth2.getAuthInstance().signIn();
+    };
+
+
+
+
     // test to upload
     const [images, setImages] = useState([]);
     const [urls, setUrls] = useState([]);
@@ -51,8 +137,8 @@ const ImagesFromCloud: React.FC<IProps> = ({ updateActiveImageIndex, addImageDat
     const handleChange = (e) => {
         for (let i = 0; i < e.target.files.length; i++) {
             const newImage = e.target.files[i];
-            console.log(newImage)
             newImage["id"] = Math.random();
+            console.log(newImage)
             setImages((prevState) => [...prevState, newImage]);
         }
     };
@@ -61,7 +147,6 @@ const ImagesFromCloud: React.FC<IProps> = ({ updateActiveImageIndex, addImageDat
         const promises = [];
         images.map((image) => {
             console.log('uploading images...')
-            console.log(image)
             const uploadTask = storage.ref(`images/${image.name}`).put(image);
             promises.push(uploadTask);
             uploadTask.on(
@@ -137,20 +222,28 @@ const ImagesFromCloud: React.FC<IProps> = ({ updateActiveImageIndex, addImageDat
     };
 
     return (
-        <>
-            <div className="ImagesDropZone">
-                <div {...getRootProps({ className: 'DropZone' })}>
-                    {getDropZoneContent()}
-                </div>
-                <div className="DropZoneButtons">
-                    <TextButton
-                        label={"Upload"}
-                        // isDisabled={!acceptedFiles.length}
-                        onClick={handleUpload}
-                    />
-                </div>
+        <div className="ImagesDropZone">
+            <div {...getRootProps({ className: 'DropZone' })}>
+                {getDropZoneContent()}
             </div>
-        </>
+            <div className="DropZoneButtons">
+                <TextButton
+                    label={"Object Detection"}
+                    isDisabled={!acceptedFiles.length}
+                    onClick={() => startEditor(ProjectType.OBJECT_DETECTION)}
+                />
+                <TextButton
+                    label={"Upload"}
+                    // isDisabled={!acceptedFiles.length}
+                    onClick={handleUpload}
+                />
+                <TextButton
+                    label={"Google Drive"}
+                    // isDisabled={!acceptedFiles.length}
+                    onClick={() => handleClientLoad()}
+                />
+            </div>
+        </div>
     )
 };
 

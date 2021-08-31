@@ -1,18 +1,18 @@
 import React, { useState } from "react";
-import './ImagesFromCloud.scss';
+import './Project.scss';
 import { useDropzone, DropzoneOptions } from "react-dropzone";
-import { TextButton } from "../../Common/TextButton/TextButton";
-import { ImageData } from "../../../store/labels/types";
+import { TextButton } from "../Common/TextButton/TextButton";
+import { ImageData } from "../../store/labels/types";
 import { connect } from "react-redux";
-import { addImageData, updateActiveImageIndex } from "../../../store/labels/actionCreators";
-import { AppState } from "../../../store";
-import { ProjectType } from "../../../data/enums/ProjectType";
-import { PopupWindowType } from "../../../data/enums/PopupWindowType";
-import { updateActivePopupType, updateProjectData } from "../../../store/general/actionCreators";
-import { AcceptedFileType } from "../../../data/enums/AcceptedFileType";
-import { ProjectData } from "../../../store/general/types";
-import { ImageDataUtil } from "../../../utils/ImageDataUtil";
-import { storage } from "../../../firebase"
+import { addImageData, updateActiveImageIndex } from "../../store/labels/actionCreators";
+import { AppState } from "../../store";
+import { ProjectType } from "../../data/enums/ProjectType";
+import { PopupWindowType } from "../../data/enums/PopupWindowType";
+import { updateActivePopupType, updateProjectData } from "../../store/general/actionCreators";
+import { AcceptedFileType } from "../../data/enums/AcceptedFileType";
+import { ProjectData } from "../../store/general/types";
+import { ImageDataUtil } from "../../utils/ImageDataUtil";
+import { storage } from "../../firebase"
 
 import { google } from 'googleapis'
 
@@ -24,7 +24,7 @@ interface IProps {
     projectData: ProjectData;
 }
 
-const ImagesFromCloud: React.FC<IProps> = ({ updateActiveImageIndex, addImageData, updateProjectData, updateActivePopupType, projectData }) => {
+const Project: React.FC<IProps> = ({ updateActiveImageIndex, addImageData, updateProjectData, updateActivePopupType, projectData }) => {
     const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
         accept: AcceptedFileType.IMAGE
     } as DropzoneOptions);
@@ -168,4 +168,4 @@ const mapStateToProps = (state: AppState) => ({
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(ImagesFromCloud);
+)(Project);

@@ -1,18 +1,18 @@
 import React, { useState } from "react";
-import './ImagesFromCloud.scss';
+import './Project.scss';
 import { useDropzone, DropzoneOptions } from "react-dropzone";
-import { TextButton } from "../../Common/TextButton/TextButton";
-import { ImageData } from "../../../store/labels/types";
+import { TextButton } from "../Common/TextButton/TextButton";
+import { ImageData } from "../../store/labels/types";
 import { connect } from "react-redux";
-import { addImageData, updateActiveImageIndex } from "../../../store/labels/actionCreators";
-import { AppState } from "../../../store";
-import { ProjectType } from "../../../data/enums/ProjectType";
-import { PopupWindowType } from "../../../data/enums/PopupWindowType";
-import { updateActivePopupType, updateProjectData } from "../../../store/general/actionCreators";
-import { AcceptedFileType } from "../../../data/enums/AcceptedFileType";
-import { ProjectData } from "../../../store/general/types";
-import { ImageDataUtil } from "../../../utils/ImageDataUtil";
-import { storage } from "../../../firebase"
+import { addImageData, updateActiveImageIndex } from "../../store/labels/actionCreators";
+import { AppState } from "../../store";
+import { ProjectType } from "../../data/enums/ProjectType";
+import { PopupWindowType } from "../../data/enums/PopupWindowType";
+import { updateActivePopupType, updateProjectData } from "../../store/general/actionCreators";
+import { AcceptedFileType } from "../../data/enums/AcceptedFileType";
+import { ProjectData } from "../../store/general/types";
+import { ImageDataUtil } from "../../utils/ImageDataUtil";
+import { storage } from "../../firebase"
 
 import { google } from 'googleapis'
 
@@ -24,7 +24,12 @@ interface IProps {
     projectData: ProjectData;
 }
 
-const ImagesFromCloud: React.FC<IProps> = ({ updateActiveImageIndex, addImageData, updateProjectData, updateActivePopupType, projectData }) => {
+const Project: React.FC<IProps> = ({
+    updateActiveImageIndex,
+    addImageData,
+    updateProjectData,
+    updateActivePopupType,
+    projectData }) => {
     const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
         accept: AcceptedFileType.IMAGE
     } as DropzoneOptions);
@@ -58,38 +63,40 @@ const ImagesFromCloud: React.FC<IProps> = ({ updateActiveImageIndex, addImageDat
     };
 
     const handleUpload = () => {
-        const promises = [];
-        images.map((image) => {
-            console.log('uploading images...')
-            console.log(image)
-            const uploadTask = storage.ref(`images/${image.name}`).put(image);
-            promises.push(uploadTask);
-            uploadTask.on(
-                "state_changed",
-                (snapshot) => {
-                    const progress = Math.round(
-                        (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-                    );
-                    setProgress(progress);
-                },
-                (error) => {
-                    console.log(error);
-                },
-                async () => {
-                    await storage
-                        .ref("images")
-                        .child(image.name)
-                        .getDownloadURL()
-                        .then((urls) => {
-                            setUrls((prevState) => [...prevState, urls]);
-                        });
-                }
-            );
-        });
+        if (images.length > 0) {
+            const promises = [];
+            images.map((image) => {
+                console.log('uploading images...')
+                console.log(image)
+                const uploadTask = storage.ref(`images/${image.name}`).put(image);
+                promises.push(uploadTask);
+                uploadTask.on(
+                    "state_changed",
+                    (snapshot) => {
+                        const progress = Math.round(
+                            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                        );
+                        setProgress(progress);
+                    },
+                    (error) => {
+                        console.log(error);
+                    },
+                    async () => {
+                        await storage
+                            .ref("images")
+                            .child(image.name)
+                            .getDownloadURL()
+                            .then((urls) => {
+                                setUrls((prevState) => [...prevState, urls]);
+                            });
+                    }
+                );
+            });
 
-        Promise.all(promises)
-            .then(() => alert("All images uploaded"))
-            .catch((err) => console.log(err));
+            Promise.all(promises)
+                .then(() => alert("All images uploaded"))
+                .catch((err) => console.log(err));
+        }
     };
 
     const getDropZoneContent = () => {
@@ -118,6 +125,9 @@ const ImagesFromCloud: React.FC<IProps> = ({ updateActiveImageIndex, addImageDat
                     src={"ico/box-closed.png"}
                 />
                 <p className="extraBold">1 image loaded</p>
+                <div>
+                    <progress value={progress} max="100" />
+                </div>
             </>;
         else
             return <>
@@ -133,23 +143,31 @@ const ImagesFromCloud: React.FC<IProps> = ({ updateActiveImageIndex, addImageDat
                     src={"ico/box-closed.png"}
                 />
                 <p key={2} className="extraBold">{acceptedFiles.length} images loaded</p>
+                <div>
+                    <progress value={progress} max="100" />
+                </div>
             </>;
     };
 
     return (
         <>
-            <div className="ImagesDropZone">
-                <div {...getRootProps({ className: 'DropZone' })}>
-                    {getDropZoneContent()}
-                </div>
-                <div className="DropZoneButtons">
-                    <TextButton
-                        label={"Upload"}
-                        // isDisabled={!acceptedFiles.length}
-                        onClick={handleUpload}
-                    />
+            <div className="mt-5 d-flex justify-content-center" style={{ minHeight: "100vh" }}>
+                <div className="w-100" style={{ maxWidth: '400px' }}>
+                    <div className="ImagesDropZone">
+                        <div {...getRootProps({ className: 'DropZone' })}>
+                            {getDropZoneContent()}
+                        </div>
+                        <div className="DropZoneButtons">
+                            <TextButton
+                                label={"Upload"}
+                                // isDisabled={!acceptedFiles.length}
+                                onClick={handleUpload}
+                            />
+                        </div>
+                    </div>
                 </div>
             </div>
+
         </>
     )
 };
@@ -168,4 +186,4 @@ const mapStateToProps = (state: AppState) => ({
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(ImagesFromCloud);
+)(Project);

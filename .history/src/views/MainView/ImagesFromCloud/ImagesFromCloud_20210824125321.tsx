@@ -61,7 +61,6 @@ const ImagesFromCloud: React.FC<IProps> = ({ updateActiveImageIndex, addImageDat
         const promises = [];
         images.map((image) => {
             console.log('uploading images...')
-            console.log(image)
             const uploadTask = storage.ref(`images/${image.name}`).put(image);
             promises.push(uploadTask);
             uploadTask.on(

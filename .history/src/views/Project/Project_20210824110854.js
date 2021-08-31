@@ -1,49 +1,8 @@
 import React, { useState } from "react";
-import './ImagesFromCloud.scss';
-import { useDropzone, DropzoneOptions } from "react-dropzone";
-import { TextButton } from "../../Common/TextButton/TextButton";
-import { ImageData } from "../../../store/labels/types";
-import { connect } from "react-redux";
-import { addImageData, updateActiveImageIndex } from "../../../store/labels/actionCreators";
-import { AppState } from "../../../store";
-import { ProjectType } from "../../../data/enums/ProjectType";
-import { PopupWindowType } from "../../../data/enums/PopupWindowType";
-import { updateActivePopupType, updateProjectData } from "../../../store/general/actionCreators";
-import { AcceptedFileType } from "../../../data/enums/AcceptedFileType";
-import { ProjectData } from "../../../store/general/types";
-import { ImageDataUtil } from "../../../utils/ImageDataUtil";
+import './Project.scss';
 import { storage } from "../../../firebase"
 
-import { google } from 'googleapis'
-
-interface IProps {
-    updateActiveImageIndex: (activeImageIndex: number) => any;
-    addImageData: (imageData: ImageData[]) => any;
-    updateProjectData: (projectData: ProjectData) => any;
-    updateActivePopupType: (activePopupType: PopupWindowType) => any;
-    projectData: ProjectData;
-}
-
-const ImagesFromCloud: React.FC<IProps> = ({ updateActiveImageIndex, addImageData, updateProjectData, updateActivePopupType, projectData }) => {
-    const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
-        accept: AcceptedFileType.IMAGE
-    } as DropzoneOptions);
-
-    const startEditor = (projectType: ProjectType) => {
-        if (acceptedFiles.length > 0) {
-            updateProjectData({
-                ...projectData,
-                type: projectType
-            });
-            updateActiveImageIndex(0);
-            addImageData(acceptedFiles.map((fileData: File) => ImageDataUtil.createImageDataFromFileData(fileData)));
-            updateActivePopupType(PopupWindowType.INSERT_LABEL_NAMES);
-            acceptedFiles.map((fileData: File) => console.log(fileData))
-        }
-    };
-
-
-    // test to upload
+export default function Project() {
     const [images, setImages] = useState([]);
     const [urls, setUrls] = useState([]);
     const [progress, setProgress] = useState(0);
@@ -51,8 +10,8 @@ const ImagesFromCloud: React.FC<IProps> = ({ updateActiveImageIndex, addImageDat
     const handleChange = (e) => {
         for (let i = 0; i < e.target.files.length; i++) {
             const newImage = e.target.files[i];
-            console.log(newImage)
             newImage["id"] = Math.random();
+            console.log(newImage)
             setImages((prevState) => [...prevState, newImage]);
         }
     };
@@ -61,7 +20,6 @@ const ImagesFromCloud: React.FC<IProps> = ({ updateActiveImageIndex, addImageDat
         const promises = [];
         images.map((image) => {
             console.log('uploading images...')
-            console.log(image)
             const uploadTask = storage.ref(`images/${image.name}`).put(image);
             promises.push(uploadTask);
             uploadTask.on(
@@ -135,37 +93,20 @@ const ImagesFromCloud: React.FC<IProps> = ({ updateActiveImageIndex, addImageDat
                 <p key={2} className="extraBold">{acceptedFiles.length} images loaded</p>
             </>;
     };
-
     return (
-        <>
+        <div>
             <div className="ImagesDropZone">
-                <div {...getRootProps({ className: 'DropZone' })}>
-                    {getDropZoneContent()}
-                </div>
-                <div className="DropZoneButtons">
-                    <TextButton
-                        label={"Upload"}
-                        // isDisabled={!acceptedFiles.length}
-                        onClick={handleUpload}
-                    />
-                </div>
+            <div {...getRootProps({ className: 'DropZone' })}>
+                {getDropZoneContent()}
             </div>
-        </>
+            <div className="DropZoneButtons">
+                <TextButton
+                    label={"Upload"}
+                    // isDisabled={!acceptedFiles.length}
+                    onClick={handleUpload}
+                />
+            </div>
+        </div>
+        </div>
     )
-};
-
-const mapDispatchToProps = {
-    updateActiveImageIndex,
-    addImageData,
-    updateProjectData,
-    updateActivePopupType
-};
-
-const mapStateToProps = (state: AppState) => ({
-    projectData: state.general.projectData
-});
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(ImagesFromCloud);
+}
