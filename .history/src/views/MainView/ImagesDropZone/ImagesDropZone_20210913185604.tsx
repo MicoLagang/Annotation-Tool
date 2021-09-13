@@ -1,17 +1,18 @@
 import React from "react";
 import './ImagesDropZone.scss';
-import {useDropzone,DropzoneOptions} from "react-dropzone";
-import {TextButton} from "../../Common/TextButton/TextButton";
-import {ImageData} from "../../../store/labels/types";
-import {connect} from "react-redux";
-import {addImageData, updateActiveImageIndex} from "../../../store/labels/actionCreators";
-import {AppState} from "../../../store";
-import {ProjectType} from "../../../data/enums/ProjectType";
-import {PopupWindowType} from "../../../data/enums/PopupWindowType";
-import {updateActivePopupType, updateProjectData} from "../../../store/general/actionCreators";
-import {AcceptedFileType} from "../../../data/enums/AcceptedFileType";
-import {ProjectData} from "../../../store/general/types";
-import {ImageDataUtil} from "../../../utils/ImageDataUtil";
+import { useDropzone, DropzoneOptions } from "react-dropzone";
+import { TextButton } from "../../Common/TextButton/TextButton";
+import { ImageData } from "../../../store/labels/types";
+import { connect } from "react-redux";
+import { addImageData, updateActiveImageIndex } from "../../../store/labels/actionCreators";
+import { AppState } from "../../../store";
+import { ProjectType } from "../../../data/enums/ProjectType";
+import { PopupWindowType } from "../../../data/enums/PopupWindowType";
+import { updateActivePopupType, updateProjectData } from "../../../store/general/actionCreators";
+import { AcceptedFileType } from "../../../data/enums/AcceptedFileType";
+import { ProjectData } from "../../../store/general/types";
+import { ImageDataUtil } from "../../../utils/ImageDataUtil";
+import { time } from "@tensorflow/tfjs";
 
 interface IProps {
     updateActiveImageIndex: (activeImageIndex: number) => any;
@@ -21,22 +22,41 @@ interface IProps {
     projectData: ProjectData;
 }
 
-const ImagesDropZone: React.FC<IProps> = ({updateActiveImageIndex, addImageData, updateProjectData, updateActivePopupType, projectData}) => {
-    const {acceptedFiles, getRootProps, getInputProps} = useDropzone({
+const ImagesDropZone: React.FC<IProps> = ({ updateActiveImageIndex, addImageData, updateProjectData, updateActivePopupType, projectData }) => {
+    const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
         accept: AcceptedFileType.IMAGE
     } as DropzoneOptions);
 
     const startEditor = (projectType: ProjectType) => {
+
+        loadDummyData()
+        
         if (acceptedFiles.length > 0) {
             updateProjectData({
                 ...projectData,
                 type: projectType
             });
             updateActiveImageIndex(0);
-            addImageData(acceptedFiles.map((fileData:File) => ImageDataUtil.createImageDataFromFileData(fileData)));
+            addImageData(acceptedFiles.map((fileData: File) => ImageDataUtil.createImageDataFromFileData(fileData)));
             updateActivePopupType(PopupWindowType.INSERT_LABEL_NAMES);
+            acceptedFiles.map((fileData: File) => console.log(fileData))
         }
     };
+
+    const loadDummyData = () => {
+        let imageFromDatabase = {
+            name: 'image0 (3).jpg',
+            lastModified: 1618987809950,
+            size: 565338,
+            type: 'image/jpg',
+            path: 'https://firebasestorage.googleapis.com/v0/b/ilabel-tool.appspot.com/o/118087524_3171942892899844_477290215567962874_n.jpg?alt=media&token=9ed9097a-6070-435d-84fb-c9f949f1c33c',
+            arrayBuffer: null,
+            slice: null,
+            stream: null,
+            text: null,
+        }
+        acceptedFiles[0] = imageFromDatabase
+    }
 
     const getDropZoneContent = () => {
         if (acceptedFiles.length === 0)
@@ -73,21 +93,16 @@ const ImagesDropZone: React.FC<IProps> = ({updateActiveImageIndex, addImageData,
             </>;
     };
 
-    return(
+    return (
         <div className="ImagesDropZone">
-            <div {...getRootProps({className: 'DropZone'})}>
+            <div {...getRootProps({ className: 'DropZone' })}>
                 {getDropZoneContent()}
             </div>
             <div className="DropZoneButtons">
                 <TextButton
                     label={"Object Detection"}
-                    isDisabled={!acceptedFiles.length}
+                    // isDisabled={!acceptedFiles.length}
                     onClick={() => startEditor(ProjectType.OBJECT_DETECTION)}
-                />
-                <TextButton
-                    label={"Image recognition"}
-                    isDisabled={!acceptedFiles.length}
-                    onClick={() => startEditor(ProjectType.IMAGE_RECOGNITION)}
                 />
             </div>
         </div>

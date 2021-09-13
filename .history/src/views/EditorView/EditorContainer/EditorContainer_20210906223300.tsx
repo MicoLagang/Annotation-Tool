@@ -61,13 +61,13 @@ const EditorContainer: React.FC<IProps> = (
 
     const leftSideBarCompanionRender = () => {
         return <>
-            <VerticalEditorButton
+            {/* <VerticalEditorButton
                 label="Images"
                 image={"/ico/camera.png"}
                 imageAlt={"images"}
                 onClick={leftSideBarButtonOnClick}
                 isActive={leftTabStatus}
-            />
+            /> */}
         </>
     };
 

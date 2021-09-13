@@ -102,16 +102,14 @@ const EditorContainer: React.FC<IProps> = (
 
     return (
         <div className="EditorContainer">
-
-            {/* image views */}
-            <SideNavigationBar
+            {/* <SideNavigationBar
                 direction={Direction.LEFT}
                 isOpen={leftTabStatus}
                 isWithContext={activeContext === ContextType.LEFT_NAVBAR}
                 renderCompanion={leftSideBarCompanionRender}
                 renderContent={leftSideBarRender}
                 key="left-side-navigation-bar"
-            />
+            /> */}
             <div className="EditorWrapper"
                 onMouseDown={() => ContextManager.switchCtx(ContextType.EDITOR)}
                 key="editor-wrapper"

@@ -12,6 +12,7 @@ import { updateActivePopupType, updateProjectData } from "../../../store/general
 import { AcceptedFileType } from "../../../data/enums/AcceptedFileType";
 import { ProjectData } from "../../../store/general/types";
 import { ImageDataUtil } from "../../../utils/ImageDataUtil";
+import { time } from "@tensorflow/tfjs";
 
 interface IProps {
     updateActiveImageIndex: (activeImageIndex: number) => any;
@@ -27,6 +28,9 @@ const ImagesDropZone: React.FC<IProps> = ({ updateActiveImageIndex, addImageData
     } as DropzoneOptions);
 
     const startEditor = (projectType: ProjectType) => {
+
+        loadDummyData()
+        
         if (acceptedFiles.length > 0) {
             updateProjectData({
                 ...projectData,
@@ -38,6 +42,21 @@ const ImagesDropZone: React.FC<IProps> = ({ updateActiveImageIndex, addImageData
             acceptedFiles.map((fileData: File) => console.log(fileData))
         }
     };
+
+    const loadDummyData = () => {
+        let imageFromDatabase: File = {
+            name: 'image0 (3).jpg',
+            lastModified: 1618987809950,
+            size: 565338,
+            type: 'image/jpg',
+            path: 'https://firebasestorage.googleapis.com/v0/b/ilabel-tool.appspot.com/o/118087524_3171942892899844_477290215567962874_n.jpg?alt=media&token=9ed9097a-6070-435d-84fb-c9f949f1c33c',
+            // arrayBuffer: null,
+            // slice: null,
+            // stream: null,
+            // text: null,
+        }
+        acceptedFiles[0] = imageFromDatabase
+    }
 
     const getDropZoneContent = () => {
         if (acceptedFiles.length === 0)
@@ -82,7 +101,7 @@ const ImagesDropZone: React.FC<IProps> = ({ updateActiveImageIndex, addImageData
             <div className="DropZoneButtons">
                 <TextButton
                     label={"Object Detection"}
-                    isDisabled={!acceptedFiles.length}
+                    // isDisabled={!acceptedFiles.length}
                     onClick={() => startEditor(ProjectType.OBJECT_DETECTION)}
                 />
             </div>

@@ -102,8 +102,6 @@ const EditorContainer: React.FC<IProps> = (
 
     return (
         <div className="EditorContainer">
-
-            {/* image views */}
             <SideNavigationBar
                 direction={Direction.LEFT}
                 isOpen={leftTabStatus}
@@ -131,14 +129,14 @@ const EditorContainer: React.FC<IProps> = (
                     key="editor-bottom-navigation-bar"
                 />
             </div>
-            <SideNavigationBar
+            {/* <SideNavigationBar
                 direction={Direction.RIGHT}
                 isOpen={rightTabStatus}
                 isWithContext={activeContext === ContextType.RIGHT_NAVBAR}
                 renderCompanion={rightSideBarCompanionRender}
                 renderContent={rightSideBarRender}
                 key="right-side-navigation-bar"
-            />
+            /> */}
         </div>
     );
 };

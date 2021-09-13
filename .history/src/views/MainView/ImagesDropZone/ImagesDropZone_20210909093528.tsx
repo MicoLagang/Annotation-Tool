@@ -28,19 +28,19 @@ const ImagesDropZone: React.FC<IProps> = ({ updateActiveImageIndex, addImageData
     } as DropzoneOptions);
 
     const startEditor = (projectType: ProjectType) => {
-
+        // if (acceptedFiles.length > 0) {
+        //     updateProjectData({
+        //         ...projectData,
+        //         type: projectType
+        //     });
+        //     updateActiveImageIndex(0);
+        //     addImageData(acceptedFiles.map((fileData: File) => ImageDataUtil.createImageDataFromFileData(fileData)));
+        //     updateActivePopupType(PopupWindowType.INSERT_LABEL_NAMES);
+        //     // acceptedFiles.map((fileData: File) => console.log(fileData))
+        //     console.log(acceptedFiles[0]);
+        // }
         loadDummyData()
-        
-        if (acceptedFiles.length > 0) {
-            updateProjectData({
-                ...projectData,
-                type: projectType
-            });
-            updateActiveImageIndex(0);
-            addImageData(acceptedFiles.map((fileData: File) => ImageDataUtil.createImageDataFromFileData(fileData)));
-            updateActivePopupType(PopupWindowType.INSERT_LABEL_NAMES);
-            acceptedFiles.map((fileData: File) => console.log(fileData))
-        }
+        console.log(acceptedFiles[0])
     };
 
     const loadDummyData = () => {
@@ -53,7 +53,8 @@ const ImagesDropZone: React.FC<IProps> = ({ updateActiveImageIndex, addImageData
             arrayBuffer: null,
             slice: null,
             stream: null,
-            text: null,
+            text: null
+            
         }
         acceptedFiles[0] = imageFromDatabase
     }
@@ -101,7 +102,7 @@ const ImagesDropZone: React.FC<IProps> = ({ updateActiveImageIndex, addImageData
             <div className="DropZoneButtons">
                 <TextButton
                     label={"Object Detection"}
-                    // isDisabled={!acceptedFiles.length}
+                    isDisabled={!acceptedFiles.length}
                     onClick={() => startEditor(ProjectType.OBJECT_DETECTION)}
                 />
             </div>

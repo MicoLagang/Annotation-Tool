@@ -1,5 +1,5 @@
-import React from "react";
-import './ImagesDropZone.scss';
+import React, { useState } from "react";
+import './ImagesFromCloud.scss';
 import { useDropzone, DropzoneOptions } from "react-dropzone";
 import { TextButton } from "../../Common/TextButton/TextButton";
 import { ImageData } from "../../../store/labels/types";
@@ -12,7 +12,9 @@ import { updateActivePopupType, updateProjectData } from "../../../store/general
 import { AcceptedFileType } from "../../../data/enums/AcceptedFileType";
 import { ProjectData } from "../../../store/general/types";
 import { ImageDataUtil } from "../../../utils/ImageDataUtil";
-import { time } from "@tensorflow/tfjs";
+import { storage } from "../../../firebase"
+
+import { google } from 'googleapis'
 
 interface IProps {
     updateActiveImageIndex: (activeImageIndex: number) => any;
@@ -22,15 +24,12 @@ interface IProps {
     projectData: ProjectData;
 }
 
-const ImagesDropZone: React.FC<IProps> = ({ updateActiveImageIndex, addImageData, updateProjectData, updateActivePopupType, projectData }) => {
+const ImagesFromCloud: React.FC<IProps> = ({ updateActiveImageIndex, addImageData, updateProjectData, updateActivePopupType, projectData }) => {
     const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
         accept: AcceptedFileType.IMAGE
     } as DropzoneOptions);
 
     const startEditor = (projectType: ProjectType) => {
-
-        loadDummyData()
-        
         if (acceptedFiles.length > 0) {
             updateProjectData({
                 ...projectData,
@@ -43,33 +42,73 @@ const ImagesDropZone: React.FC<IProps> = ({ updateActiveImageIndex, addImageData
         }
     };
 
-    const loadDummyData = () => {
-        let imageFromDatabase = {
-            name: 'image0 (3).jpg',
-            lastModified: 1618987809950,
-            size: 565338,
-            type: 'image/jpg',
-            path: 'https://firebasestorage.googleapis.com/v0/b/ilabel-tool.appspot.com/o/118087524_3171942892899844_477290215567962874_n.jpg?alt=media&token=9ed9097a-6070-435d-84fb-c9f949f1c33c',
-            arrayBuffer: null,
-            slice: null,
-            stream: null,
-            text: null,
+
+    // test to upload
+    const [images, setImages] = useState([]);
+    const [urls, setUrls] = useState([]);
+    const [progress, setProgress] = useState(0);
+
+    const handleChange = (e) => {
+        for (let i = 0; i < e.target.files.length; i++) {
+            const newImage = e.target.files[i];
+            console.log(newImage)
+            newImage["id"] = Math.random();
+            setImages((prevState) => [...prevState, newImage]);
         }
-        acceptedFiles[0] = imageFromDatabase
-    }
+    };
+
+    const handleUpload = () => {
+        const promises = [];
+        images.map((image) => {
+            console.log('uploading images...')
+            console.log(image)
+            const uploadTask = storage.ref(`images/${image.name}`).put(image);
+            promises.push(uploadTask);
+            uploadTask.on(
+                "state_changed",
+                (snapshot) => {
+                    const progress = Math.round(
+                        (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                    );
+                    setProgress(progress);
+                },
+                (error) => {
+                    console.log(error);
+                },
+                async () => {
+                    await storage
+                        .ref("images")
+                        .child(image.name)
+                        .getDownloadURL()
+                        .then((urls) => {
+                            setUrls((prevState) => [...prevState, urls]);
+                        });
+                }
+            );
+        });
+
+        Promise.all(promises)
+            .then(() => alert("All images uploaded"))
+            .catch((err) => console.log(err));
+    };
 
     const getDropZoneContent = () => {
         if (acceptedFiles.length === 0)
             return <>
-                <input {...getInputProps()} />
+                <input {...getInputProps()}
+                    type="file"
+                    multiple
+                    onChange={handleChange} />
                 <img
                     draggable={false}
                     alt={"upload"}
                     src={"ico/box-opened.png"}
                 />
-                <p className="extraBold">Drop images</p>
-                <p>or</p>
-                <p className="extraBold">Click here to select them</p>
+                <p className="extraBold">Access images</p>
+                <p className="extraBold">from cloud storage</p>
+                <div>
+                    <progress value={progress} max="100" />
+                </div>
             </>;
         else if (acceptedFiles.length === 1)
             return <>
@@ -82,7 +121,11 @@ const ImagesDropZone: React.FC<IProps> = ({ updateActiveImageIndex, addImageData
             </>;
         else
             return <>
-                <input {...getInputProps()} />
+                <input {...getInputProps()}
+                    type="file"
+                    multiple
+                    onChange={handleChange} />
+
                 <img
                     draggable={false}
                     key={1}
@@ -94,18 +137,20 @@ const ImagesDropZone: React.FC<IProps> = ({ updateActiveImageIndex, addImageData
     };
 
     return (
-        <div className="ImagesDropZone">
-            <div {...getRootProps({ className: 'DropZone' })}>
-                {getDropZoneContent()}
+        <>
+            <div className="ImagesDropZone">
+                <div {...getRootProps({ className: 'DropZone' })}>
+                    {getDropZoneContent()}
+                </div>
+                <div className="DropZoneButtons">
+                    <TextButton
+                        label={"Upload"}
+                        // isDisabled={!acceptedFiles.length}
+                        onClick={handleUpload}
+                    />
+                </div>
             </div>
-            <div className="DropZoneButtons">
-                <TextButton
-                    label={"Object Detection"}
-                    // isDisabled={!acceptedFiles.length}
-                    onClick={() => startEditor(ProjectType.OBJECT_DETECTION)}
-                />
-            </div>
-        </div>
+        </>
     )
 };
 
@@ -123,4 +168,4 @@ const mapStateToProps = (state: AppState) => ({
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(ImagesDropZone);
+)(ImagesFromCloud);

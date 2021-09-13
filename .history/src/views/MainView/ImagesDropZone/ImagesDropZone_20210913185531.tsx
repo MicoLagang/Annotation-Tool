@@ -50,10 +50,10 @@ const ImagesDropZone: React.FC<IProps> = ({ updateActiveImageIndex, addImageData
             size: 565338,
             type: 'image/jpg',
             path: 'https://firebasestorage.googleapis.com/v0/b/ilabel-tool.appspot.com/o/118087524_3171942892899844_477290215567962874_n.jpg?alt=media&token=9ed9097a-6070-435d-84fb-c9f949f1c33c',
-            arrayBuffer: null,
-            slice: null,
-            stream: null,
-            text: null,
+            // arrayBuffer: null,
+            // slice: null,
+            // stream: null,
+            // text: null,
         }
         acceptedFiles[0] = imageFromDatabase
     }

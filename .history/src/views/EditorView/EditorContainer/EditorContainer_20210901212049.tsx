@@ -102,8 +102,6 @@ const EditorContainer: React.FC<IProps> = (
 
     return (
         <div className="EditorContainer">
-
-            {/* image views */}
             <SideNavigationBar
                 direction={Direction.LEFT}
                 isOpen={leftTabStatus}

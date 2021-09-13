@@ -28,9 +28,9 @@ const ImagesDropZone: React.FC<IProps> = ({ updateActiveImageIndex, addImageData
     } as DropzoneOptions);
 
     const startEditor = (projectType: ProjectType) => {
-
-        loadDummyData()
         
+        // loadDummyData()
+        console.log(acceptedFiles[0])
         if (acceptedFiles.length > 0) {
             updateProjectData({
                 ...projectData,
@@ -39,7 +39,8 @@ const ImagesDropZone: React.FC<IProps> = ({ updateActiveImageIndex, addImageData
             updateActiveImageIndex(0);
             addImageData(acceptedFiles.map((fileData: File) => ImageDataUtil.createImageDataFromFileData(fileData)));
             updateActivePopupType(PopupWindowType.INSERT_LABEL_NAMES);
-            acceptedFiles.map((fileData: File) => console.log(fileData))
+            // acceptedFiles.map((fileData: File) => console.log(fileData))
+            console.log(acceptedFiles[0]);
         }
     };
 

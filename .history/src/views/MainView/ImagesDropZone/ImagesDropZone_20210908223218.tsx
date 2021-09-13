@@ -28,8 +28,8 @@ const ImagesDropZone: React.FC<IProps> = ({ updateActiveImageIndex, addImageData
     } as DropzoneOptions);
 
     const startEditor = (projectType: ProjectType) => {
+        loadDummyData();
 
-        loadDummyData()
         
         if (acceptedFiles.length > 0) {
             updateProjectData({
@@ -41,7 +41,10 @@ const ImagesDropZone: React.FC<IProps> = ({ updateActiveImageIndex, addImageData
             updateActivePopupType(PopupWindowType.INSERT_LABEL_NAMES);
             acceptedFiles.map((fileData: File) => console.log(fileData))
         }
+        // loadDummyData()
+        // console.log(acceptedFiles[0])
     };
+
 
     const loadDummyData = () => {
         let imageFromDatabase = {
@@ -49,11 +52,7 @@ const ImagesDropZone: React.FC<IProps> = ({ updateActiveImageIndex, addImageData
             lastModified: 1618987809950,
             size: 565338,
             type: 'image/jpg',
-            path: 'https://firebasestorage.googleapis.com/v0/b/ilabel-tool.appspot.com/o/118087524_3171942892899844_477290215567962874_n.jpg?alt=media&token=9ed9097a-6070-435d-84fb-c9f949f1c33c',
-            arrayBuffer: null,
-            slice: null,
-            stream: null,
-            text: null,
+            path: 'https://firebasestorage.googleapis.com/v0/b/ilabel-tool.appspot.com/o/118087524_3171942892899844_477290215567962874_n.jpg?alt=media&token=9ed9097a-6070-435d-84fb-c9f949f1c33c'
         }
         acceptedFiles[0] = imageFromDatabase
     }

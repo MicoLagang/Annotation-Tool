@@ -29,7 +29,7 @@ const ImagesDropZone: React.FC<IProps> = ({ updateActiveImageIndex, addImageData
 
     const startEditor = (projectType: ProjectType) => {
 
-        loadDummyData()
+        // loadDummyData()
         
         if (acceptedFiles.length > 0) {
             updateProjectData({

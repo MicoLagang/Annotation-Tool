@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
-import { connect } from "react-redux";
-import { Direction } from "../../../data/enums/Direction";
-import { ISize } from "../../../interfaces/ISize";
-import { Settings } from "../../../settings/Settings";
-import { AppState } from "../../../store";
-import { ImageData } from "../../../store/labels/types";
+import React, {useState} from 'react';
+import {connect} from "react-redux";
+import {Direction} from "../../../data/enums/Direction";
+import {ISize} from "../../../interfaces/ISize";
+import {Settings} from "../../../settings/Settings";
+import {AppState} from "../../../store";
+import {ImageData} from "../../../store/labels/types";
 import ImagesList from "../SideNavigationBar/ImagesList/ImagesList";
 import LabelsToolkit from "../SideNavigationBar/LabelsToolkit/LabelsToolkit";
-import { SideNavigationBar } from "../SideNavigationBar/SideNavigationBar";
-import { VerticalEditorButton } from "../VerticalEditorButton/VerticalEditorButton";
+import {SideNavigationBar} from "../SideNavigationBar/SideNavigationBar";
+import {VerticalEditorButton} from "../VerticalEditorButton/VerticalEditorButton";
 import './EditorContainer.scss';
 import Editor from "../Editor/Editor";
-import { ContextManager } from "../../../logic/context/ContextManager";
-import { ContextType } from "../../../data/enums/ContextType";
+import {ContextManager} from "../../../logic/context/ContextManager";
+import {ContextType} from "../../../data/enums/ContextType";
 import EditorBottomNavigationBar from "../EditorBottomNavigationBar/EditorBottomNavigationBar";
 import EditorTopNavigationBar from "../EditorTopNavigationBar/EditorTopNavigationBar";
-import { ProjectType } from "../../../data/enums/ProjectType";
+import {ProjectType} from "../../../data/enums/ProjectType";
 
 interface IProps {
     windowSize: ISize;
@@ -72,7 +72,7 @@ const EditorContainer: React.FC<IProps> = (
     };
 
     const leftSideBarRender = () => {
-        return <ImagesList />
+        return <ImagesList/>
     };
 
     const rightSideBarButtonOnClick = () => {
@@ -97,13 +97,11 @@ const EditorContainer: React.FC<IProps> = (
     };
 
     const rightSideBarRender = () => {
-        return <LabelsToolkit />
+        return <LabelsToolkit/>
     };
 
     return (
         <div className="EditorContainer">
-
-            {/* image views */}
             <SideNavigationBar
                 direction={Direction.LEFT}
                 isOpen={leftTabStatus}
@@ -114,7 +112,7 @@ const EditorContainer: React.FC<IProps> = (
             />
             <div className="EditorWrapper"
                 onMouseDown={() => ContextManager.switchCtx(ContextType.EDITOR)}
-                key="editor-wrapper"
+                 key="editor-wrapper"
             >
                 {projectType === ProjectType.OBJECT_DETECTION && <EditorTopNavigationBar
                     key="editor-top-navigation-bar"
