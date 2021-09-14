@@ -66,11 +66,12 @@ export default function Dashboard() {
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Nav className="me-auto">
                             <Nav.Link href="/tool">Tool</Nav.Link>
+                            <Nav.Link href="/gallery">Gallery</Nav.Link>
                         </Nav>
                         <Nav>
                             <NavDropdown title={currentUser.email} id="collasible-nav-dropdown">
                                 <NavDropdown.Item href="/update-profile">Profile</NavDropdown.Item>
-                                <NavDropdown.Item href="#action/3.2">My Teams</NavDropdown.Item>
+                                <NavDropdown.Item href="/teams">My Teams</NavDropdown.Item>
                                 <NavDropdown.Divider />
                                 <NavDropdown.Item onClick={handleLogout}>Logout</NavDropdown.Item>
                             </NavDropdown>
@@ -79,14 +80,14 @@ export default function Dashboard() {
                 </Container>
             </Navbar>
             <div>
-                <Container fluid="lg">
+                <Container>
                     <Row>
-                        <Col>
-                            <Row>
-                                {/* <Col><TeamList></TeamList></Col> */}
-                                <Col><Link to="/new">New</Link></Col>
-                            </Row>
-                            {/* {
+                        {/* <Col>
+                        <Row>
+                            <Col><TeamList></TeamList></Col>
+                            <Col><Link to="/new">New</Link></Col>
+                        </Row>
+                        {
                                 Object.keys(teamsObjects).map(id => {
                                     return (
                                         <Row>
@@ -97,8 +98,8 @@ export default function Dashboard() {
                                         </Row>
                                     )
                                 })
-                            } */}
-                        </Col>
+                            }
+                    </Col> */}
                         <Col xs={10}>
                             {/* <CreateTeam {...({ addOrEdit, currentId, teamsObjects })} /> */}
                             <TeamList></TeamList>

@@ -19,7 +19,7 @@ import PageTitle from "../../components/PageTitle/PageTitle";
 
 
 // icons sets
-import "font-awesome/css/font-awesome.min.css";
+// import "font-awesome/css/font-awesome.min.css";
 
 export default function IconsPage () {
   const [anchorEl, setAnchorEl] = React.useState(null)

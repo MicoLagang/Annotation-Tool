@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
-import { Button, Form } from 'react-bootstrap'
-import teamService from '../../services/team.service';
+import { Form } from 'react-bootstrap'
+import { Button } from '@material-ui/core'
+import teamService from '../../../src/services/team.service';
+import { Link } from 'react-router-dom'
 
 export default class CreateTeam extends Component {
     constructor(props) {
@@ -15,6 +17,7 @@ export default class CreateTeam extends Component {
             name: '',
             contactEmail: '',
             owner: '',
+            submitted: false,
         };
     }
 
@@ -37,7 +40,7 @@ export default class CreateTeam extends Component {
     }
 
     saveTeam() {
-        let data = {
+        const data = {
             name: this.state.name,
             contactEmail: this.state.contactEmail,
             owner: this.state.owner
@@ -46,24 +49,37 @@ export default class CreateTeam extends Component {
         teamService.create(data)
           .then(() => {
             console.log("Created new item successfully!");
+            this.setState({
+                submitted: true,
+            });
           })
           .catch((e) => {
             console.log(e);
           });
-      }
+    }
     
-      createTeam() {
+    createTeam() {
         this.setState({
             name: '',
             contactEmail: '',
             owner: '',
+            submitted: false,
         });
-      }
+    }
 
     render() {
         return (
             <div className="submit-form">
-                <div>
+                {this.state.submitted ? (
+                    <div>
+                    <h4 className="text-center mb-4">You submitted successfully!</h4>
+                    {/* <button className="btn btn-success w-100" href="/" onClick={this.createTeam}>
+                      Back
+                    </button> */}
+                    <Link to="/">Back</Link>
+                  </div>
+                ) : (
+                    <div>
                     <h2 className="text-center mb-4">Create your team</h2>
                     <Form >
                         <Form.Group className="mb-3">
@@ -89,12 +105,25 @@ export default class CreateTeam extends Component {
                                 placeholder="Contact Email"
                                 name="contactEmail"/>
                         </Form.Group>
+
+                        <Form.Group className="mb-3">
+                            <Form.Control 
+                                type="text"
+                                className="form-control"
+                                id="owner"
+                                required
+                                onChange={this.onChangeOwner}
+                                value={this.state.owner}
+                                placeholder="Organization or Owner"
+                                name="owner"/>
+                        </Form.Group>
                         
-                        <Button onClick={this.saveTeam} variant="primary" className="w-100" type="submit">
+                        <Button onClick={this.saveTeam} variant="contained" color="primary" className="w-100">
                             Create
                         </Button>
                     </Form>
                 </div>
+                )}
             </div>
         );
       

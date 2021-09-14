@@ -1,14 +1,19 @@
-import firebaseDb from "../firebase";
+import { projectStorage, projectFirestore, timestamp } from '../firebase';
 
-const db = firebaseDb.ref("teams");
+const db = projectFirestore.collection("PROJECT");
 
 class TutorialDataService {
   getAll() {
     return db;
   }
 
+  getOnce() {
+    return db;
+  }
+
   create(tutorial) {
-    return db.push(tutorial);
+    return db.add(tutorial);
+    // return db.collection("teams").doc(tutorial).collection('folderimages');
   }
 
   update(key, value) {

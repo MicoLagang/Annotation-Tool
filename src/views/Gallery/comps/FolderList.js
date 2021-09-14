@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
-import {projectFirestore} from '../../firebase';
+import {projectFirestore} from '../../../firebase';
 import { Link } from 'react-router-dom'
+import FolderImages from './FolderImages';
+import { useParams } from 'react-router-dom'
 import { Card, Container } from "react-bootstrap";
-
-
+import TopNav from "../../Navigation/TopNav";
 const FolderList = () => {
   const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState([]);
-
+  const {teamID} = useParams()
   const createTeam = {
     backgroundColor: "#FFD803",
   };
@@ -21,7 +22,9 @@ const FolderList = () => {
   useEffect(() => {
     const getPostsFromFirebase = [];
     const subscriber = projectFirestore
-      .collection("PROJECT")
+      // .collection("FolderImages")
+      // .collection('teams').doc('JviFAFCWPy0VPJFeCBPZ').collection('FolderImages').doc('HceEccV4vOIkrNX4CYeB')
+      .doc(`PROJECT/${teamID}`).collection('FOLDERS')
       .onSnapshot((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           getPostsFromFirebase.push({
@@ -41,25 +44,20 @@ const FolderList = () => {
     return <h1>loading firebase data...</h1>;
   }
 
-
-
   return (
 
     
     // <div className="container">
-    //   <Link to="/new">
-    //     <h1>CREATE TEAM</h1>
-    //   </Link>
-    //   <h5>TEAM LIST:</h5>
-      
+    //   <h1>Folder:</h1>
+
     //   <ul className="list-group">
     //   {posts.length > 0 ? (
     //     posts.map((post) =>
     //      <Link 
-    //     to={`/gallery/${post.key}`} 
+    //     to={`/folder/${post.key}/${teamID}`} 
 
     //     key={post.key}> 
-    //     {post.name}</Link>
+    //     {post.name} </Link>
     //     )
     //   ) : (
     //     <h6>No folder yet</h6>
@@ -73,43 +71,16 @@ const FolderList = () => {
 
     <>
 
-
-{/* 
-<div className="container">
-      <Link to="/new">
-        <h1>CREATE TEAM</h1>
-      </Link>
-      <h5>TEAM LIST:</h5>
-      
-      <ul className="list-group">
-      {posts.length > 0 ? (
-        posts.map((post) =>
-         <Link 
-        to={`/gallery/${post.key}`} 
-
-        key={post.key}> 
-        {post.name}</Link>
-        )
-      ) : (
-        <h6>No folder yet</h6>
-      )}
-
-      </ul>
-
-
-
-    </div> */}
-<br></br>
 <br></br>
     <div className="row">
       <Link
-        to="/new"
+        to={`/Addfolder/${teamID}`} 
         style={cardLink}
         className="col-lg-3 col-md-4 col-sm-12 mb-3"
       >
         <Card border="dark" style={createTeam} className="h-100">
           <Card.Body className="d-flex align-items-center justify-content-center">
-            <Card.Title>Create Team</Card.Title>
+            <Card.Title>Create Project</Card.Title>
           </Card.Body>
         </Card>
       </Link>
@@ -119,7 +90,7 @@ const FolderList = () => {
       {posts.length > 0 ? (
         posts.map((post) =>
           <Link
-          to={`/gallery/${post.key}`} 
+          to={`/folder/${post.key}/${teamID}`} 
           key={post.key}
             style={cardLink}
             className="col-lg-3 col-md-4 col-sm-12 mb-3"
@@ -136,10 +107,8 @@ const FolderList = () => {
         )}
       
     </div>
-  </>
+    </>
   );
 };
 
 export default FolderList;
-
-
