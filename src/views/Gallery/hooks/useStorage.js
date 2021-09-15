@@ -8,6 +8,7 @@ const useStorage = (file) => {
   const [url, setUrl] = useState(null);
   const { name } = useParams()
   const {teamID} = useParams()
+  const {folderID} = useParams()
 
   useEffect(() => {
 
@@ -15,7 +16,7 @@ const useStorage = (file) => {
     const storageRef = projectStorage.ref(file.name);
 
     // const collectionRef = projectFirestore.collection('teams').doc(name).collection("images");
-    const collectionRef = projectFirestore.collection('PROJECT').doc(teamID).collection("FOLDERS").doc(name).collection('images');
+    const collectionRef = projectFirestore.collection('PROJECT').doc(folderID).collection("FOLDERS").doc(name).collection('IMAGESFOLDER').doc(teamID).collection("IMAGES");
 
     console.log(storageRef);
     storageRef.put(file).on('state_changed', (snap) => {

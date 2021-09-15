@@ -103,7 +103,7 @@ const FolderList = () => {
           </Link>
         )
         ): (
-          <h6>No folder yet</h6>
+          <h6>No Project yet</h6>
         )}
       
     </div>

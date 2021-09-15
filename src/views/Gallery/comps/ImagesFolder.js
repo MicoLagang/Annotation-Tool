@@ -90,11 +90,13 @@ export default function TestTeam() {
       {posts.length > 0 ? (
         posts.map((post) =>
           <Link
-          // to={`/folder/${post.key}/${teamID}`} 
+          to={`/galleryimagesfolder/${name}/${post.key}/${teamID}`} 
           key={post.key}
             style={cardLink}
             className="col-lg-3 col-md-4 col-sm-12 mb-3"
           >
+            {/* {name} */}
+            {/* {post.key} */}
             <Card border="dark" className="h-100">
               <Card.Body className="d-flex align-items-center justify-content-center">
                 <Card.Title>{post.name}</Card.Title>
@@ -103,7 +105,7 @@ export default function TestTeam() {
           </Link>
         )
         ): (
-          <h6>No folder yet</h6>
+          <h6>No Images folder yet</h6>
         )}
       </div>
   </Container>

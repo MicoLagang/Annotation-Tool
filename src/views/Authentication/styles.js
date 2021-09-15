@@ -10,9 +10,10 @@ export default makeStyles(theme => ({
     position: "absolute",
     top: 0,
     left: 0,
+    
   },
   logotypeContainer: {
-    backgroundColor: theme.palette.primary.main,
+    backgroundColor: "#272343",
     width: "60%",
     height: "100%",
     display: "flex",
@@ -39,6 +40,7 @@ export default makeStyles(theme => ({
     },
   },
   formContainer: {
+    
     width: "40%",
     height: "100%",
     display: "flex",
@@ -111,13 +113,13 @@ export default makeStyles(theme => ({
   },
   textFieldUnderline: {
     "&:before": {
-      borderBottomColor: theme.palette.primary.light,
+      borderBottomColor: "black",
     },
     "&:after": {
-      borderBottomColor: theme.palette.primary.main,
+      borderBottomColor: "white",
     },
     "&:hover:before": {
-      borderBottomColor: `${theme.palette.primary.light} !important`,
+      borderBottomColor: "white",
     },
   },
   textField: {

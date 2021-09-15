@@ -50,6 +50,7 @@ import PrivateRoute from './views/PrivateRoutes/PrivateRoute'
 import Dashboard from './views/Dashboard/Dashboard';
 import CreateTeam from './views/Team/CreateTeam';
 import Tool from './views/MainView/MainView';
+// import Tool from './views/Tool/Tool';
 // import TestTeam from './views/Team/TestTeam';
 import Team from './views/Team/Team';
 import Project from './views/Project/Project';
@@ -72,7 +73,7 @@ import AddFolder from './views/Gallery/comps/AddFolder';
 
 import ImagesFolder from "./views/Gallery/comps/ImagesFolder"
 import AddFolderpic from "./views/Gallery/comps/AddFolderpic"
-
+import UploadImagesGallery from './views/Gallery/UploadImagesGallery'
 
 interface IProps {
     projectType: ProjectType;
@@ -119,9 +120,10 @@ const App: React.FC<IProps> = ({ projectType, windowSize, ObjectDetectorLoaded, 
                       
                         {/* <PrivateRoute exact path="/test" component={test} /> */}
                         {/* <Route exact path="/team/:name"> <TestTeam></TestTeam> </Route> */}
-                        <Route exact path="/folder/:name/:teamID"> <FolderImages></FolderImages> </Route>
-                        <Route exact path="/imagesfolder/:name/:teamID"> <ImagesFolder/> </Route>
-                        <Route exact path="/team/:name"> <Team></Team> </Route>
+                        <PrivateRoute exact path="/folder/:name/:teamID" component={FolderImages}> <FolderImages/> </PrivateRoute>
+                        <PrivateRoute exact path="/imagesfolder/:name/:teamID" component={ImagesFolder}> <ImagesFolder/> </PrivateRoute>
+                        <PrivateRoute exact path="/galleryimagesfolder/:name/:teamID/:folderID" component={UploadImagesGallery}> <UploadImagesGallery/> </PrivateRoute>
+                        <PrivateRoute exact path="/team/:name" component={Team}> <Team/> </PrivateRoute>
                         <Container className="mt-5 d-flex justify-content-center" style={{ minHeight: "100vh" }}>
                             <div className="w-100" style={{ maxWidth: '400px' }}>
                                 <PrivateRoute exact path="/new" component={CreateTeam} />

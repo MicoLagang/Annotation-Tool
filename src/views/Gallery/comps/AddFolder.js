@@ -128,6 +128,7 @@ export default function AddFolder() {
 
     return (
         <div className="submit-form"> 
+           <h2 className="text-center mb-4">Create your Project</h2>
              <Form >
               
               {/* <div>{teamID}</div> */}
@@ -139,7 +140,7 @@ export default function AddFolder() {
                                               required
                                             //   onChange={foldername}
                                               ref={foldername}
-                                              placeholder="Create Folder"
+                                              placeholder="Project Name"
                                               name="owner"/>
                                       </Form.Group>
                       

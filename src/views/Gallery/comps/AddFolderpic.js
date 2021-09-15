@@ -54,6 +54,7 @@ export default function TestTeam(post) {
     <>
     {/* <TopNav/> */}
     <div className="submit-form"> 
+    <h2 className="text-center mb-4">Create Images Folder</h2>
              <Form >
               
               {/* <div>{teamID}</div> */}
@@ -65,7 +66,7 @@ export default function TestTeam(post) {
                                               required
                                             //   onChange={foldername}
                                             ref={foldername}
-                                              placeholder="Create Folder"
+                                              placeholder="Name"
                                               name="owner"/>
                                       </Form.Group>
                       

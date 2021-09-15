@@ -57,9 +57,13 @@ export default function Dashboard() {
         }
     }
 
+    const createTeam = {
+        backgroundColor: "#272343",
+      };
+
     return (
         <>
-            <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+            <Navbar collapseOnSelect expand="xl" style={createTeam} variant="dark">
                 <Container>
                     <Navbar.Brand href="#home">Ilabel</Navbar.Brand>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />

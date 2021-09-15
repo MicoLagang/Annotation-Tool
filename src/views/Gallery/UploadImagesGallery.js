@@ -17,8 +17,8 @@ function App() {
     <>
           <TopNav/>
       <Container>
-      {/* <Title/>
-      <UploadForm /> */}
+      <Title/>
+      <UploadForm />
 
       <ImageGrid setSelectedImg={setSelectedImg} />
       
@@ -29,7 +29,7 @@ function App() {
       {/* <div>{teamID}</div> */}
 
       {/* <AddFolder /> */}
-      <FolderList/>
+      {/* <FolderList/> */}
 
       
       {console.log(selectedImg)}
