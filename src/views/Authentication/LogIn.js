@@ -132,6 +132,8 @@ import logo from "./logo.svg";
 // context
 import { useUserDispatch, loginUser } from "../../context/UserContext";
 
+import userServices from '../../services/user.services';
+
 function Login(props) {
   var classes = useStyles();
 
@@ -145,7 +147,12 @@ function Login(props) {
   var [nameValue, setNameValue] = useState("");
   var [loginValue, setLoginValue] = useState("");
   var [passwordValue, setPasswordValue] = useState("");
+
+  var [loginValue1, setLoginValue1] = useState("");
+  var [passwordValue1, setPasswordValue1] = useState("");
   var [passwordValueS, setPasswordValueS] = useState("");
+
+  var [role, setRole] = useState("");
     //   test
     const emailRef = useRef()
     const passwordRef = useRef()
@@ -179,18 +186,34 @@ function Login(props) {
     async function handleSubmitSignUp(e) {
         e.preventDefault()
 
-        if (passwordValue !== passwordValueS) {
+        if (passwordValue1 !== passwordValueS) {
             return setError('Passwords do not match')
         }
 
         try {
             setError('')
             setLoading(true)
-            await signup(loginValue, passwordValue)
+            await signup(loginValue1, passwordValue1)
             history.push("/")
         } catch (error) {
             setError(error.message)
         }
+
+        const data = {
+          email : loginValue,
+          role : role
+      };
+  
+      userServices.create(data)
+        .then(() => {
+          console.log("Created new item successfully!");
+          this.setState({
+              submitted: true,
+          });
+        })
+        .catch((e) => {
+          console.log(e);
+        });
 
         setLoading(false)
     }
@@ -236,11 +259,11 @@ function Login(props) {
                 <Typography className={classes.formDividerWord}>or</Typography>
                 <div className={classes.formDivider} />
               </div> */}
-              {/* <Fade in={error}>
+              <Fade in={error}>
                 <Typography color="secondary" className={classes.errorMessage}>
                   Something is wrong with your login or password :(
                 </Typography>
-              </Fade> */}
+              </Fade>
               <TextField
                 id="email"
                 InputProps={{
@@ -310,7 +333,7 @@ function Login(props) {
               </Typography>
               <Fade in={error}>
                 <Typography color="secondary" className={classes.errorMessage}>
-                  Something is wrong with your login or password :(
+                  {/* Something is wrong with your login or password :( */}
                 </Typography>
               </Fade>
               <TextField
@@ -321,8 +344,8 @@ function Login(props) {
                     input: classes.textField,
                   },
                 }}
-                value={loginValue}
-                onChange={e => setLoginValue(e.target.value)}
+                value={loginValue1}
+                onChange={e => setLoginValue1(e.target.value)}
                 margin="normal"
                 placeholder="Email Address"
                 type="email"
@@ -336,8 +359,8 @@ function Login(props) {
                     input: classes.textField,
                   },
                 }}
-                value={passwordValue}
-                onChange={e => setPasswordValue(e.target.value)}
+                value={passwordValue1}
+                onChange={e => setPasswordValue1(e.target.value)}
                 margin="normal"
                 placeholder="Password"
                 type="password"
@@ -358,6 +381,23 @@ function Login(props) {
                 type="password"
                 fullWidth
               />
+
+              
+
+
+
+<div className="form-row">
+                                <div className="form-group col-md-5">
+                                
+                                    <select className="form-control" >
+                                        {/* <option selected>Status</option> */}
+                                        <option value="Private">Private</option>
+                                        <option value="Public">Public</option>
+                                    </select>
+                                </div>
+                            </div>
+
+              
               <div className={classes.creatingButtonContainer}>
                 {isLoading ? (
                   <CircularProgress size={26} />
@@ -365,8 +405,8 @@ function Login(props) {
                   <Button
                     onClick={handleSubmitSignUp}
                     disabled={
-                      loginValue.length === 0 ||
-                      passwordValue.length === 0 ||
+                      loginValue1.length === 0 ||
+                      passwordValue1.length === 0 ||
                       passwordValueS.length === 0
                     }
                     size="large"

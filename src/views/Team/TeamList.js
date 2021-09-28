@@ -18,6 +18,11 @@ const FolderList = () => {
     height: "130px",
   };
 
+  var rand = require("random-key");
+  rand.generate(7);
+
+  console.log(rand.generate(5))
+
   useEffect(() => {
     const getPostsFromFirebase = [];
     const subscriber = projectFirestore
@@ -114,7 +119,7 @@ const FolderList = () => {
         </Card>
       </Link>
 
-
+    
 
       {posts.length > 0 ? (
         posts.map((post) =>
@@ -126,7 +131,11 @@ const FolderList = () => {
           >
             <Card border="dark" className="h-100">
               <Card.Body className="d-flex align-items-center justify-content-center">
-                <Card.Title>{post.name}</Card.Title>
+                <Card.Title>{post.name}
+      
+                <h6 align="center">{post.TeamCode}</h6>
+                </Card.Title>
+                
               </Card.Body>
             </Card>
           </Link>

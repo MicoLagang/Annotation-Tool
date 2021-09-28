@@ -26,7 +26,21 @@ const ImagesDropZone: React.FC<IProps> = ({ updateActiveImageIndex, addImageData
         accept: AcceptedFileType.IMAGE
     } as DropzoneOptions);
 
+const img = "https://firebasestorage.googleapis.com/v0/b/ilabel-tool.appspot.com/o/RTX742OR-e1572454412638.jpg?alt=media&token=0dc64c89-82f0-47f4-9fb2-f2111018beb7";
+
+    // const img1 = "https://firebasestorage.googleapis.com/v0/b/ilabel-tool.appspot.com/o/WhatsApp-Image-2020-04-10-at-22.03.56.jpeg?alt=media&token=5673969d-38fb-4639-abd1-db5e9223a56f";
+    
+
+    // const img2 = "https://firebasestorage.googleapis.com/v0/b/ilabel-tool.appspot.com/o/Screenshot_2.png?alt=media&token=564dbe65-bbf1-44e2-ab87-175b30f8e311"
+    // const img = [
+        // "https://firebasestorage.googleapis.com/v0/b/ilabel-tool.appspot.com/o/RTX742OR-e1572454412638.jpg?alt=media&token=0dc64c89-82f0-47f4-9fb2-f2111018beb7",
+        // "https://firebasestorage.googleapis.com/v0/b/ilabel-tool.appspot.com/o/WhatsApp-Image-2020-04-10-at-22.03.56.jpeg?alt=media&token=5673969d-38fb-4639-abd1-db5e9223a56f"
+    // ];
+
     const startEditor = (projectType: ProjectType) => {
+
+
+        loadDummyData()
         if (acceptedFiles.length > 0) {
             updateProjectData({
                 ...projectData,
@@ -36,8 +50,83 @@ const ImagesDropZone: React.FC<IProps> = ({ updateActiveImageIndex, addImageData
             addImageData(acceptedFiles.map((fileData: File) => ImageDataUtil.createImageDataFromFileData(fileData)));
             updateActivePopupType(PopupWindowType.INSERT_LABEL_NAMES);
             acceptedFiles.map((fileData: File) => console.log(fileData))
+ 
         }
     };
+
+    
+
+    const getBase64Image = (img) => {
+        var canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, img.width, img.height);
+        var ext = img.src.substring(img.src.lastIndexOf(".") + 1).toLowerCase();
+        var dataURL = canvas.toDataURL("image/" + ext);
+
+        return dataURL;
+    }
+
+    const btof = (data, fileName) => {
+        const dataArr = data.split(",");
+        const byteString = atob(dataArr[1]);
+
+        const u8Arr = new Uint8Array(byteString.length);
+        for (let i = 0; i < byteString.length; i++) {
+            u8Arr[i] = byteString.charCodeAt(i);
+        }
+        return new File([u8Arr], fileName + ".jpg", {
+            type: "image/jpeg",
+            endings: "native"
+        });
+    }
+
+
+    const loadDummyData = () => {
+
+
+
+    // for(var i = 0; i <img.length ; i++){
+        var image = new Image;
+        image.src = img;
+        image.setAttribute("crossOrigin", "Anonymous");
+        image.onload = function() {
+            var base64 = getBase64Image(image);
+
+            var file = btof(base64, "test");
+            acceptedFiles[0] = file;
+            console.log(file)
+            // console.log(img.length)
+
+        };
+
+        // var image1 = new Image();
+        // image1.src = img1;
+        // image1.setAttribute("crossOrigin", "Anonymous");
+        // image1.onload = function() {
+        //     var base64 = getBase64Image(image1);
+
+        //     var file1 = btof(base64, "test");
+        //     acceptedFiles[1] = file1;
+        //     console.log(file1)
+
+        // };
+        // var image2 = new Image();
+        // image2.src = img2;
+        // image2.setAttribute("crossOrigin", "Anonymous");
+        // image2.onload = function() {
+        //     var base64 = getBase64Image(image2);
+
+        //     var file2 = btof(base64, "test");
+        //     acceptedFiles[2] = file2;
+        //     console.log(file2)
+
+        // };
+    // }
+
+
+    }
 
     const getDropZoneContent = () => {
         if (acceptedFiles.length === 0)
@@ -82,7 +171,7 @@ const ImagesDropZone: React.FC<IProps> = ({ updateActiveImageIndex, addImageData
             <div className="DropZoneButtons">
                 <TextButton
                     label={"Object Detection"}
-                    isDisabled={!acceptedFiles.length}
+                    // isDisabled={!acceptedFiles.length}
                     onClick={() => startEditor(ProjectType.OBJECT_DETECTION)}
                 />
             </div>

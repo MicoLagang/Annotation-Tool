@@ -22,6 +22,7 @@ function App() {
 
       <ImageGrid setSelectedImg={setSelectedImg} />
       
+
       { selectedImg && (
         <Modal selectedImg={selectedImg} setSelectedImg={setSelectedImg} />
       )}

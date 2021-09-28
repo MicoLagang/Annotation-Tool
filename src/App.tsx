@@ -49,8 +49,8 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import PrivateRoute from './views/PrivateRoutes/PrivateRoute'
 import Dashboard from './views/Dashboard/Dashboard';
 import CreateTeam from './views/Team/CreateTeam';
-import Tool from './views/MainView/MainView';
-// import Tool from './views/Tool/Tool';
+// import Tool from './views/MainView/MainView';
+import Tool from './views/Tool/Tool';
 // import TestTeam from './views/Team/TestTeam';
 import Team from './views/Team/Team';
 import Project from './views/Project/Project';
@@ -114,6 +114,7 @@ const App: React.FC<IProps> = ({ projectType, windowSize, ObjectDetectorLoaded, 
                         {/* <PrivateRoute exact path="/" component={Layout} /> */}
                         {/* <PrivateRoute exact path="/" component={Header} /> */}
                         
+                        {/* <PrivateRoute exact path="/tool" component={Tool} /> */}
                         <PrivateRoute exact path="/tool" component={Tool} />
                         <PrivateRoute exact path="/gallery/:teamID" component={Gallery} />
                         <PrivateRoute exact path="/project" component={Project} />

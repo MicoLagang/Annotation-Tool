@@ -1,6 +1,5 @@
 import React from 'react';
 import '../../App.scss';
-import './MainView.scss';
 import EditorView from "../EditorView/EditorView";
 import MainView from "../MainView/MainView";
 import { ProjectType } from "../../data/enums/ProjectType";

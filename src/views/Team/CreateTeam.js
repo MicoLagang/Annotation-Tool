@@ -3,6 +3,8 @@ import { Form } from 'react-bootstrap'
 import { Button } from '@material-ui/core'
 import teamService from '../../../src/services/team.service';
 import { Link } from 'react-router-dom'
+import DropdownButton from 'react-bootstrap/DropdownButton';
+import Dropdown from 'react-bootstrap/Dropdown'
 
 export default class CreateTeam extends Component {
     constructor(props) {
@@ -12,13 +14,31 @@ export default class CreateTeam extends Component {
         this.onChangeOwner = this.onChangeOwner.bind(this);
         this.saveTeam = this.saveTeam.bind(this);
         this.createTeam = this.createTeam.bind(this);
-
+        this.status = this.statusChange.bind(this);
+        this.key = this.keyChange.bind(this)
+        var randomstring = require("random-key");
         this.state = {
             name: '',
             contactEmail: '',
             owner: '',
+            status: '',
+            key: randomstring.generate(7),
             submitted: false,
         };
+    }
+
+
+
+    keyChange(e){
+        this.setState({
+            key: e.target.value
+        })
+    }
+
+    statusChange(e){
+        this.setState({
+            status: e.target.value
+        })
     }
 
     onChangeName(e) {
@@ -33,17 +53,23 @@ export default class CreateTeam extends Component {
         });
     }
 
+
     onChangeOwner(e) {
         this.setState({
             owner: e.target.value,
         });
     }
 
+
+    
+
     saveTeam() {
         const data = {
             name: this.state.name,
             contactEmail: this.state.contactEmail,
-            owner: this.state.owner
+            owner: this.state.owner,
+            status: this.state.status,
+            TeamCode: this.state.key,
         };
     
         teamService.create(data)
@@ -117,6 +143,33 @@ export default class CreateTeam extends Component {
                                 placeholder="Organization or Owner"
                                 name="owner"/>
                         </Form.Group>
+
+
+                        <Form.Group className="mb-3">
+                            <Form.Control 
+                                type="hidden"
+                                className="form-control"
+                                id="owner"
+                                required
+                                onChange={this.keyChange}
+                                value={this.state.key}
+                                placeholder="Organization or Owner"
+                                name="owner"/>
+                        </Form.Group>
+
+                        
+                        <div className="form-row">
+                                <div className="form-group col-md-5">
+                                
+                                    <select className="form-control"  onChange={this.status} >
+                                        {/* <option selected>Status</option> */}
+                                        <option value="Private">Private</option>
+                                        <option value="Public">Public</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                        <br></br>
                         
                         <Button onClick={this.saveTeam} variant="contained" color="primary" className="w-100">
                             Create

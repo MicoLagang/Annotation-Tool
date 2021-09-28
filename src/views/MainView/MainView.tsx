@@ -6,6 +6,7 @@ import { EditorFeatureData, IEditorFeature } from "../../data/info/EditorFeature
 import { Tooltip } from "@material-ui/core";
 import withStyles from "@material-ui/core/styles/withStyles";
 import ImagesDropZone from "./ImagesDropZone/ImagesDropZone";
+// import ImagesFromCloud from './ImagesFromCloud/ImagesFromCloud';
 
 const MainView: React.FC = () => {
     const [projectInProgress, setProjectInProgress] = useState(true);
@@ -96,16 +97,15 @@ const MainView: React.FC = () => {
             </div>
             <div className="RightColumn">
                 <div />
-                <ImagesDropZone />
+                <div className="row">
+                    <div className="col"><ImagesDropZone /></div>
+                    {/* <div className="col"><ImagesFromCloud /></div> */}
+                </div>
                 <div className="SocialMediaWrapper"></div>
                 {!projectInProgress && <TextButton
                     label={"Get Started"}
                     onClick={startProject}
                 />}
-                {/* {!projectInProgress && <TextButton
-                    label={"Log Out"}
-                    onClick={handleLogout}
-                />} */}
             </div>
         </div>
     );

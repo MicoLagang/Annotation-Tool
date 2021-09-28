@@ -5,6 +5,7 @@ import { useAuth } from '../../logic/context/AuthContext'
 import { Link, useHistory } from 'react-router-dom'
 import CreateTeam from '../Team/CreateTeam'
 import firebaseDb from '../../firebase'
+import Swal from "sweetalert2";  
 
 export default function Dashboard() {
     const [error, setError] = useState('')
@@ -61,6 +62,14 @@ export default function Dashboard() {
         backgroundColor: "#272343",
       };
 
+      function JoinTeam(){
+        Swal.fire({  
+            title: 'Join Team',
+            input: 'text',
+            inputPlaceholder: 'Enter Team Code'
+          });
+      }
+
     return (
         <>
             <Navbar collapseOnSelect expand="xl" style={createTeam} variant="dark">
@@ -76,6 +85,8 @@ export default function Dashboard() {
                             <NavDropdown title={currentUser.email} id="collasible-nav-dropdown">
                                 <NavDropdown.Item href="/update-profile">Profile</NavDropdown.Item>
                                 <NavDropdown.Item href="/teams">My Teams</NavDropdown.Item>
+                                <NavDropdown.Item onClick={JoinTeam}>Join Project</NavDropdown.Item>
+                                {/* <NavDropdown.Item href="/teams">Join Project</NavDropdown.Item> */}
                                 <NavDropdown.Divider />
                                 <NavDropdown.Item onClick={handleLogout}>Logout</NavDropdown.Item>
                             </NavDropdown>
