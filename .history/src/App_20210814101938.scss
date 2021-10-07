@@ -1,0 +1,34 @@
+@import './settings/_Settings';
+
+.App {
+	--leading-color: #{$secondaryColor};
+	--button-text-color: #{white};
+	--hue-value: 172deg;
+}
+
+.App.AI {
+	--leading-color: #{$primaryColor};
+	--button-text-color: #{$darkThemeSecondColor};
+	--hue-value: 120deg;
+}
+
+.container h2 {
+	text-align: center;
+	margin: 25px auto;
+  }
+  
+  .list {
+	text-align: left;
+	max-width: 750px;
+	margin: auto;
+  }
+  
+  .submit-form {
+	max-width: 300px;
+	margin: auto;
+  }
+  
+  .edit-form {
+	max-width: 300px;
+	margin: auto;
+  }
