@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from 'react';
 import './ImagesDropZone.scss';
 import { useDropzone, DropzoneOptions } from "react-dropzone";
 import { TextButton } from "../../Common/TextButton/TextButton";
@@ -12,6 +12,7 @@ import { updateActivePopupType, updateProjectData } from "../../../store/general
 import { AcceptedFileType } from "../../../data/enums/AcceptedFileType";
 import { ProjectData } from "../../../store/general/types";
 import { ImageDataUtil } from "../../../utils/ImageDataUtil";
+import { useImage } from '../../../logic/context/imageContext';
 
 interface IProps {
     updateActiveImageIndex: (activeImageIndex: number) => any;
@@ -26,21 +27,12 @@ const ImagesDropZone: React.FC<IProps> = ({ updateActiveImageIndex, addImageData
         accept: AcceptedFileType.IMAGE
     } as DropzoneOptions);
 
-const img = "https://firebasestorage.googleapis.com/v0/b/ilabel-tool.appspot.com/o/RTX742OR-e1572454412638.jpg?alt=media&token=0dc64c89-82f0-47f4-9fb2-f2111018beb7";
-
-    // const img1 = "https://firebasestorage.googleapis.com/v0/b/ilabel-tool.appspot.com/o/WhatsApp-Image-2020-04-10-at-22.03.56.jpeg?alt=media&token=5673969d-38fb-4639-abd1-db5e9223a56f";
-    
-
-    // const img2 = "https://firebasestorage.googleapis.com/v0/b/ilabel-tool.appspot.com/o/Screenshot_2.png?alt=media&token=564dbe65-bbf1-44e2-ab87-175b30f8e311"
-    // const img = [
-        // "https://firebasestorage.googleapis.com/v0/b/ilabel-tool.appspot.com/o/RTX742OR-e1572454412638.jpg?alt=media&token=0dc64c89-82f0-47f4-9fb2-f2111018beb7",
-        // "https://firebasestorage.googleapis.com/v0/b/ilabel-tool.appspot.com/o/WhatsApp-Image-2020-04-10-at-22.03.56.jpeg?alt=media&token=5673969d-38fb-4639-abd1-db5e9223a56f"
-    // ];
+    const { imagesData, setImagesData } = useImage()
+    const timer = ms => new Promise(res => setTimeout(res, ms))
 
     const startEditor = (projectType: ProjectType) => {
+        console.log(acceptedFiles)
 
-
-        loadDummyData()
         if (acceptedFiles.length > 0) {
             updateProjectData({
                 ...projectData,
@@ -54,9 +46,8 @@ const img = "https://firebasestorage.googleapis.com/v0/b/ilabel-tool.appspot.com
         }
     };
 
-    
-
     const getBase64Image = (img) => {
+        console.log("processing base 64...")
         var canvas = document.createElement("canvas");
         canvas.width = img.width;
         canvas.height = img.height;
@@ -69,6 +60,7 @@ const img = "https://firebasestorage.googleapis.com/v0/b/ilabel-tool.appspot.com
     }
 
     const btof = (data, fileName) => {
+        console.log("processing btof...")
         const dataArr = data.split(",");
         const byteString = atob(dataArr[1]);
 
@@ -82,53 +74,50 @@ const img = "https://firebasestorage.googleapis.com/v0/b/ilabel-tool.appspot.com
         });
     }
 
+    const loadDummyData = async() => {
+        for (var i = 0; i < imagesData.length; i++){
+            console.log(i)
+            var image = await new Image;
+            image.src = imagesData[i];
+            console.log(imagesData[i])
+            console.log(image)
+            image.setAttribute("crossOrigin", "Anonymous");
+            image.onload = async() => {
+                var base64 = await getBase64Image(image);
+                console.log("done base 64")
 
-    const loadDummyData = () => {
+                var file = await btof(base64, `test${i}`);
+                console.log("done btof")
+                acceptedFiles[i] = file;
+                console.log(file)
+            };
+        }
+    }
 
+    async function load () { // We need to wrap the loop into an async function for this to work
+        for (var i = 0; i < imagesData.length; i++) {
+            console.log(i);
+            var image = await new Image;
+            image.src = imagesData[i];
+            console.log(imagesData[i])
+            console.log(image)
+            image.setAttribute("crossOrigin", "Anonymous");
+            image.onload = async() => {
+                var base64 = await getBase64Image(image);
+                console.log("done base 64")
 
-
-    // for(var i = 0; i <img.length ; i++){
-        var image = new Image;
-        image.src = img;
-        image.setAttribute("crossOrigin", "Anonymous");
-        image.onload = function() {
-            var base64 = getBase64Image(image);
-
-            var file = btof(base64, "test");
-            acceptedFiles[0] = file;
-            console.log(file)
-            // console.log(img.length)
-
-        };
-
-        // var image1 = new Image();
-        // image1.src = img1;
-        // image1.setAttribute("crossOrigin", "Anonymous");
-        // image1.onload = function() {
-        //     var base64 = getBase64Image(image1);
-
-        //     var file1 = btof(base64, "test");
-        //     acceptedFiles[1] = file1;
-        //     console.log(file1)
-
-        // };
-        // var image2 = new Image();
-        // image2.src = img2;
-        // image2.setAttribute("crossOrigin", "Anonymous");
-        // image2.onload = function() {
-        //     var base64 = getBase64Image(image2);
-
-        //     var file2 = btof(base64, "test");
-        //     acceptedFiles[2] = file2;
-        //     console.log(file2)
-
-        // };
-    // }
-
-
+                var file = await btof(base64, `test${i}`);
+                console.log("done btof")
+                acceptedFiles[i] = file;
+                console.log(file)
+            };
+            await timer(1000); // then the created Promise can be awaited
+        }
+        getDropZoneContent();
     }
 
     const getDropZoneContent = () => {
+        console.log("Updating dropzone...")
         if (acceptedFiles.length === 0)
             return <>
                 <input {...getInputProps()} />
@@ -169,6 +158,11 @@ const img = "https://firebasestorage.googleapis.com/v0/b/ilabel-tool.appspot.com
                 {getDropZoneContent()}
             </div>
             <div className="DropZoneButtons">
+                <TextButton
+                    label={"Load Images"}
+                    // isDisabled={!acceptedFiles.length}
+                    onClick={() => load()}
+                />
                 <TextButton
                     label={"Object Detection"}
                     // isDisabled={!acceptedFiles.length}

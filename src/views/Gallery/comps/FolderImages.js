@@ -72,7 +72,7 @@ export default function TestTeam(post) {
 
 
       <Link
-        // to={`/Addfolder/${teamID}`} 
+        to={`/teamMembers/${teamID}`} 
         style={cardLink}
         className="col-lg-3 col-md-4 col-sm-12 mb-3"
       >

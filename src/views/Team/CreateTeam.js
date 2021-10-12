@@ -1,12 +1,19 @@
-import React, { Component } from 'react'
+import React, { Component,useState } from 'react'
 import { Form } from 'react-bootstrap'
 import { Button } from '@material-ui/core'
 import teamService from '../../../src/services/team.service';
+import projectMembersService from '../../../src/services/projectMembers.service';
 import { Link } from 'react-router-dom'
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown'
+import { useAuth } from '../../logic/context/AuthContext';
+import { useParams } from 'react-router-dom'
+import axios from 'axios';
+import { projectFirestore } from '../../firebase';
 
 export default class CreateTeam extends Component {
+
+ 
     constructor(props) {
         super(props);
         this.onChangeName = this.onChangeName.bind(this);
@@ -16,6 +23,9 @@ export default class CreateTeam extends Component {
         this.createTeam = this.createTeam.bind(this);
         this.status = this.statusChange.bind(this);
         this.key = this.keyChange.bind(this)
+
+        this.teamID = this.setTeamID.bind(this)
+
         var randomstring = require("random-key");
         this.state = {
             name: '',
@@ -24,10 +34,24 @@ export default class CreateTeam extends Component {
             status: '',
             key: randomstring.generate(7),
             submitted: false,
+            teamID:'',
         };
+
+    
+
+       
     }
 
+    componentDidMount(props) {
+        const id = props.UserID;
 
+    }
+
+    setTeamID(e){
+        this.setState({
+            key: e.target.value
+        })
+    }
 
     keyChange(e){
         this.setState({
@@ -60,10 +84,26 @@ export default class CreateTeam extends Component {
         });
     }
 
-
+    componentDidMount() {
+        const options = {
+            headers: {
+                'Authorization': localStorage.getItem('api_key'),
+                'content-type': 'application/json'
+            }
+        };
+        axios.get(`urlLink/${this.props.match.params.UserID}` , options)
+            .then((response) => {
+                console.log(response);
+            });
+    }
     
 
     saveTeam() {
+
+        // const { currentUser, logout } = useAuth();
+
+        
+
         const data = {
             name: this.state.name,
             contactEmail: this.state.contactEmail,
@@ -72,9 +112,25 @@ export default class CreateTeam extends Component {
             TeamCode: this.state.key,
         };
     
+
+        const member = {
+            role : "admin"  ,
+            uid  : this.props.match.params.UserID,
+            TeamCode: this.state.key,
+            projectID : "",
+            TeamName:this.state.name,
+            Status: "true",
+        }
+
+
         teamService.create(data)
-          .then(() => {
+          .then((res) => {
+            
+            member.projectID = res.id
+            
             console.log("Created new item successfully!");
+
+            projectMembersService.create(member)
             this.setState({
                 submitted: true,
             });
@@ -82,6 +138,10 @@ export default class CreateTeam extends Component {
           .catch((e) => {
             console.log(e);
           });
+
+
+
+
     }
     
     createTeam() {

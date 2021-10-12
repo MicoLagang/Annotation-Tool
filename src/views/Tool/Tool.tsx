@@ -39,7 +39,9 @@ const Tool: React.FC<IProps> = ({ projectType, windowSize, ObjectDetectorLoaded,
         <div className={classNames("App", { "AI": ObjectDetectorLoaded || PoseDetectionLoaded })}
             draggable={false}
         >
+            
             {selectRoute()}
+
             <PopupView />
         </div>
     );

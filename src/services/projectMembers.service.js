@@ -1,6 +1,7 @@
 import { projectStorage, projectFirestore, timestamp } from '../firebase';
 
-const db = projectFirestore.collection("PROJECT");
+const db = projectFirestore.collection("PROJECTMEMBERS");
+
 
 class TutorialDataService {
   getAll() {
@@ -13,13 +14,11 @@ class TutorialDataService {
 
   create(tutorial) {
     return db.add(tutorial);
+  
+    // return db.add(teamID);
     // return db.collection("teams").doc(tutorial).collection('folderimages');
   }
-  joinTeam(teamId, member){
-    return db.doc(teamId).collection("MEMBERS").add(member)
-    console.log(teamId)
-    console.log(member)
-  }
+
 
   update(key, value) {
     return db.child(key).update(value);

@@ -75,6 +75,11 @@ import ImagesFolder from "./views/Gallery/comps/ImagesFolder"
 import AddFolderpic from "./views/Gallery/comps/AddFolderpic"
 import UploadImagesGallery from './views/Gallery/UploadImagesGallery'
 
+import myTeam from './views/myTeam/myTeam'
+import teamMembers from './views/Team/teamMembers';
+import AddMember from './views/Team/AddMember';
+import { ImageProvider } from './logic/context/imageContext';
+
 interface IProps {
     projectType: ProjectType;
     windowSize: ISize;
@@ -109,6 +114,7 @@ const App: React.FC<IProps> = ({ projectType, windowSize, ObjectDetectorLoaded, 
             <CssBaseline />
                 <Router>
                 <AuthProvider>
+                    <ImageProvider>
                     <Switch>
                         <PrivateRoute exact path="/" component={Dashboard} />
                         {/* <PrivateRoute exact path="/" component={Layout} /> */}
@@ -118,6 +124,9 @@ const App: React.FC<IProps> = ({ projectType, windowSize, ObjectDetectorLoaded, 
                         <PrivateRoute exact path="/tool" component={Tool} />
                         <PrivateRoute exact path="/gallery/:teamID" component={Gallery} />
                         <PrivateRoute exact path="/project" component={Project} />
+
+                        <PrivateRoute exact path="/myTeam/:uid" component={myTeam} />
+                        <PrivateRoute exact path="/teamMembers/:teamID" component={teamMembers} />
                       
                         {/* <PrivateRoute exact path="/test" component={test} /> */}
                         {/* <Route exact path="/team/:name"> <TestTeam></TestTeam> </Route> */}
@@ -127,8 +136,9 @@ const App: React.FC<IProps> = ({ projectType, windowSize, ObjectDetectorLoaded, 
                         <PrivateRoute exact path="/team/:name" component={Team}> <Team/> </PrivateRoute>
                         <Container className="mt-5 d-flex justify-content-center" style={{ minHeight: "100vh" }}>
                             <div className="w-100" style={{ maxWidth: '400px' }}>
-                                <PrivateRoute exact path="/new" component={CreateTeam} />
+                                <PrivateRoute exact path="/new/:UserID" component={CreateTeam} />
                                 <PrivateRoute path="/update-profile" component={UpdateProfile} />
+                                <PrivateRoute path="/addMember/:UserID" component={AddMember} />
                                 <PrivateRoute exact path="/createimagesfolder/:name/:teamID" component={AddFolderpic}/>
                                 <PrivateRoute exact path="/Addfolder/:teamID" component={AddFolder} />
                                 <Route path="/signup" component={SignUp} />
@@ -137,6 +147,7 @@ const App: React.FC<IProps> = ({ projectType, windowSize, ObjectDetectorLoaded, 
                             </div>
                         </Container>
                     </Switch>
+                    </ImageProvider>
                 </AuthProvider>
             </Router>
           </ThemeProvider>
