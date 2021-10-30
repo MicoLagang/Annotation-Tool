@@ -10,11 +10,16 @@ import TopNav from '../../Navigation/TopNav';
 import {projectFirestore} from '../../../firebase';
 
 export default function TestTeam(post) {
-    const { name } = useParams()
+
+  
+    // const { name } = useParams()
+    // const {teamID} = useParams()
+    const teamID= localStorage.getItem("currentTeamID")
+    const name = localStorage.getItem("currentProjectID")
     const [selectedImg, setSelectedImg] = useState(null);
     const [loading, setLoading] = useState(true);
     const [posts, setPosts] = useState([]);
-    const {teamID} = useParams()
+    
     const createTeam = {
         backgroundColor: "#FFD803",
       };
@@ -58,7 +63,7 @@ export default function TestTeam(post) {
 
 
       <Link
-        to={`/imagesfolder/${name}/${teamID}`} 
+        to={`/imagesfolder`} 
         style={cardLink}
         className="col-lg-3 col-md-4 col-sm-12 mb-3"
       >
@@ -72,7 +77,7 @@ export default function TestTeam(post) {
 
 
       <Link
-        to={`/teamMembers/${teamID}`} 
+        to={`/teamMembers`} 
         style={cardLink}
         className="col-lg-3 col-md-4 col-sm-12 mb-3"
       >

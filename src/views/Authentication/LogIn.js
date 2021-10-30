@@ -386,16 +386,6 @@ function Login(props) {
 
 
 
-<div className="form-row">
-                                <div className="form-group col-md-5">
-                                
-                                    <select className="form-control" >
-                                        {/* <option selected>Status</option> */}
-                                        <option value="Private">Private</option>
-                                        <option value="Public">Public</option>
-                                    </select>
-                                </div>
-                            </div>
 
               
               <div className={classes.creatingButtonContainer}>

@@ -112,7 +112,8 @@ import { useParams } from 'react-router-dom'
 
 export default function AddFolder() {
 
-    const {teamID} = useParams()
+    // const {teamID} = useParams()
+    const teamID = localStorage.getItem('currentTeamID')
     const foldername = useRef()
 
     function saveData(){

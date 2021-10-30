@@ -180,7 +180,7 @@ export default function Dashboard() {
                         <Nav className="me-auto">
                             <Nav.Link href="/tool">Tool</Nav.Link>
                             <Nav.Link href="/gallery">Gallery</Nav.Link>
-                            <Nav.Link href={`myTeam/${currentUser.uid}`}>My Team</Nav.Link>
+                            <Nav.Link href={`/myTeam`}>My Team</Nav.Link>
                         </Nav>
                         <Nav>
                         <Nav.Link></Nav.Link>

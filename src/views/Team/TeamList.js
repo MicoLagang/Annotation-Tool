@@ -50,8 +50,15 @@ const FolderList = () => {
     return <h1>loading firebase data...</h1>;
   }
 
+  function saveAs(ID){
+    localStorage.setItem("currentTeamID",ID);
+    
+  }
+  
+  localStorage.setItem("currentUserUID",currentUser.uid);
 
-
+  // const rememberMe = localStorage.getItem('currentUserUID');
+  // console.log(rememberMe)
   return (
 
     
@@ -113,7 +120,8 @@ const FolderList = () => {
     <div className="row">
       <Link
         // to="/new/"
-        to={`/new/${currentUser.uid}`} 
+        to={`/new`} 
+
         style={cardLink}
         className="col-lg-3 col-md-4 col-sm-12 mb-3"
       >
@@ -128,13 +136,18 @@ const FolderList = () => {
 
       {posts.length > 0 ? (
         posts.map((post) =>
+
+        
           <Link
-          to={`/gallery/${post.key}`} 
+          // to={`/gallery/${post.key}`} 
+          to={`/gallery`} 
           // to={`/gallery/${currentUser.uid}`} 
+          onClick={() => saveAs(post.key)}
           key={post.key}
             style={cardLink}
             className="col-lg-3 col-md-4 col-sm-12 mb-3"
           >
+            {/* {localStorage.setItem("currentGalleryUid", post.key)} */}
             <Card border="dark" className="h-100">
               <Card.Body className="d-flex align-items-center justify-content-center">
                 <Card.Title>{post.name}

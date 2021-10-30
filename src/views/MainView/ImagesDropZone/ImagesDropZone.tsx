@@ -74,46 +74,31 @@ const ImagesDropZone: React.FC<IProps> = ({ updateActiveImageIndex, addImageData
         });
     }
 
-    const loadDummyData = async() => {
-        for (var i = 0; i < imagesData.length; i++){
-            console.log(i)
-            var image = await new Image;
-            image.src = imagesData[i];
-            console.log(imagesData[i])
-            console.log(image)
-            image.setAttribute("crossOrigin", "Anonymous");
-            image.onload = async() => {
-                var base64 = await getBase64Image(image);
-                console.log("done base 64")
+    async function load() {
+        console.log(imagesData.length)
+        if (imagesData.length > -1) {
+            for (var i = 0; i < imagesData.length; i++) {
+                console.log(i);
+                var image = await new Image;
+                image.src = imagesData[i];
+                console.log(imagesData[i])
+                console.log(image)
+                image.setAttribute("crossOrigin", "Anonymous");
+                image.onload = async() => {
+                    var base64 = await getBase64Image(image);
+                    console.log("done base 64")
 
-                var file = await btof(base64, `test${i}`);
-                console.log("done btof")
-                acceptedFiles[i] = file;
-                console.log(file)
-            };
+                    var file = await btof(base64, `test${i}`);
+                    console.log("done btof")
+                    acceptedFiles[i] = file;
+                    console.log(file)
+                };
+                await timer(1000); // then the created Promise can be awaited
+            }
+            getDropZoneContent();
+        } else {
+            alert("No images selected to annotate.")
         }
-    }
-
-    async function load () { // We need to wrap the loop into an async function for this to work
-        for (var i = 0; i < imagesData.length; i++) {
-            console.log(i);
-            var image = await new Image;
-            image.src = imagesData[i];
-            console.log(imagesData[i])
-            console.log(image)
-            image.setAttribute("crossOrigin", "Anonymous");
-            image.onload = async() => {
-                var base64 = await getBase64Image(image);
-                console.log("done base 64")
-
-                var file = await btof(base64, `test${i}`);
-                console.log("done btof")
-                acceptedFiles[i] = file;
-                console.log(file)
-            };
-            await timer(1000); // then the created Promise can be awaited
-        }
-        getDropZoneContent();
     }
 
     const getDropZoneContent = () => {
@@ -158,11 +143,12 @@ const ImagesDropZone: React.FC<IProps> = ({ updateActiveImageIndex, addImageData
                 {getDropZoneContent()}
             </div>
             <div className="DropZoneButtons">
+                {imagesData && 
                 <TextButton
                     label={"Load Images"}
                     // isDisabled={!acceptedFiles.length}
                     onClick={() => load()}
-                />
+                />}
                 <TextButton
                     label={"Object Detection"}
                     // isDisabled={!acceptedFiles.length}

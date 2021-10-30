@@ -13,6 +13,8 @@ import { CSSHelper } from "../../logic/helpers/CSSHelper";
 import { ClipLoader } from "react-spinners";
 import ImportLabelPopup from "./ImportLabelPopup/ImportLabelPopup";
 import ExportLabelPopup from "./ExportLabelsPopup/ExportLabelPopup";
+import SaveAnnotationsPopup from './SaveAnnotationsPopup/SaveAnnotationsPopup';
+import LoadAnnotationsPopup from './LoadAnnotationsPopup/LoadAnnotationsPopup';
 
 interface IProps {
     activePopupType: PopupWindowType;
@@ -26,6 +28,10 @@ const PopupView: React.FC<IProps> = ({ activePopupType }) => {
                 return <LoadLabelsPopup />;
             case PopupWindowType.EXPORT_ANNOTATIONS:
                 return <ExportLabelPopup />;
+            case PopupWindowType.SAVE_ANNOTATIONS:
+                return <SaveAnnotationsPopup />;
+            case PopupWindowType.LOAD_ANNOTATIONS:
+                return <LoadAnnotationsPopup />;
             case PopupWindowType.IMPORT_ANNOTATIONS:
                 return <ImportLabelPopup />;
             case PopupWindowType.INSERT_LABEL_NAMES:

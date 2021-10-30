@@ -12,11 +12,15 @@ import { Form } from 'react-bootstrap'
 import { Button } from '@material-ui/core'
 
 export default function TestTeam(post) {
-    const { name } = useParams()
+
+  // const {teamID} = useParams()
+  //   const { name } = useParams()
+    const teamID= localStorage.getItem("currentTeamID")
+    const name = localStorage.getItem("currentProjectID")
     const [selectedImg, setSelectedImg] = useState(null);
     const [loading, setLoading] = useState(true);
     const [posts, setPosts] = useState([]);
-    const {teamID} = useParams()
+    
     const foldername = useRef()
     const createTeam = {
         backgroundColor: "#FFD803",

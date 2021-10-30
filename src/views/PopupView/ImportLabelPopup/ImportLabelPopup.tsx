@@ -14,6 +14,7 @@ import {updateActiveLabelType, updateImageData, updateLabelNames} from "../../..
 import {ImporterSpecData} from "../../../data/ImporterSpecData";
 import {AnnotationFormatType} from "../../../data/enums/AnnotationFormatType";
 import {ILabelFormatData} from "../../../interfaces/ILabelFormatData";
+import { projectFirestore } from '../../../firebase';
 
 interface IProps {
     activeLabelType: LabelType,
@@ -44,8 +45,44 @@ const ImportLabelPopup: React.FC<IProps> = (
         accept: [AcceptedFileType.JSON, AcceptedFileType.TEXT],
         multiple: true,
         onDrop: (acceptedFiles) => {
+            console.log(acceptedFiles);
             const importer = new (ImporterSpecData[formatType])([labelType])
+            console.log(importer)
+            console.log(formatType);
+            console.log(labelType);
             importer.import(acceptedFiles, onAnnotationLoadSuccess, onAnnotationsLoadFailure);
+
+
+            // let data;
+            // var docRef = projectFirestore
+            // .collection("ANNOTATIONS")
+            // .doc("lXk8j3LeWwX0NoIpw8Uy");
+
+            // docRef
+            // .get()
+            // .then((doc) => {
+            //     if (doc.exists) {
+            //         console.log("Document data:", doc.data().data);
+            //         data = doc.data().data
+            //         var datastring = JSON.stringify(data);
+            //         let dataFile = new File([datastring], "data.json", {
+            //                 type: "application/json"
+            //         });
+
+            //         acceptedFiles[0] = dataFile
+            //         console.log(acceptedFiles);
+            //         const importer = new (ImporterSpecData[formatType])([labelType])
+            //         console.log(importer)
+            //         console.log(formatType);
+            //         console.log(labelType);
+            //         importer.import(acceptedFiles, onAnnotationLoadSuccess, onAnnotationsLoadFailure);
+            //     } else {
+            //         console.log("No such document!");
+            //     }
+            // })
+            // .catch((error) => {
+            //     console.log("Error getting document:", error);
+            // });
         }
     });
 
@@ -100,6 +137,7 @@ const ImportLabelPopup: React.FC<IProps> = (
                 <p className="extraBold">Try again</p>
             </>;
         } else if (loadedImageData.length !== 0 && loadedLabelNames.length !== 0) {
+            console.log(loadedImageData)
             return <>
                 <img
                     draggable={false}

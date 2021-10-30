@@ -34,7 +34,8 @@ const ExportLabelPopup: React.FC <IProps> = ({activeLabelType}) => {
                 LineLabelsExporter.export(exportFormatType);
                 break;
             case LabelType.POLYGON:
-                PolygonLabelsExporter.export(exportFormatType);
+                console.log(exportFormatType)
+                PolygonLabelsExporter.export(exportFormatType, "local");
                 break;
             case LabelType.IMAGE_RECOGNITION:
                 TagLabelsExporter.export(exportFormatType);
@@ -48,6 +49,7 @@ const ExportLabelPopup: React.FC <IProps> = ({activeLabelType}) => {
     };
 
     const onSelect = (exportFormatType: AnnotationFormatType) => {
+        console.log(exportFormatType)
         setExportFormatType(exportFormatType);
     };
 

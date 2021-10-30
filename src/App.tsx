@@ -122,25 +122,25 @@ const App: React.FC<IProps> = ({ projectType, windowSize, ObjectDetectorLoaded, 
                         
                         {/* <PrivateRoute exact path="/tool" component={Tool} /> */}
                         <PrivateRoute exact path="/tool" component={Tool} />
-                        <PrivateRoute exact path="/gallery/:teamID" component={Gallery} />
+                        <PrivateRoute exact path="/gallery" component={Gallery} />
                         <PrivateRoute exact path="/project" component={Project} />
 
-                        <PrivateRoute exact path="/myTeam/:uid" component={myTeam} />
-                        <PrivateRoute exact path="/teamMembers/:teamID" component={teamMembers} />
+                        <PrivateRoute exact path="/myTeam" component={myTeam} />
+                        <PrivateRoute exact path="/teamMembers" component={teamMembers} />
                       
                         {/* <PrivateRoute exact path="/test" component={test} /> */}
                         {/* <Route exact path="/team/:name"> <TestTeam></TestTeam> </Route> */}
-                        <PrivateRoute exact path="/folder/:name/:teamID" component={FolderImages}> <FolderImages/> </PrivateRoute>
-                        <PrivateRoute exact path="/imagesfolder/:name/:teamID" component={ImagesFolder}> <ImagesFolder/> </PrivateRoute>
-                        <PrivateRoute exact path="/galleryimagesfolder/:name/:teamID/:folderID" component={UploadImagesGallery}> <UploadImagesGallery/> </PrivateRoute>
+                        <PrivateRoute exact path="/folder" component={FolderImages}> <FolderImages/> </PrivateRoute>
+                        <PrivateRoute exact path="/imagesfolder" component={ImagesFolder}> <ImagesFolder/> </PrivateRoute>
+                        <PrivateRoute exact path="/galleryimagesfolder" component={UploadImagesGallery}> <UploadImagesGallery/> </PrivateRoute>
                         <PrivateRoute exact path="/team/:name" component={Team}> <Team/> </PrivateRoute>
                         <Container className="mt-5 d-flex justify-content-center" style={{ minHeight: "100vh" }}>
                             <div className="w-100" style={{ maxWidth: '400px' }}>
-                                <PrivateRoute exact path="/new/:UserID" component={CreateTeam} />
+                                <PrivateRoute exact path="/new" component={CreateTeam} />
                                 <PrivateRoute path="/update-profile" component={UpdateProfile} />
                                 <PrivateRoute path="/addMember/:UserID" component={AddMember} />
-                                <PrivateRoute exact path="/createimagesfolder/:name/:teamID" component={AddFolderpic}/>
-                                <PrivateRoute exact path="/Addfolder/:teamID" component={AddFolder} />
+                                <PrivateRoute exact path="/createimagesfolder" component={AddFolderpic}/>
+                                <PrivateRoute exact path="/Addfolder" component={AddFolder} />
                                 <Route path="/signup" component={SignUp} />
                                 <Route path="/login" component={LogIn} />
                                 <Route path="/forgot-password" component={ForgotPassword} />

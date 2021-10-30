@@ -112,10 +112,10 @@ export default class CreateTeam extends Component {
             TeamCode: this.state.key,
         };
     
-
+        const currentUserID = localStorage.getItem("currentUserUID")
         const member = {
             role : "admin"  ,
-            uid  : this.props.match.params.UserID,
+            uid  : currentUserID,
             TeamCode: this.state.key,
             projectID : "",
             TeamName:this.state.name,
@@ -131,6 +131,7 @@ export default class CreateTeam extends Component {
             console.log("Created new item successfully!");
 
             projectMembersService.create(member)
+            console.log(member)
             this.setState({
                 submitted: true,
             });

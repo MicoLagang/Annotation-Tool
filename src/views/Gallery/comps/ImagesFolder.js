@@ -10,8 +10,11 @@ import { Link } from 'react-router-dom'
 import TopNav from '../../Navigation/TopNav';
 
 export default function TestTeam() {
-    const { name } = useParams()
-    const {teamID} = useParams()
+
+    // const { name } = useParams()
+    // const {teamID} = useParams()
+    const teamID= localStorage.getItem("currentTeamID")
+    const name = localStorage.getItem("currentProjectID")
     const [loading, setLoading] = useState(true);
     const [posts, setPosts] = useState([]);
     const [selectedImg, setSelectedImg] = useState(null);
@@ -50,8 +53,14 @@ export default function TestTeam() {
         return <h1>loading firebase data...</h1>;
       }
 
+      function saveAs(ID){
+        localStorage.setItem("currentImagesFolderID",ID);
+        
+      }
+
     return (
     //     <div>
+ 
 
     // <Title/>
     //     {/* <input 
@@ -64,7 +73,7 @@ export default function TestTeam() {
     //   <ImageGrid setSelectedImg={setSelectedImg} />
     //         {/* <h2>Team { name }</h2>
 
-    //         <h1>HELLO PO YAWAA TESt</h1> */}
+    //         
 
     //     </div>
 
@@ -76,7 +85,7 @@ export default function TestTeam() {
 <Container>
     <div className="row">
       <Link
-        to={`/createimagesfolder/${name}/${teamID}`} 
+        to={`/createimagesfolder`} 
         style={cardLink}
         className="col-lg-3 col-md-4 col-sm-12 mb-3"
       >
@@ -90,7 +99,8 @@ export default function TestTeam() {
       {posts.length > 0 ? (
         posts.map((post) =>
           <Link
-          to={`/galleryimagesfolder/${name}/${post.key}/${teamID}`} 
+          to={`/galleryimagesfolder`} 
+          onClick={() => saveAs(post.key)}
           key={post.key}
             style={cardLink}
             className="col-lg-3 col-md-4 col-sm-12 mb-3"

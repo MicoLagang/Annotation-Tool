@@ -86,6 +86,7 @@ import useFirestore from "../hooks/useFirestore";
 import { Card, Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useImage } from "../../../logic/context/imageContext";
+import { projectFirestore } from "../../../firebase";
 
 function ImageGrid() {
   const { docs } = useFirestore("PROJECT");
@@ -125,6 +126,19 @@ function ImageGrid() {
     console.log(tempArray);
     setImagesURL(tempArray);
   }
+
+  var docRef = projectFirestore.collection("ANNOTATIONS").doc("24ul5NguzlVppt0TXgjU");
+
+docRef.get().then((doc) => {
+    if (doc.exists) {
+        console.log("Document data:", doc.data().data);
+    } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+    }
+}).catch((error) => {
+    console.log("Error getting document:", error);
+});
 
   return (
     <>

@@ -18,7 +18,11 @@ const useStorage = (file) => {
     // const collectionRef = projectFirestore.collection('teams').doc(name).collection("images");
     const collectionRef = projectFirestore.collection('PROJECT').doc(folderID).collection("FOLDERS").doc(name).collection('IMAGESFOLDER').doc(teamID).collection("IMAGES");
 
-    console.log(storageRef);
+
+    console.log(folderID);
+    console.log(name);
+    console.log(teamID);
+    // console.log(storageRef);
     storageRef.put(file).on('state_changed', (snap) => {
       let percentage = (snap.bytesTransferred / snap.totalBytes) * 100;
       setProgress(percentage);

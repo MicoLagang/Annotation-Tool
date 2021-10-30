@@ -8,7 +8,10 @@ import TopNav from "../../Navigation/TopNav";
 const FolderList = () => {
   const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState([]);
-  const {teamID} = useParams()
+  // const {teamID} = useParams()
+  const teamID = localStorage.getItem('currentTeamID');
+
+
   const createTeam = {
     backgroundColor: "#FFD803",
   };
@@ -44,6 +47,11 @@ const FolderList = () => {
     return <h1>loading firebase data...</h1>;
   }
 
+  function saveAs(ID){
+    localStorage.setItem("currentProjectID",ID);
+    
+  }
+
   return (
 
     
@@ -74,7 +82,7 @@ const FolderList = () => {
 <br></br>
     <div className="row">
       <Link
-        to={`/Addfolder/${teamID}`} 
+        to={`/Addfolder`} 
         style={cardLink}
         className="col-lg-3 col-md-4 col-sm-12 mb-3"
       >
@@ -90,11 +98,13 @@ const FolderList = () => {
       {posts.length > 0 ? (
         posts.map((post) =>
           <Link
-          to={`/folder/${post.key}/${teamID}`} 
+          to={`/folder`} 
+          onClick={() => saveAs(post.key)}
           key={post.key}
             style={cardLink}
             className="col-lg-3 col-md-4 col-sm-12 mb-3"
           >
+
             <Card border="dark" className="h-100">
               <Card.Body className="d-flex align-items-center justify-content-center">
                 <Card.Title>{post.name}</Card.Title>

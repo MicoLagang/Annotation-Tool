@@ -1,6 +1,6 @@
-import {updateActivePopupType} from "../../store/general/actionCreators";
-import {PopupWindowType} from "../enums/PopupWindowType";
-import {store} from "../../index";
+import { updateActivePopupType } from "../../store/general/actionCreators";
+import { PopupWindowType } from "../enums/PopupWindowType";
+import { store } from "../../index";
 
 export type DropDownMenuNode = {
     name: string
@@ -59,6 +59,22 @@ export const DropDownMenuData: DropDownMenuNode[] = [
                 disabled: false,
                 onClick: () => store.dispatch(updateActivePopupType(PopupWindowType.LOAD_AI_MODEL))
             },
+            {
+                name: "Save Annotations",
+                description: "Save annotations in database",
+                imageSrc: "ico/import-labels.png",
+                imageAlt: "load-ai-model",
+                disabled: false,
+                onClick: () => store.dispatch(updateActivePopupType(PopupWindowType.SAVE_ANNOTATIONS))
+            },
+            {
+                name: "Load Annotations",
+                description: "Load annotations from database",
+                imageSrc: "ico/export-labels.png",
+                imageAlt: "load-ai-model",
+                disabled: false,
+                onClick: () => store.dispatch(updateActivePopupType(PopupWindowType.LOAD_ANNOTATIONS))
+            },
         ]
     },
     {
@@ -83,6 +99,6 @@ export const DropDownMenuData: DropDownMenuNode[] = [
                 onClick: () => window.open("https://github.com/SkalskiP/make-sense/issues", "_blank")
             }
         ]
-    }
-]
+    },
 
+]

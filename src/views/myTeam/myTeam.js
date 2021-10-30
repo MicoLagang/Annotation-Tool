@@ -9,7 +9,8 @@ const FolderList = () => {
   const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState([]);
   const [posts1, setPosts1] = useState([]);
-  const {uid} = useParams()
+  // const {uid} = useParams()
+  const uid = localStorage.getItem('currentUserUID')
 
   const createTeam = {
     backgroundColor: "#FFD803",
@@ -29,7 +30,7 @@ const FolderList = () => {
   useEffect(() => {
     const getPostsFromFirebase = [];
     const subscriber = projectFirestore
-      .collection("PROJECTMEMBERS").where("uid", "==",uid)
+      .collection("PROJECTMEMBERS").where("uid", "==",uid).where("Status", "==","true")
       .onSnapshot((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           getPostsFromFirebase.push({
@@ -136,7 +137,7 @@ const FolderList = () => {
 
 
           <Link
-          to={`/gallery/${post.projectID}`} 
+          to={`/gallery`} 
           // to={`/gallery/${uid}`} 
           key={post.key}
             style={cardLink}

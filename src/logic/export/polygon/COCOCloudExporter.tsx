@@ -2,7 +2,6 @@ import { ImageData, LabelName, LabelPolygon } from "../../../store/labels/types"
 import { LabelsSelector } from "../../../store/selectors/LabelsSelector";
 import { GeneralSelector } from "../../../store/selectors/GeneralSelector";
 import { ImageRepository } from "../../imageRepository/ImageRepository";
-import { ExporterUtil } from "../../../utils/ExporterUtil";
 import {
     COCOAnnotation, COCOBBox,
     COCOCategory,
@@ -13,19 +12,24 @@ import {
 } from "../../../data/labels/COCO";
 import { flatten } from "lodash";
 import { IPoint } from "../../../interfaces/IPoint";
+import imageService from "../../../services/image.service";
 
 export type LabelDataMap = { [key: string]: number; }
 
-export class COCOExporter {
+export class COCOCloudExporter {
     public static export(): void {
-        console.log("exporting coco Json...")
+        console.log("Saving annotation to cloud...")
         const imagesData: ImageData[] = LabelsSelector.getImagesData();
         const labelNames: LabelName[] = LabelsSelector.getLabelNames();
         const projectName: string = GeneralSelector.getProjectName();
-        const COCOObject: COCOObject = COCOExporter.mapImagesDataToCOCOObject(imagesData, labelNames, projectName);
+        const COCOObject: COCOObject = COCOCloudExporter.mapImagesDataToCOCOObject(imagesData, labelNames, projectName);
         const content: string = JSON.stringify(COCOObject);
-        const fileName: string = `${ExporterUtil.getExportFileName()}.json`;
-        ExporterUtil.saveAs(content, fileName);
+        let folderID = localStorage.getItem('currentImagesFolderID')
+        let data = {
+            data: content,
+            folderID: folderID
+        }
+        imageService.create(data);
     }
 
     private static mapImagesDataToCOCOObject(
@@ -34,10 +38,10 @@ export class COCOExporter {
         projectName: string
     ): COCOObject {
         return {
-            "info": COCOExporter.getInfoComponent(projectName),
-            "images": COCOExporter.getImagesComponent(imagesData),
-            "annotations": COCOExporter.getAnnotationsComponent(imagesData, labelNames),
-            "categories": COCOExporter.getCategoriesComponent(labelNames)
+            "info": COCOCloudExporter.getInfoComponent(projectName),
+            "images": COCOCloudExporter.getImagesComponent(imagesData),
+            "annotations": COCOCloudExporter.getAnnotationsComponent(imagesData, labelNames),
+            "categories": COCOCloudExporter.getCategoriesComponent(labelNames)
         }
     }
 
@@ -72,7 +76,7 @@ export class COCOExporter {
     }
 
     public static getAnnotationsComponent(imagesData: ImageData[], labelNames: LabelName[]): COCOAnnotation[] {
-        const labelsMap: LabelDataMap = COCOExporter.mapLabelsData(labelNames);
+        const labelsMap: LabelDataMap = COCOCloudExporter.mapLabelsData(labelNames);
         let id = 0;
         const annotations: COCOAnnotation[][] = imagesData
             .filter((imagesData: ImageData) => imagesData.loadStatus)
@@ -84,9 +88,9 @@ export class COCOExporter {
                         "iscrowd": 0,
                         "image_id": index + 1,
                         "category_id": labelsMap[labelPolygon.labelId],
-                        "segmentation": COCOExporter.getCOCOSegmentation(labelPolygon.vertices),
-                        "bbox": COCOExporter.getCOCOBbox(labelPolygon.vertices),
-                        "area": COCOExporter.getCOCOArea(labelPolygon.vertices)
+                        "segmentation": COCOCloudExporter.getCOCOSegmentation(labelPolygon.vertices),
+                        "bbox": COCOCloudExporter.getCOCOBbox(labelPolygon.vertices),
+                        "area": COCOCloudExporter.getCOCOArea(labelPolygon.vertices)
                     }
                 })
             })
