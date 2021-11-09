@@ -80,14 +80,20 @@ import { Card, Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useImage } from "../../../logic/context/imageContext";
 import { projectFirestore } from "../../../firebase";
+import teamService from "../../../services/team.service";
+import { toast, ToastContainer } from "react-toastify";
 
 function ImageGrid() {
   const { docs } = useFirestore("PROJECT");
   const { imagesData, setImagesData } = useImage();
 
+  const [imagesID, setImagesID] = useState([]);
   const [imagesURL, setImagesURL] = useState([]);
   const currentUserRole = localStorage.getItem("currentUserRole");
   const timer = (ms) => new Promise((res) => setTimeout(res, ms));
+  const teamID= localStorage.getItem("currentTeamID")
+  const name = localStorage.getItem("currentProjectID")
+  const folderID = localStorage.getItem("currentImagesFolderID")
 
   const cardLink = {
     color: "#000000",
@@ -100,6 +106,20 @@ function ImageGrid() {
     setImagesData(imagesURL);
   }
 
+  async function deleteSelectedImage(){
+    if(imagesID.length == 0){
+      teamService.deleteImages(teamID,name,folderID,imagesID[0])
+    }else{
+      for (let index = 0; index < imagesID.length; index++) {
+       await teamService.deleteImages(teamID,name,folderID,imagesID[index]) 
+       
+      }
+      setImagesID([])
+      setImagesURL([])
+      toast.success("Images deleted successfully");
+    }
+  }
+
   function test(data) {
     console.log(data);
     setImagesURL([...imagesURL, data]);
@@ -108,6 +128,8 @@ function ImageGrid() {
   function addImage(doc) {
     if (imagesURL.length == 0) {
       setImagesURL([...imagesURL, doc.url]);
+      setImagesID([...imagesID, doc.id]);
+      console.log(doc.id)
       return;
     }
     for (let i = 0; i < imagesURL.length; i++) {
@@ -117,6 +139,16 @@ function ImageGrid() {
         return;
       } else {
         setImagesURL([...imagesURL, doc.url]);
+      }
+    }
+
+    for (let i = 0; i < imagesID.length; i++) {
+      if (doc.id == imagesID[i]) {
+        const tempArray = imagesID.filter((element) => element != doc.id);
+        setImagesID(tempArray);
+        return;
+      } else {
+        setImagesID([...imagesID, doc.id]);
       }
     }
   }
@@ -129,6 +161,7 @@ function ImageGrid() {
     console.log(arr);
     setImagesData(arr);
   }
+
 
   // function removeImage(doc) {
   //   const tempArray = imagesURL.filter((element) => element.url !== doc.url);
@@ -156,6 +189,7 @@ function ImageGrid() {
 
   return (
     <>
+      <ToastContainer />
       {currentUserRole !== "contributor" && (
         <div>
           {imagesURL.length > 0 && (
@@ -163,6 +197,10 @@ function ImageGrid() {
               <p>Selected: {imagesURL.length}</p>
               <Link to="/tool" onClick={() => showSelectedImage()}>
                 Annotate
+              </Link>
+              <br></br>
+              <Link onClick={() => deleteSelectedImage()}>
+                Delete
               </Link>
             </div>
           )}

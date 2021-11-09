@@ -26,6 +26,8 @@ const FolderList = () => {
     },
     uid: "",
   });
+
+  
   const createTeam = {
     backgroundColor: "#FFD803",
   };
@@ -67,6 +69,8 @@ const FolderList = () => {
 
   function MyVerticallyCenteredModal(props) {
     const { daata } = props;
+    console.log(daata)
+    console.log(daata.uid)
     const [value, setValue] = useState({
       uid: daata.uid,
       role: daata.role,
@@ -74,6 +78,8 @@ const FolderList = () => {
       status: daata.Status,
       key: daata.key,
     });
+
+    console.log(value)
 
     const { uid, role, teamID, status, key } = value;
 
@@ -94,12 +100,18 @@ const FolderList = () => {
           toast.success("User had been accepted");
           setTimeout(function() {
             window.location.reload();
+            console.log(teamID)
+            console.log(daata.key)
+            console.log(role)
           }, 5000);
         })
         .catch(() => {
           toast.error("Something went wrong!");
         });
     };
+
+
+
     return (
       <Modal
         {...props}
@@ -149,6 +161,10 @@ const FolderList = () => {
       </Modal>
     );
   }
+
+
+
+
 
   return (
     <>

@@ -80,14 +80,10 @@ export default function TestTeam() {
     <>
       <TopNav></TopNav>
 
-      <br></br>
-      <button>delete</button>
-      <button>edit</button>
-
-      <br></br>
-      <br></br>
+  
 
       <Container>
+    
         <div className="row">
           <Link
             to={`/createimagesfolder`}

@@ -108,22 +108,34 @@ import React, { useRef, useState } from 'react'
 import { Form } from 'react-bootstrap'
 import { Button } from '@material-ui/core'
 import { projectFirestore } from '../../../firebase';
-import { useParams } from 'react-router-dom'
+import { useParams,useHistory } from 'react-router-dom'
+import teamMemberServices from '../../../services/team.member.services';
 
 export default function AddFolder() {
 
     // const {teamID} = useParams()
     const teamID = localStorage.getItem('currentTeamID')
     const foldername = useRef()
+    const history= useHistory()
 
     function saveData(){
-        console.log('yawa');
-        console.log(foldername.current.value)
-        projectFirestore.collection('PROJECT').doc(teamID).collection('FOLDERS').add({name:foldername.current.value});
-        // window.location.reload(false);
-        
-    console.log(teamID)
-    console.log(foldername.current.value)
+
+        const data = {
+            teamName : foldername.current.value
+        }
+
+        if(foldername.current.value){
+            teamMemberServices.create(data)
+            console.log('yawa');
+            console.log(foldername.current.value)
+            projectFirestore.collection('PROJECT').doc(teamID).collection('FOLDERS').add({name:foldername.current.value});
+            
+            // window.location.reload(false);
+            console.log(teamID)
+            console.log(foldername.current.value)
+            history.push("/gallery")
+        }
+    
     };
 
 

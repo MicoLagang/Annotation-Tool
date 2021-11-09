@@ -28,7 +28,7 @@ const FolderList = () => {
   useEffect(() => {
     const getPostsFromFirebase = [];
     const subscriber = projectFirestore
-      .collection("PROJECT")
+      .collection("PROJECT").where("status", "==", "Public")
       .onSnapshot((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           getPostsFromFirebase.push({
@@ -114,7 +114,7 @@ const FolderList = () => {
       <br></br>
       <br></br>
       <div className="row">
-        <Link
+        {/* <Link
           // to="/new/"
           to={`/new`}
           style={cardLink}
@@ -125,7 +125,7 @@ const FolderList = () => {
               <Card.Title>Create Team</Card.Title>
             </Card.Body>
           </Card>
-        </Link>
+        </Link> */}
 
         {posts.length > 0 ? (
           posts.map((post) => (

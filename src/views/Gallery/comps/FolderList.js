@@ -1,15 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { projectFirestore } from "../../../firebase";
-import { Link } from "react-router-dom";
+import { Link ,useHistory} from "react-router-dom";
 import FolderImages from "./FolderImages";
 import { useParams } from "react-router-dom";
-import { Card, Container } from "react-bootstrap";
+import { Card, Container,Modal,Button} from "react-bootstrap";
+import { TextField } from "@material-ui/core";
 import TopNav from "../../Navigation/TopNav";
+import teamService from "../../../services/team.service";
+import { toast, ToastContainer } from "react-toastify";
+// import { browserHistory } from 'react-router-dom';
+
 const FolderList = () => {
   const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState([]);
+  const [teamName, setTeamName] = useState();
+  const [modalShow, setModalShow] = React.useState(false);
   // const {teamID} = useParams()
   const teamID = localStorage.getItem("currentTeamID");
+  const history = useHistory()
 
   const createTeam = {
     backgroundColor: "#FFD803",
@@ -20,6 +28,14 @@ const FolderList = () => {
     textDecoration: "none",
     height: "130px",
   };
+
+  const [updata, setUpdata] = useState({
+    data: {
+      role: "",
+      status: "",
+    },
+    uid: "",
+  });
 
   useEffect(() => {
     const getPostsFromFirebase = [];
@@ -51,31 +67,148 @@ const FolderList = () => {
     localStorage.setItem("currentProjectID", ID);
   }
 
+  function deleteTeam(){
+    teamService.deleteTeam(teamID);
+    // await toast.success("Team Deleted");
+    history.push("/");
+    
+  }
+
+  function getValue(){
+    var docRef = projectFirestore.collection("PROJECT").doc(teamID);
+
+      docRef.get().then((doc) => {
+          if (doc.exists) {
+              console.log("Document data:", doc.data());
+              setUpdata(doc.data())
+          } else {
+              // doc.data() will be undefined in this case
+              console.log("No such document!");
+          }
+      }).catch((error) => {
+          console.log("Error getting document:", error);
+      });
+
+  }
+
+  function MyVerticallyCenteredModal(props) {
+    const { daata } = props;
+    console.log(props)
+    const [value, setValue] = useState({
+      uid: daata.uid,
+      role: daata.name,
+      // teamID: daata.TeamCode,
+      status: daata.Status,
+      key: daata.key,
+    });
+
+  
+
+    const { uid, role, status, key } = value;
+
+    const handleChange = (uid) => (e) => {
+      e.preventDefault();
+      setValue({ ...value, [uid]: e.target.value });
+    };
+
+    // console.log(teamID)
+
+    const update = () => {
+      projectFirestore
+        .collection("PROJECT")
+        .doc(teamID)
+        .update({ 
+          name: role,
+        })
+        .then(() => {
+          toast.success("EDIT SUCCESS");
+          setTimeout(function() {
+            history.push("/")
+          }, 5000);
+        })
+        .catch(() => {
+          toast.error("Something went wrong!");
+          console.log(teamID)
+          console.log(role)
+        });
+    };
+
+
+
+    return (
+      <Modal
+        {...props}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">
+            Modal heading
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {/* <TextField
+            id="teamID"
+            value={teamID}
+            onChange={handleChange("teamID")}
+            margin="normal"
+            // placeholder="Email Adress"
+            type="text"
+            fullWidth
+            disabled
+          /> */}
+
+          <TextField
+            id="Role"
+            value={role}
+            onChange={handleChange("role")}
+            margin="normal"
+            // placeholder="Email Adress"
+            type="text"
+            fullWidth
+          />
+
+          <Button
+            onClick={update}
+            // variant="contained"
+            color="secondary"
+            size="large"
+          >
+            Edit
+          </Button>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={props.onHide}>Close</Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  }
+
+
+
+
+
+
+
+
   return (
-    // <div className="container">
-    //   <h1>Folder:</h1>
-
-    //   <ul className="list-group">
-    //   {posts.length > 0 ? (
-    //     posts.map((post) =>
-    //      <Link
-    //     to={`/folder/${post.key}/${teamID}`}
-
-    //     key={post.key}>
-    //     {post.name} </Link>
-    //     )
-    //   ) : (
-    //     <h6>No folder yet</h6>
-    //   )}
-
-    //   </ul>
-
-    // </div>
-
     <>
+    <ToastContainer />
       <br></br>
-      <button>delete</button>
-      <button>edit</button>
+      <button onClick={deleteTeam}>delete</button>
+      <button 
+        onClick={() => {
+          setModalShow(true);
+          getValue();
+        }}
+      >edit</button>
+                            <MyVerticallyCenteredModal
+                        show={modalShow}
+                        onHide={() => setModalShow(false)}
+                        daata={updata}
+                      />
+ 
       <br></br>
       <br></br>
 

@@ -5,7 +5,7 @@ import Title from './Title'
 import UploadForm from './UploadForm'
 import useStorage from '../hooks/useStorage';
 import { Card, Container } from "react-bootstrap";
-import { Link } from 'react-router-dom'
+import { Link,useHistory } from 'react-router-dom'
 import TopNav from '../../Navigation/TopNav';
 import {projectFirestore} from '../../../firebase';
 import { Form } from 'react-bootstrap'
@@ -20,6 +20,7 @@ export default function TestTeam(post) {
     const [selectedImg, setSelectedImg] = useState(null);
     const [loading, setLoading] = useState(true);
     const [posts, setPosts] = useState([]);
+    const history = useHistory()
     
     const foldername = useRef()
     const createTeam = {
@@ -33,13 +34,16 @@ export default function TestTeam(post) {
       };
 
       function saveData(){
-        console.log('yawa');
-        console.log(foldername.current.value)
-        projectFirestore.collection('PROJECT').doc(teamID).collection('FOLDERS').doc(name).collection('IMAGESFOLDER').add({name:foldername.current.value});
-        // window.location.reload(false);
-        
-    console.log(teamID)
-    console.log(foldername.current.value)
+        if(foldername.current.value){
+          console.log('yawa');
+          console.log(foldername.current.value)
+          projectFirestore.collection('PROJECT').doc(teamID).collection('FOLDERS').doc(name).collection('IMAGESFOLDER').add({name:foldername.current.value});
+          // window.location.reload(false);
+          history.push("/imagesfolder")
+      console.log(teamID)
+      console.log(foldername.current.value)
+        }
+      
     };
 
     return (

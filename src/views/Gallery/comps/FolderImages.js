@@ -4,11 +4,14 @@ import ImageGrid from "./ImageGrid";
 import Title from "./Title";
 import UploadForm from "./UploadForm";
 import useStorage from "../hooks/useStorage";
-import { Card, Container } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Card, Container,Modal,Button } from "react-bootstrap";
+import { TextField } from "@material-ui/core";
+import { Link, useHistory } from "react-router-dom";
 import TopNav from "../../Navigation/TopNav";
 import { projectFirestore } from "../../../firebase";
 import projectMembersService from "../../../services/projectMembers.service";
+import teamService from "../../../services/team.service";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function TestTeam(post) {
   // const { name } = useParams()
@@ -19,6 +22,8 @@ export default function TestTeam(post) {
   const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState([]);
   const uid = localStorage.getItem("currentUserUID");
+  const history = useHistory()
+  const [modalShow, setModalShow] = React.useState(false);
 
   projectMembersService.getRole(uid, teamID);
 
@@ -31,6 +36,136 @@ export default function TestTeam(post) {
     textDecoration: "none",
     height: "130px",
   };
+
+  const [updata, setUpdata] = useState({
+    data: {
+      role: "",
+      status: "",
+    },
+    uid: "",
+  });
+
+  function deleteProject(){
+    teamService.deleteProject(teamID,name);
+    history.push("/gallery")
+    // console.log(teamID)
+    // console.log(name)
+  }
+
+  function getValue(){
+    var docRef = projectFirestore.collection("PROJECT").doc(teamID).collection("FOLDERS").doc(name)
+
+      docRef.get().then((doc) => {
+          if (doc.exists) {
+              console.log("Document data:", doc.data());
+              setUpdata(doc.data())
+          } else {
+              // doc.data() will be undefined in this case
+              console.log("No such document!");
+          }
+      }).catch((error) => {
+          console.log("Error getting document:", error);
+      });
+
+  }
+
+
+
+  function MyVerticallyCenteredModal(props) {
+    const { daata } = props;
+    console.log(props)
+    const [value, setValue] = useState({
+      uid: daata.uid,
+      role: daata.name,
+      // teamID: daata.TeamCode,
+      status: daata.Status,
+      key: daata.key,
+    });
+
+  
+
+    const { uid, role, status, key } = value;
+
+    const handleChange = (uid) => (e) => {
+      e.preventDefault();
+      setValue({ ...value, [uid]: e.target.value });
+    };
+
+    // console.log(teamID)
+
+    const update = () => {
+      projectFirestore
+        .collection("PROJECT")
+        .doc(teamID)
+        .collection("FOLDERS")
+        .doc(name)
+        .update({ 
+          name: role,
+        })
+        .then(() => {
+          toast.success("EDIT SUCCESS");
+          setTimeout(function() {
+            history.push("/gallery")
+          }, 5000);
+        })
+        .catch(() => {
+          toast.error("Something went wrong!");
+        });
+    };
+
+
+
+    return (
+      <Modal
+        {...props}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">
+            Modal heading
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {/* <TextField
+            id="teamID"
+            value={teamID}
+            onChange={handleChange("teamID")}
+            margin="normal"
+            // placeholder="Email Adress"
+            type="text"
+            fullWidth
+            disabled
+          /> */}
+
+          <TextField
+            id="Role"
+            value={role}
+            onChange={handleChange("role")}
+            margin="normal"
+            // placeholder="Email Adress"
+            type="text"
+            fullWidth
+          />
+
+          <Button
+            onClick={update}
+            // variant="contained"
+            color="secondary"
+            size="large"
+          >
+            Edit
+          </Button>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={props.onHide}>Close</Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  }
+
+  
 
   return (
     //     <div>
@@ -52,11 +187,27 @@ export default function TestTeam(post) {
       <br></br>
       <br></br>
       <br></br>
+ 
+      <br></br>
       <br></br>
       <br></br>
       <br></br>
 
       <Container>
+      <ToastContainer />
+      <button onClick={deleteProject}>delete</button>
+      <button 
+        onClick={() => {
+          setModalShow(true);
+          getValue();
+        }}
+      >edit</button>
+
+                      <MyVerticallyCenteredModal
+                        show={modalShow}
+                        onHide={() => setModalShow(false)}
+                        daata={updata}
+                      />
         <div className="row d-flex align-items-center justify-content-center">
           <Link
             to={`/imagesfolder`}

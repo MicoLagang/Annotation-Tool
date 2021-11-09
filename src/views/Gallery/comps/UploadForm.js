@@ -4,8 +4,9 @@ import { projectFirestore } from '../../../firebase';
 import { projectStorage,timestamp } from '../../../firebase';
 import { motion } from 'framer-motion';
 import { Refresh } from '@material-ui/icons';
-import { useParams } from 'react-router-dom'
+import { useParams,useHistory } from 'react-router-dom'
 import { folder } from 'jszip';
+import teamService from '../../../services/team.service';
 
 const UploadForm = () => {
   const [file, setFile] = useState();
@@ -13,6 +14,7 @@ const UploadForm = () => {
   const [url, setUrl] = useState([]);
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState(null);
+  const history = useHistory()
 
 
   // const { name } = useParams()
@@ -83,6 +85,11 @@ const UploadForm = () => {
 
   }
 
+  function deleteFolder(){
+    teamService.deleteFolder(teamID,name,folderID);
+    history.push("/imagesfolder");
+  }
+
 
 //   const handleChange = (e) => {
 //     for (let i = 0; i < e.target.files.length; i++) {
@@ -120,6 +127,7 @@ const UploadForm = () => {
     <br />
     <input type="file" multiple onChange={handleChange} />
     <button onClick={handleUpload}>Upload</button>
+    <button onClick={deleteFolder}>Delete This Folder</button>
     <br />
 
     <br />

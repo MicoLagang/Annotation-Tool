@@ -118,7 +118,7 @@ const FolderList = () => {
 <br></br>
 <br></br>
     <div className="row">
-      {/* <Link
+      <Link
         to="/new"
         style={cardLink}
         className="col-lg-3 col-md-4 col-sm-12 mb-3"
@@ -128,7 +128,7 @@ const FolderList = () => {
             <Card.Title>Create Team</Card.Title>
           </Card.Body>
         </Card>
-      </Link> */}
+      </Link>
 
     
 
