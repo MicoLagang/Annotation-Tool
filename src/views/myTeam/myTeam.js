@@ -30,7 +30,7 @@ const FolderList = () => {
   useEffect(() => {
     const getPostsFromFirebase = [];
     const subscriber = projectFirestore
-      .collection("PROJECTMEMBERS").where("uid", "==",uid).where("Status", "==","true")
+      .collection("TEAMMEMBERS").where("uid", "==",uid).where("Status", "==","true")
       .onSnapshot((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           getPostsFromFirebase.push({

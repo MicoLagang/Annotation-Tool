@@ -1,6 +1,6 @@
 import { projectStorage, projectFirestore, timestamp } from "../firebase";
 
-const db = projectFirestore.collection("TEAMMEMBERS");
+const db = projectFirestore.collection("PROJECTMEMBERS");
 
 class teamMembers {
   getAll() {

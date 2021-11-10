@@ -46,7 +46,7 @@ const FolderList = () => {
   useEffect(() => {
     const getPostsFromFirebase = [];
     const subscriber = projectFirestore
-      .collection("PROJECTMEMBERS")
+      .collection("TEAMMEMBERS")
       .where("projectID", "==", teamID)
       .onSnapshot((querySnapshot) => {
         querySnapshot.forEach((doc) => {
@@ -90,7 +90,7 @@ const FolderList = () => {
 
     const update = () => {
       projectFirestore
-        .collection("PROJECTMEMBERS")
+        .collection("TEAMMEMBERS")
         .doc(daata.key)
         .update({
           Status: "true",
@@ -175,7 +175,7 @@ const FolderList = () => {
           <thead>
             <tr>
               <th>User ID</th>
-              <th>Team Code</th>
+              <th>Email</th>
               <th>Role</th>
               {currentUserRole === "admin" && <th>Action</th>}
             </tr>
@@ -185,7 +185,7 @@ const FolderList = () => {
               <tbody>
                 <tr>
                   <td>{post.uid}</td>
-                  <td>{post.TeamCode}</td>
+                  <td>{post.email}</td>
                   <td>{post.role}</td>
                   {currentUserRole === "admin" && (
                     <td>

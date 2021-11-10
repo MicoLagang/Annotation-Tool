@@ -1,7 +1,7 @@
 import { projectStorage, projectFirestore, timestamp } from '../firebase';
 // import { useImage } from '../logic/context/imageContext';
 
-const db = projectFirestore.collection("PROJECT");
+const db = projectFirestore.collection("TEAM");
 // const { imagesData, setImagesData } = useImage();
 
 class TutorialDataService {

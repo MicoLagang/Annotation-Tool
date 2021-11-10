@@ -28,7 +28,7 @@ const FolderList = () => {
   useEffect(() => {
     const getPostsFromFirebase = [];
     const subscriber = projectFirestore
-      .collection("PROJECT").where("status", "==", "Public")
+      .collection("TEAM").where("status", "==", "Public")
       .onSnapshot((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           getPostsFromFirebase.push({

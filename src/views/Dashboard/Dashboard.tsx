@@ -116,9 +116,10 @@ export default function Dashboard() {
             projectID: UID,
             TeamName: teamName,
             Status: "false",
+            email: currentUser.email
         }
         console.log(member)
-
+        console.log(currentUser)
         projectMembersService.create(member)
     }
 
@@ -141,13 +142,12 @@ export default function Dashboard() {
             if (result.isConfirmed) {    
 
                 
-                projectFirestore.collection("PROJECT").where("TeamCode", "==",result.value)
+                projectFirestore.collection("TEAM").where("TeamCode", "==",result.value)
                 .get().then((props) => {
             
                     props.forEach((doc) => {
             
                         a(result.value,doc.id,doc.data().name)
-
                     });
                     
                 })
@@ -179,7 +179,7 @@ export default function Dashboard() {
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Nav className="me-auto">
                             <Nav.Link href="/tool">Tool</Nav.Link>
-                            <Nav.Link href="/gallery">Gallery</Nav.Link>
+                            {/* <Nav.Link href="/gallery">Gallery</Nav.Link> */}
                             <Nav.Link href={`/myTeam`}>My Team</Nav.Link>
                             <Nav.Link href={`/myProject`}>My Projects</Nav.Link>
                         </Nav>

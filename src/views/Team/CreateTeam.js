@@ -9,7 +9,7 @@ import Dropdown from 'react-bootstrap/Dropdown'
 import { useAuth } from '../../logic/context/AuthContext';
 import { useParams } from 'react-router-dom'
 import axios from 'axios';
-import { projectFirestore } from '../../firebase';
+import { projectFirestore, timestamp } from '../../firebase';
 
 export default class CreateTeam extends Component {
 
@@ -102,7 +102,7 @@ export default class CreateTeam extends Component {
 
         // const { currentUser, logout } = useAuth();
 
-        
+        const createdAt = timestamp()
 
         const data = {
             name: this.state.name,
@@ -110,6 +110,9 @@ export default class CreateTeam extends Component {
             owner: this.state.owner,
             status: this.state.status,
             TeamCode: this.state.key,
+            createdAt: createdAt,
+            updatedAt: "",
+          
         };
     
         const currentUserID = localStorage.getItem("currentUserUID")
@@ -120,6 +123,9 @@ export default class CreateTeam extends Component {
             projectID : "",
             TeamName:this.state.name,
             Status: "true",
+            createdAt: createdAt,
+            updatedAt: "",
+            email:this.state.contactEmail,
         }
 
 

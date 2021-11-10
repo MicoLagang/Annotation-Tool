@@ -18,6 +18,7 @@ const FolderList = () => {
   // const {teamID} = useParams()
   const teamID = localStorage.getItem("currentTeamID");
   const history = useHistory()
+  const currentUserRole = localStorage.getItem("currentUserRole");
 
   const createTeam = {
     backgroundColor: "#FFD803",
@@ -186,7 +187,9 @@ const FolderList = () => {
   }
 
 
-
+  function showTeamMembers(){
+    history.push("/teamMembers")
+  }
 
 
 
@@ -196,13 +199,17 @@ const FolderList = () => {
     <>
     <ToastContainer />
       <br></br>
-      <button onClick={deleteTeam}>delete</button>
+      {currentUserRole === "admin" && <button onClick={deleteTeam}>delete</button>}
+      {currentUserRole === "admin" && 
+
       <button 
         onClick={() => {
           setModalShow(true);
           getValue();
         }}
-      >edit</button>
+      >edit</button>}
+       {currentUserRole === "admin" && <button onClick={showTeamMembers}>Team Members</button>}
+       
                             <MyVerticallyCenteredModal
                         show={modalShow}
                         onHide={() => setModalShow(false)}
@@ -213,6 +220,8 @@ const FolderList = () => {
       <br></br>
 
       <div className="row">
+
+      {currentUserRole === "admin" && 
         <Link
           to={`/Addfolder`}
           style={cardLink}
@@ -224,6 +233,7 @@ const FolderList = () => {
             </Card.Body>
           </Card>
         </Link>
+        }
 
         {posts.length > 0 ? (
           posts.map((post) => (
