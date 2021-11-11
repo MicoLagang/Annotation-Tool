@@ -32,7 +32,7 @@ export default function TestTeam() {
     const subscriber = projectFirestore
       // .collection("FolderImages")
       // .collection('teams').doc('JviFAFCWPy0VPJFeCBPZ').collection('FolderImages').doc('HceEccV4vOIkrNX4CYeB')
-      .doc(`PROJECT/${teamID}`)
+      .doc(`TEAM/${teamID}`)
       .collection("FOLDERS")
       .doc(name)
       .collection("IMAGESFOLDER")

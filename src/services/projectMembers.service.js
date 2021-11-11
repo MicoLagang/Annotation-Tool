@@ -22,6 +22,16 @@ class TutorialDataService {
     return db.child(key).update(value);
   }
 
+  deleteTeam(teamID){
+   const response =projectFirestore.collection("TEAMMEMBERS").where("projectID", "==", teamID);
+
+    response.get().then(function(querySnapshot) {
+      querySnapshot.forEach(function(doc) {
+        doc.ref.delete();
+      });
+    });
+  }
+
   delete(key) {
     return db.child(key).remove();
   }
@@ -35,7 +45,7 @@ class TutorialDataService {
     console.log(projectID);
 
     const response = projectFirestore
-      .collection("PROJECTMEMBERS")
+      .collection("TEAMMEMBERS")
       .where("uid", "==", UID)
       .where("projectID", "==", projectID);
 

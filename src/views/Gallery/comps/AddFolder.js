@@ -128,7 +128,7 @@ export default function AddFolder() {
             teamMemberServices.create(data)
             console.log('yawa');
             console.log(foldername.current.value)
-            projectFirestore.collection('PROJECT').doc(teamID).collection('FOLDERS').add({name:foldername.current.value});
+            projectFirestore.collection('TEAM').doc(teamID).collection('FOLDERS').add({name:foldername.current.value});
             
             // window.location.reload(false);
             console.log(teamID)

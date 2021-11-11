@@ -37,7 +37,7 @@ export default function TestTeam(post) {
         if(foldername.current.value){
           console.log('yawa');
           console.log(foldername.current.value)
-          projectFirestore.collection('PROJECT').doc(teamID).collection('FOLDERS').doc(name).collection('IMAGESFOLDER').add({name:foldername.current.value});
+          projectFirestore.collection('TEAM').doc(teamID).collection('FOLDERS').doc(name).collection('IMAGESFOLDER').add({name:foldername.current.value});
           // window.location.reload(false);
           history.push("/imagesfolder")
       console.log(teamID)

@@ -77,7 +77,9 @@ export default function Dashboard() {
 
         try {
             await logout()
+            window.localStorage.clear();
             history.pushState('/login')
+            
         } catch (error) {
             // setError(error.message)
         }

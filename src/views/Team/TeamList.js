@@ -50,6 +50,7 @@ const FolderList = () => {
 
   function saveAs(ID) {
     localStorage.setItem("currentTeamID", ID);
+    console.log(ID)
   }
 
   localStorage.setItem("currentUserUID", currentUser.uid);

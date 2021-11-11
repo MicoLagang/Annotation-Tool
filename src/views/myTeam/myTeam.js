@@ -3,6 +3,7 @@ import {projectFirestore} from '../../firebase';
 import { Link ,useParams} from 'react-router-dom'
 import { Card, Container } from "react-bootstrap";
 import TopNav from "../Navigation/TopNav";
+import projectMembersService from "../../services/projectMembers.service";
 
 
 const FolderList = () => {
@@ -50,6 +51,12 @@ const FolderList = () => {
 
   if (loading) {
     return <h1>loading firebase data...</h1>;
+  }
+
+  function saveAs(ID) {
+    localStorage.setItem("currentTeamID", ID);
+    projectMembersService.getRole(uid,ID)
+    console.log(ID)
   }
 
 
@@ -140,6 +147,9 @@ const FolderList = () => {
           to={`/gallery`} 
           // to={`/gallery/${uid}`} 
           key={post.key}
+          onClick={() => 
+            saveAs(post.projectID)
+          }
             style={cardLink}
             className="col-lg-3 col-md-4 col-sm-12 mb-3"
           >

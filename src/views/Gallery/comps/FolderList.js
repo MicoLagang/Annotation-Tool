@@ -8,6 +8,7 @@ import { TextField } from "@material-ui/core";
 import TopNav from "../../Navigation/TopNav";
 import teamService from "../../../services/team.service";
 import { toast, ToastContainer } from "react-toastify";
+import projectMembersService from "../../../services/projectMembers.service";
 // import { browserHistory } from 'react-router-dom';
 
 const FolderList = () => {
@@ -43,7 +44,7 @@ const FolderList = () => {
     const subscriber = projectFirestore
       // .collection("FolderImages")
       // .collection('teams').doc('JviFAFCWPy0VPJFeCBPZ').collection('FolderImages').doc('HceEccV4vOIkrNX4CYeB')
-      .doc(`PROJECT/${teamID}`)
+      .doc(`TEAM/${teamID}`)
       .collection("FOLDERS")
       .onSnapshot((querySnapshot) => {
         querySnapshot.forEach((doc) => {
@@ -70,6 +71,7 @@ const FolderList = () => {
 
   function deleteTeam(){
     teamService.deleteTeam(teamID);
+    projectMembersService.deleteTeam(teamID)
     // await toast.success("Team Deleted");
     history.push("/");
     
@@ -221,7 +223,7 @@ const FolderList = () => {
 
       <div className="row">
 
-      {currentUserRole === "admin" && 
+      {/* {currentUserRole === "admin" &&  */}
         <Link
           to={`/Addfolder`}
           style={cardLink}
@@ -233,7 +235,7 @@ const FolderList = () => {
             </Card.Body>
           </Card>
         </Link>
-        }
+         {/* }  */}
 
         {posts.length > 0 ? (
           posts.map((post) => (
