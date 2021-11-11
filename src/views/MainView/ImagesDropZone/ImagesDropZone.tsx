@@ -1,3 +1,4 @@
+
 import React, { useContext, useState } from 'react';
 import './ImagesDropZone.scss';
 import { useDropzone, DropzoneOptions } from "react-dropzone";
@@ -80,7 +81,7 @@ const ImagesDropZone: React.FC<IProps> = ({ updateActiveImageIndex, addImageData
     }
 
     async function load() {
-        if (imagesData.length > -1) {
+        if (imagesData) {
             for (var i = 0; i < imagesData.length; i++) {
                 console.log(i);
                 var image = await new Image;
@@ -100,95 +101,75 @@ const ImagesDropZone: React.FC<IProps> = ({ updateActiveImageIndex, addImageData
                 };
                 await timer(1000); // then the created Promise can be awaited
             }
-            getDropZoneContent();
-        } else {
-            alert("No images selected to annotate.")
+            setImagesData([])
         }
     }
     
     load()
 
     const getDropZoneContent = () => {
-        if (acceptedFiles.length > 0)
-              
-        // setProgress(acceptedFiles.length );
-        
-        console.log(acceptedFiles.length)
-        console.log("Done Loading Image...")
-        if (acceptedFiles.length > 0) {
+        if (imagesData) {
+            console.log(acceptedFiles.length)
+            console.log("Done Loading Image...")
+            if (acceptedFiles.length > 0) toast.success("PLS WAIT")
             
-            // startEditor(ProjectType.OBJECT_DETECTION)
-            console.log("apple")
-            toast.success("PLS WAIT")
-     
-            // setTimeout(() => {
-            //     startEditor(ProjectType.OBJECT_DETECTION);
-            //     }, 5000);
-         
-       
-            // 
+            return <>
+                <ToastContainer />
+                    <p>All Images are loaded. Start annotating now?</p>
+                    <TextButton
+                    label={"Start"}
+                        isDisabled={acceptedFiles.length > 0}
+                        onClick={() => startEditor(ProjectType.OBJECT_DETECTION)}
+                    />
+                </>
         }
- 
-        return <>
-            <ToastContainer />
-       
-                <p>All Images are loaded. Start annotating now?</p>
-                <TextButton
-                label={"Start"}
-                    isDisabled={acceptedFiles.length > 0}
-                    onClick={() => startEditor(ProjectType.OBJECT_DETECTION)}
+        if (acceptedFiles.length === 0)
+            return <>
+                <input {...getInputProps()} />
+                <img
+                    draggable={false}
+                    alt={"upload"}
+                    src={"ico/box-opened.png"}
                 />
-            </>
-
-            // if (acceptedFiles.length === 0)
-            //     return <>
-            //         <input {...getInputProps()} />
-            //         <img
-            //             draggable={false}
-            //             alt={"upload"}
-            //             src={"ico/box-opened.png"}
-            //         />
-            //         <p className="extraBold">Drop images</p>
-            //         <p>or</p>
-            //         <p className="extraBold">Click here to select them</p>
-            //     </>;
-            // else if (acceptedFiles.length === 1)
-            //     return <>
-            //         <img
-            //             draggable={false}
-            //             alt={"uploaded"}
-            //             src={"ico/box-closed.png"}
-            //         />
-            //         <p className="extraBold">1 image loaded</p>
-            //     </>;
-            // else
-            //     return <>
-            //         <input {...getInputProps()} />
-            //         <img
-            //             draggable={false}
-            //             key={1}
-            //             alt={"uploaded"}
-            //             src={"ico/box-closed.png"}
-            //         />
-            //         <p key={2} className="extraBold">{acceptedFiles.length} images loaded</p>
-            //     </>;
+                <p className="extraBold">Drop images</p>
+                <p>or</p>
+                <p className="extraBold">Click here to select them</p>
+            </>;
+        else if (acceptedFiles.length === 1)
+            return <>
+                <img
+                    draggable={false}
+                    alt={"uploaded"}
+                    src={"ico/box-closed.png"}
+                />
+                <p className="extraBold">1 image loaded</p>
+            </>;
+        else
+            return <>
+                <input {...getInputProps()} />
+                <img
+                    draggable={false}
+                    key={1}
+                    alt={"uploaded"}
+                    src={"ico/box-closed.png"}
+                />
+                <p key={2} className="extraBold">{acceptedFiles.length} images loaded</p>
+            </>;
     
         
     };
 
     return (
         <div className="ImagesDropZone">
-     
-            {/* <div {...getRootProps({ className: 'DropZone' })}>
+            <div {...getRootProps({ className: 'DropZone' })}>
                 {getDropZoneContent()}
-            </div> */}
-            {getDropZoneContent()}
+            </div>
             <div className="DropZoneButtons">
-                {/* {imagesData && 
-                <TextButton
-                    label={"Load Images"}
-                    onClick={() => load()}
-                />} */}
+                {!imagesData && <TextButton
+                    label={"Object Detection"}
+                    isDisabled={!acceptedFiles.length}
+                    onClick={() => startEditor(ProjectType.OBJECT_DETECTION)}
+                />}
             </div>
         </div>
     )

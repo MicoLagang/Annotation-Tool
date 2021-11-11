@@ -24,8 +24,15 @@ class TutorialDataService {
   }
 
   deleteTeam(teamID){
-    console.log(teamID)
+    // console.log(teamID)
     return db.doc(teamID).delete();
+    // const response =projectFirestore.collection("TEAM").doc(teamID)
+  //   projectFirestore.collection("TEAM").doc(teamID).get().then(querySnapshot => {
+  //     querySnapshot.docs.forEach(snapshot => {
+  //         snapshot.ref.delete();
+  //     })
+  // })
+
   }
 
   deleteProject(teamID,name){

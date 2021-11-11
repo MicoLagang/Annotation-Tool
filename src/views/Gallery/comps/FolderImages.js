@@ -21,6 +21,7 @@ export default function TestTeam(post) {
   const [selectedImg, setSelectedImg] = useState(null);
   const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState([]);
+  const currentUserRole = localStorage.getItem("currentUserRole");
   const uid = localStorage.getItem("currentUserUID");
   const history = useHistory()
   const [modalShow, setModalShow] = React.useState(false);
@@ -53,7 +54,7 @@ export default function TestTeam(post) {
   }
 
   function getValue(){
-    var docRef = projectFirestore.collection("PROJECT").doc(teamID).collection("FOLDERS").doc(name)
+    var docRef = projectFirestore.collection("TEAM").doc(teamID).collection("FOLDERS").doc(name)
 
       docRef.get().then((doc) => {
           if (doc.exists) {
@@ -195,13 +196,18 @@ export default function TestTeam(post) {
 
       <Container>
       <ToastContainer />
+
+      {currentUserRole === "admin" && 
       <button onClick={deleteProject}>delete</button>
+      }   {currentUserRole === "admin" && 
       <button 
         onClick={() => {
           setModalShow(true);
           getValue();
         }}
       >edit</button>
+      }     
+
 
                       <MyVerticallyCenteredModal
                         show={modalShow}

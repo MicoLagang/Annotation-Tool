@@ -50,7 +50,7 @@ const UploadForm = () => {
     const promises = [];
     images.map((image) => {
       const uploadTask = projectStorage.ref(image.name)
-      const collectionRef = projectFirestore.collection('PROJECT').doc(teamID).collection("FOLDERS").doc(name).collection('IMAGESFOLDER').doc(folderID).collection("IMAGES");
+      const collectionRef = projectFirestore.collection('TEAM').doc(teamID).collection("FOLDERS").doc(name).collection('IMAGESFOLDER').doc(folderID).collection("IMAGES");
       promises.push(uploadTask);
       uploadTask.put(image).on(
         "state_changed",

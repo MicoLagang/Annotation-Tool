@@ -14,7 +14,7 @@ const useFirestore = (collection,sub) => {
   useEffect(() => {
     // const unsub = projectFirestore.collection(collection).doc(name).collection("images")
       // const unsub = projectFirestore.collection(collection).doc(teamID).collection("FOLDERS").doc(name).collection('images')
-      const unsub = projectFirestore.collection('PROJECT').doc(teamID).collection("FOLDERS").doc(name).collection('IMAGESFOLDER').doc(folderID).collection("IMAGES")
+      const unsub = projectFirestore.collection('TEAM').doc(teamID).collection("FOLDERS").doc(name).collection('IMAGESFOLDER').doc(folderID).collection("IMAGES")
       .orderBy('createdAt', 'desc')
       .onSnapshot(snap => {
         let documents = [];

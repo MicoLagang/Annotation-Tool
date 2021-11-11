@@ -78,7 +78,7 @@ const FolderList = () => {
   }
 
   function getValue(){
-    var docRef = projectFirestore.collection("PROJECT").doc(teamID);
+    var docRef = projectFirestore.collection("TEAM").doc(teamID);
 
       docRef.get().then((doc) => {
           if (doc.exists) {

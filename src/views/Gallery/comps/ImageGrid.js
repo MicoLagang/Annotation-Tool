@@ -84,7 +84,7 @@ import teamService from "../../../services/team.service";
 import { toast, ToastContainer } from "react-toastify";
 
 function ImageGrid() {
-  const { docs } = useFirestore("PROJECT");
+  const { docs } = useFirestore("TEAM");
   const { imagesData, setImagesData } = useImage();
 
   const [imagesID, setImagesID] = useState([]);
