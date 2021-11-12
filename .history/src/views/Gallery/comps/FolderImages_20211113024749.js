@@ -1,25 +1,33 @@
 import React, { useEffect, useState } from "react";
-import { projectFirestore } from "../../../firebase";
-import { Link, useHistory } from "react-router-dom";
-import FolderImages from "./FolderImages";
 import { useParams } from "react-router-dom";
+import ImageGrid from "./ImageGrid";
+import Title from "./Title";
+import UploadForm from "./UploadForm";
+import useStorage from "../hooks/useStorage";
 import { Card, Container, Modal, Button } from "react-bootstrap";
 import { TextField } from "@material-ui/core";
+import { Link, useHistory } from "react-router-dom";
 import TopNav from "../../Navigation/TopNav";
+import { projectFirestore } from "../../../firebase";
+import projectMembersService from "../../../services/projectMembers.service";
 import teamService from "../../../services/team.service";
 import { toast, ToastContainer } from "react-toastify";
-import projectMembersService from "../../../services/projectMembers.service";
-// import { browserHistory } from 'react-router-dom';
 
-const FolderList = () => {
-  const [loading, setLoading] = useState(true);
-  const [posts, setPosts] = useState([]);
-  const [teamName, setTeamName] = useState();
-  const [modalShow, setModalShow] = React.useState(false);
+export default function TestTeam(post) {
+  // const { name } = useParams()
   // const {teamID} = useParams()
   const teamID = localStorage.getItem("currentTeamID");
-  const history = useHistory();
+  const name = localStorage.getItem("currentProjectID");
+  const [selectedImg, setSelectedImg] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [posts, setPosts] = useState([]);
   const currentUserRole = localStorage.getItem("currentUserRole");
+  const uid = localStorage.getItem("currentUserUID");
+  const history = useHistory();
+  const [modalShow, setModalShow] = React.useState(false);
+  const currentUserRole = localStorage.getItem("currentUserRole");
+
+  projectMembersService.getRole(uid, teamID);
 
   const createTeam = {
     backgroundColor: "#FFD803",
@@ -39,45 +47,19 @@ const FolderList = () => {
     uid: "",
   });
 
-  useEffect(() => {
-    const getPostsFromFirebase = [];
-    const subscriber = projectFirestore
-      // .collection("FolderImages")
-      // .collection('teams').doc('JviFAFCWPy0VPJFeCBPZ').collection('FolderImages').doc('HceEccV4vOIkrNX4CYeB')
-      .doc(`TEAM/${teamID}`)
-      .collection("FOLDERS")
-      .onSnapshot((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          getPostsFromFirebase.push({
-            ...doc.data(), //spread operator
-            key: doc.id, // `id` given to us by Firebase
-          });
-        });
-        setPosts(getPostsFromFirebase);
-        setLoading(false);
-      });
-
-    // return cleanup function
-    return () => subscriber();
-  }, [loading]); // empty dependencies array => useEffect only called once
-
-  if (loading) {
-    return <h1>loading firebase data...</h1>;
-  }
-
-  function saveAs(ID) {
-    localStorage.setItem("currentProjectID", ID);
-  }
-
-  function deleteTeam() {
-    teamService.deleteTeam(teamID);
-    projectMembersService.deleteTeam(teamID);
-    // await toast.success("Team Deleted");
-    history.push("/");
+  function deleteProject() {
+    teamService.deleteProject(teamID, name);
+    history.push("/gallery");
+    // console.log(teamID)
+    // console.log(name)
   }
 
   function getValue() {
-    var docRef = projectFirestore.collection("TEAM").doc(teamID);
+    var docRef = projectFirestore
+      .collection("PROJECT")
+      .doc(teamID)
+      .collection("FOLDERS")
+      .doc(name);
 
     docRef
       .get()
@@ -117,21 +99,21 @@ const FolderList = () => {
 
     const update = () => {
       projectFirestore
-        .collection("TEAM")
+        .collection("PROJECT")
         .doc(teamID)
+        .collection("FOLDERS")
+        .doc(name)
         .update({
           name: role,
         })
         .then(() => {
           toast.success("EDIT SUCCESS");
           setTimeout(function() {
-            history.push("/");
+            history.push("/gallery");
           }, 5000);
         })
         .catch(() => {
           toast.error("Something went wrong!");
-          console.log(teamID);
-          console.log(role);
         });
     };
 
@@ -185,77 +167,78 @@ const FolderList = () => {
     );
   }
 
-  function showTeamMembers() {
-    history.push("/teamMembers");
-  }
-
   return (
+    //     <div>
+    // <Title/>
+    //     {/* <input
+    //         type="file"
+    //         multiple
+    //     /> */}
+    // <UploadForm/>
+    //   <ImageGrid setSelectedImg={setSelectedImg} />
+    //         {/* <h2>Team { name }</h2>
+    //         <h1>HELLO PO YAWAA TESt</h1> */}
+    //     </div>
+
     <>
-      <ToastContainer />
+      <TopNav />
       <br></br>
-      {currentUserRole === "admin" && (
-        <button onClick={deleteTeam}>delete</button>
-      )}
-      {currentUserRole === "admin" && (
-        <button
-          onClick={() => {
-            setModalShow(true);
-            getValue();
-          }}
-        >
-          edit
-        </button>
-      )}
-      {currentUserRole === "admin" && (
-        <button onClick={showTeamMembers}>Team Members</button>
-      )}
-
-      <MyVerticallyCenteredModal
-        show={modalShow}
-        onHide={() => setModalShow(false)}
-        daata={updata}
-      />
-
+      <br></br>
+      <br></br>
       <br></br>
       <br></br>
 
-      <div className="row">
+      <br></br>
+      <br></br>
+      <br></br>
+      <br></br>
+
+      <Container>
+        <ToastContainer />
         {currentUserRole === "admin" && (
+          <button onClick={deleteProject}>delete</button>
+        )}{" "}
+        {currentUserRole === "admin" && (
+          <button
+            onClick={() => {
+              setModalShow(true);
+              getValue();
+            }}
+          >
+            edit
+          </button>
+        )}
+        <MyVerticallyCenteredModal
+          show={modalShow}
+          onHide={() => setModalShow(false)}
+          daata={updata}
+        />
+        <div className="row d-flex align-items-center justify-content-center">
           <Link
-            to={`/Addfolder`}
+            to={`/imagesfolder`}
             style={cardLink}
             className="col-lg-3 col-md-4 col-sm-12 mb-3"
           >
             <Card border="dark" style={createTeam} className="h-100">
               <Card.Body className="d-flex align-items-center justify-content-center">
-                <Card.Title>Create Project</Card.Title>
+                <Card.Title>Images</Card.Title>
               </Card.Body>
             </Card>
           </Link>
-        )}
 
-        {posts.length > 0 ? (
-          posts.map((post) => (
-            <Link
-              to={`/folder`}
-              onClick={() => saveAs(post.key)}
-              key={post.key}
-              style={cardLink}
-              className="col-lg-3 col-md-4 col-sm-12 mb-3"
-            >
-              <Card border="dark" className="h-100">
-                <Card.Body className="d-flex align-items-center justify-content-center">
-                  <Card.Title>{post.name}</Card.Title>
-                </Card.Body>
-              </Card>
-            </Link>
-          ))
-        ) : (
-          <h6>No Project yet</h6>
-        )}
-      </div>
+          <Link
+            to={`/teamMembers`}
+            style={cardLink}
+            className="col-lg-3 col-md-4 col-sm-12 mb-3"
+          >
+            <Card border="dark" style={createTeam} className="h-100">
+              <Card.Body className="d-flex align-items-center justify-content-center">
+                <Card.Title>Team Members</Card.Title>
+              </Card.Body>
+            </Card>
+          </Link>
+        </div>
+      </Container>
     </>
   );
-};
-
-export default FolderList;
+}

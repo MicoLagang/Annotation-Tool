@@ -174,7 +174,7 @@ function ImageGrid() {
       <ToastContainer />
       {currentUserRole !== "contributor" && (
         <div>
-          {imagesURL.length > 0 && (
+          {imagesURL.length > 0 && currentUserRole == "admin" && (
             <div>
               <p>Selected: {imagesURL.length}</p>
               {/* <Link to="/tool" onClick={() => showSelectedImage()}>

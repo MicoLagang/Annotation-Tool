@@ -117,7 +117,7 @@ const FolderList = () => {
 
     const update = () => {
       projectFirestore
-        .collection("TEAM")
+        .collection("PROJECT")
         .doc(teamID)
         .update({
           name: role,

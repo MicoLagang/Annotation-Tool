@@ -172,50 +172,49 @@ function ImageGrid() {
   return (
     <>
       <ToastContainer />
-      {currentUserRole !== "contributor" && (
-        <div>
-          {imagesURL.length > 0 && (
-            <div>
-              <p>Selected: {imagesURL.length}</p>
-              {/* <Link to="/tool" onClick={() => showSelectedImage()}>
+      {/* {currentUserRole !== "contributor" && ( */}
+      <div>
+        {currentUserRole === "admin" && (
+          <div>
+            <p>Selected: {imagesURL.length}</p>
+            {/* <Link to="/tool" onClick={() => showSelectedImage()}>
                 Annotate
               </Link> */}
-              <br></br>
-              <Link onClick={() => deleteSelectedImage()}>Delete</Link>
-            </div>
-          )}
-
-          <Link to="/tool" onClick={() => annotateFolder()}>
-            Annotate This Folder
-          </Link>
-
-          <div className="row">
-            {docs &&
-              docs.map((doc) => (
-                <Link
-                  // to="/tool"
-                  style={cardLink}
-                  className="col-lg-3 col-md-4 col-sm-12 mb-3"
-                >
-                  <Card
-                    key={doc.id}
-                    border="dark"
-                    className="h-100"
-                    style={{
-                      backgroundImage: `url(${doc.url})`,
-                      backgroundRepeat: "no-repeat",
-                      backgroundPosition: "center",
-                      backgroundSize: "cover",
-                    }}
-                    onClick={() => addImage(doc)}
-                  ></Card>
-                  <p className="text-center">{doc.name}</p>
-                </Link>
-              ))}
+            <br></br>
+            <Link onClick={() => deleteSelectedImage()}>Delete</Link>
           </div>
-        </div>
-      )}
+        )}
 
+        <Link to="/tool" onClick={() => annotateFolder()}>
+          Annotate This Folder
+        </Link>
+
+        <div className="row">
+          {docs &&
+            docs.map((doc) => (
+              <Link
+                // to="/tool"
+                style={cardLink}
+                className="col-lg-3 col-md-4 col-sm-12 mb-3"
+              >
+                <Card
+                  key={doc.id}
+                  border="dark"
+                  className="h-100"
+                  style={{
+                    backgroundImage: `url(${doc.url})`,
+                    backgroundRepeat: "no-repeat",
+                    backgroundPosition: "center",
+                    backgroundSize: "cover",
+                  }}
+                  onClick={() => addImage(doc)}
+                ></Card>
+                <p className="text-center">{doc.name}</p>
+              </Link>
+            ))}
+        </div>
+      </div>
+      // )}
       {currentUserRole === "contributor" && (
         <div className="row">
           {docs &&

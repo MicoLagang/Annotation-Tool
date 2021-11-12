@@ -117,7 +117,7 @@ const FolderList = () => {
 
     const update = () => {
       projectFirestore
-        .collection("TEAM")
+        .collection("PROJECT")
         .doc(teamID)
         .update({
           name: role,
@@ -220,19 +220,19 @@ const FolderList = () => {
       <br></br>
 
       <div className="row">
-        {currentUserRole === "admin" && (
-          <Link
-            to={`/Addfolder`}
-            style={cardLink}
-            className="col-lg-3 col-md-4 col-sm-12 mb-3"
-          >
-            <Card border="dark" style={createTeam} className="h-100">
-              <Card.Body className="d-flex align-items-center justify-content-center">
-                <Card.Title>Create Project</Card.Title>
-              </Card.Body>
-            </Card>
-          </Link>
-        )}
+        {/* {currentUserRole === "admin" &&  */}
+        <Link
+          to={`/Addfolder`}
+          style={cardLink}
+          className="col-lg-3 col-md-4 col-sm-12 mb-3"
+        >
+          <Card border="dark" style={createTeam} className="h-100">
+            <Card.Body className="d-flex align-items-center justify-content-center">
+              <Card.Title>Create Project</Card.Title>
+            </Card.Body>
+          </Card>
+        </Link>
+        {/* }  */}
 
         {posts.length > 0 ? (
           posts.map((post) => (

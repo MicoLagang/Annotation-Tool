@@ -97,6 +97,8 @@ function ImageGrid() {
   const name = localStorage.getItem("currentProjectID");
   const folderID = localStorage.getItem("currentImagesFolderID");
 
+  console.log(currentUserRole);
+
   const cardLink = {
     color: "#000000",
     textDecoration: "none",
@@ -174,7 +176,7 @@ function ImageGrid() {
       <ToastContainer />
       {currentUserRole !== "contributor" && (
         <div>
-          {imagesURL.length > 0 && (
+          {currentUserRole === "admin" && (
             <div>
               <p>Selected: {imagesURL.length}</p>
               {/* <Link to="/tool" onClick={() => showSelectedImage()}>

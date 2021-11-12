@@ -160,7 +160,7 @@ const UploadForm = () => {
       <input type="file" multiple onChange={handleChange} />
       <button onClick={handleUpload}>Upload</button>
       <button onClick={fetchTotalImages}>Fetch TotalImages</button>
-      {currentUserRole === "admin" && (
+      {currentUserRole && (
         <button onClick={deleteFolder}>Delete This Folder</button>
       )}
       <br />
