@@ -29,7 +29,7 @@ const FolderList = () => {
   useEffect(() => {
     const getPostsFromFirebase = [];
     const subscriber = projectFirestore
-      .collection("TEAMMEMBERS")
+      .collection("PROJECTMEMBERS")
       .onSnapshot((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           getPostsFromFirebase.push({
@@ -123,7 +123,7 @@ const FolderList = () => {
           {posts.length > 0 ? (
             posts.map((post) => (
               <Link
-                to={`/gallery`}
+                // to={`/gallery`}
                 // to={`/gallery/${uid}`}
                 key={post.key}
                 style={cardLink}

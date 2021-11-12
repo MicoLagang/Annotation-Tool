@@ -21,6 +21,7 @@ export default function TestTeam(post) {
   const [selectedImg, setSelectedImg] = useState(null);
   const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState([]);
+  const currentUserRole = localStorage.getItem("currentUserRole");
   const uid = localStorage.getItem("currentUserUID");
   const history = useHistory();
   const [modalShow, setModalShow] = React.useState(false);
@@ -53,6 +54,7 @@ export default function TestTeam(post) {
     // console.log(name)
   }
 
+<<<<<<< HEAD
   function getValue() {
     var docRef = projectFirestore
       .collection("PROJECT")
@@ -73,6 +75,21 @@ export default function TestTeam(post) {
       })
       .catch((error) => {
         console.log("Error getting document:", error);
+=======
+  function getValue(){
+    var docRef = projectFirestore.collection("TEAM").doc(teamID).collection("FOLDERS").doc(name)
+
+      docRef.get().then((doc) => {
+          if (doc.exists) {
+              console.log("Document data:", doc.data());
+              setUpdata(doc.data())
+          } else {
+              // doc.data() will be undefined in this case
+              console.log("No such document!");
+          }
+      }).catch((error) => {
+          console.log("Error getting document:", error);
+>>>>>>> d13b0482729a9388c966dde199dfc9a2d908a007
       });
   }
 
@@ -193,6 +210,7 @@ export default function TestTeam(post) {
       <br></br>
 
       <Container>
+<<<<<<< HEAD
         <ToastContainer />
         {currentUserRole === "admin" && (
           <button onClick={deleteProject}>delete</button>
@@ -212,6 +230,27 @@ export default function TestTeam(post) {
           onHide={() => setModalShow(false)}
           daata={updata}
         />
+=======
+      <ToastContainer />
+
+      {currentUserRole === "admin" && 
+      <button onClick={deleteProject}>delete</button>
+      }   {currentUserRole === "admin" && 
+      <button 
+        onClick={() => {
+          setModalShow(true);
+          getValue();
+        }}
+      >edit</button>
+      }     
+
+
+                      <MyVerticallyCenteredModal
+                        show={modalShow}
+                        onHide={() => setModalShow(false)}
+                        daata={updata}
+                      />
+>>>>>>> d13b0482729a9388c966dde199dfc9a2d908a007
         <div className="row d-flex align-items-center justify-content-center">
           <Link
             to={`/imagesfolder`}

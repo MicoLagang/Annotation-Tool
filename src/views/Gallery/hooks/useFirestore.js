@@ -13,6 +13,7 @@ const useFirestore = (collection, sub) => {
 
   useEffect(() => {
     // const unsub = projectFirestore.collection(collection).doc(name).collection("images")
+<<<<<<< HEAD
     // const unsub = projectFirestore.collection(collection).doc(teamID).collection("FOLDERS").doc(name).collection('images')
     const unsub = projectFirestore
       .collection("TEAM")
@@ -24,6 +25,12 @@ const useFirestore = (collection, sub) => {
       .collection("IMAGES")
       .orderBy("createdAt", "desc")
       .onSnapshot((snap) => {
+=======
+      // const unsub = projectFirestore.collection(collection).doc(teamID).collection("FOLDERS").doc(name).collection('images')
+      const unsub = projectFirestore.collection('TEAM').doc(teamID).collection("FOLDERS").doc(name).collection('IMAGESFOLDER').doc(folderID).collection("IMAGES")
+      .orderBy('createdAt', 'desc')
+      .onSnapshot(snap => {
+>>>>>>> d13b0482729a9388c966dde199dfc9a2d908a007
         let documents = [];
         snap.forEach((doc) => {
           documents.push({ ...doc.data(), id: doc.id });

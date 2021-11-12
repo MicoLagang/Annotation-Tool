@@ -76,8 +76,13 @@ const FolderList = () => {
     history.push("/");
   }
 
+<<<<<<< HEAD
   function getValue() {
     var docRef = projectFirestore.collection("PROJECT").doc(teamID);
+=======
+  function getValue(){
+    var docRef = projectFirestore.collection("TEAM").doc(teamID);
+>>>>>>> d13b0482729a9388c966dde199dfc9a2d908a007
 
     docRef
       .get()
