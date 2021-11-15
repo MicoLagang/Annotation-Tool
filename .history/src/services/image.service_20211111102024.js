@@ -8,8 +8,7 @@ class ImageDataService {
   }
 
   create(data) {
-    // return db.add(data);
-    return db.doc(data.folderID).set(data);
+    return db.add(data);
     // console.log(data);
   }
 }
