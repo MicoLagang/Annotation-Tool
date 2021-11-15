@@ -7,7 +7,6 @@ import { Refresh } from "@material-ui/icons";
 import { useParams, useHistory } from "react-router-dom";
 import { folder } from "jszip";
 import teamService from "../../../services/team.service";
-import firebase from "firebase/app";
 
 const UploadForm = () => {
   const [file, setFile] = useState();
@@ -36,6 +35,23 @@ const UploadForm = () => {
     fetchTotalImages();
   };
 
+  function updatetotalImages(value) {
+    projectFirestore
+      .collection("TEAM")
+      .doc(teamID)
+      .collection("FOLDERS")
+      .doc(name)
+      .collection("IMAGESFOLDER")
+      .doc(folderID)
+      .update({
+        totalImages: value,
+      })
+      .then(() => {
+        console.log("Updated Total Images from firebase is: " + totalImages);
+      })
+      .catch(() => {});
+  }
+
   async function fetchTotalImages() {
     console.log("fetching data...");
     await projectFirestore
@@ -48,7 +64,10 @@ const UploadForm = () => {
       .get()
       .then((snapshot) => {
         totalImages = snapshot.data().totalImages;
+        const b = snapshot.data().totalImages;
         console.log("Total Images from firebase is: " + totalImages);
+        console.log(b);
+        console.log("Total Images from fetchTotalImages: " + totalImages);
       });
   }
 
@@ -57,7 +76,6 @@ const UploadForm = () => {
     const promises = [];
     images.map(async (image) => {
       const uploadTask = projectStorage.ref(image.name);
-      const increment = firebase.firestore.FieldValue.increment(1);
       const collectionRef = projectFirestore
         .collection("TEAM")
         .doc(teamID)
@@ -65,19 +83,8 @@ const UploadForm = () => {
         .doc(name)
         .collection("IMAGESFOLDER")
         .doc(folderID)
-        .collection("IMAGES")
-        .doc();
-
-      const counterRef = projectFirestore
-        .collection("TEAM")
-        .doc(teamID)
-        .collection("FOLDERS")
-        .doc(name)
-        .collection("IMAGESFOLDER")
-        .doc(folderID);
-
+        .collection("IMAGES");
       promises.push(uploadTask);
-
       uploadTask.put(image).on(
         "state_changed",
         (snapshot) => {
@@ -91,20 +98,27 @@ const UploadForm = () => {
         },
 
         async () => {
+          console.log("Total Images from handle upload: " + totalImages);
+          totalImages = totalImages + 1;
           const url = await uploadTask.getDownloadURL();
           const createdAt = timestamp();
           const name = `${folderName}_${totalImages}`;
           console.log(name);
 
-          const batch = projectFirestore.batch();
-          batch.set(collectionRef, { url, createdAt, name });
-          batch.set(counterRef, { totalImages: increment }, { merge: true });
-          batch.commit();
-          totalImages = totalImages + 1;
-          // collectionRef.add({ url, createdAt, name });
+          // const data = {
+          //   createdAt: createdAt,
+          //   url: url,
+          //   name: name,
+          // };
+          console.log("AWAIT");
+          collectionRef.add({ url, createdAt, name });
+          console.log("setting");
           setUrl((prevState) => [...prevState, url]);
+          console.log("updating");
         }
       );
+      await timer(1000);
+      updatetotalImages(totalImages);
     });
   }
 

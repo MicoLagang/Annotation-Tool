@@ -106,6 +106,7 @@ const ImagesDropZone: React.FC<IProps> = ({ updateActiveImageIndex, addImageData
             console.log(acceptedFiles.length)
             console.log("Done Loading Image...")
             if (acceptedFiles.length > 0) toast.success("PLS WAIT")
+            setImagesData([])
         }
     }
     

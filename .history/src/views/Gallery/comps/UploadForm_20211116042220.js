@@ -53,7 +53,7 @@ const UploadForm = () => {
   }
 
   function handleUpload() {
-    fetchTotalImages();
+    await fetchTotalImages();
     const promises = [];
     images.map(async (image) => {
       const uploadTask = projectStorage.ref(image.name);

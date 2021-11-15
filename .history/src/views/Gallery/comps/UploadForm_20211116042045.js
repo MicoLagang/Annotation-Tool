@@ -36,6 +36,23 @@ const UploadForm = () => {
     fetchTotalImages();
   };
 
+  function updatetotalImages(value) {
+    projectFirestore
+      .collection("TEAM")
+      .doc(teamID)
+      .collection("FOLDERS")
+      .doc(name)
+      .collection("IMAGESFOLDER")
+      .doc(folderID)
+      .update({
+        totalImages: value,
+      })
+      .then(() => {
+        console.log("Updated Total Images from firebase is: " + totalImages);
+      })
+      .catch(() => {});
+  }
+
   async function fetchTotalImages() {
     console.log("fetching data...");
     await projectFirestore
@@ -48,14 +65,17 @@ const UploadForm = () => {
       .get()
       .then((snapshot) => {
         totalImages = snapshot.data().totalImages;
+        const b = snapshot.data().totalImages;
         console.log("Total Images from firebase is: " + totalImages);
+        console.log(b);
+        console.log("Total Images from fetchTotalImages: " + totalImages);
       });
   }
 
   function handleUpload() {
-    fetchTotalImages();
     const promises = [];
     images.map(async (image) => {
+      await fetchTotalImages();
       const uploadTask = projectStorage.ref(image.name);
       const increment = firebase.firestore.FieldValue.increment(1);
       const collectionRef = projectFirestore
@@ -100,7 +120,6 @@ const UploadForm = () => {
           batch.set(collectionRef, { url, createdAt, name });
           batch.set(counterRef, { totalImages: increment }, { merge: true });
           batch.commit();
-          totalImages = totalImages + 1;
           // collectionRef.add({ url, createdAt, name });
           setUrl((prevState) => [...prevState, url]);
         }

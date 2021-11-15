@@ -145,6 +145,8 @@ const ImagesDropZone: React.FC<IProps> = ({ updateActiveImageIndex, addImageData
                 />
                 <p key={2} className="extraBold">{acceptedFiles.length} images loaded</p>
             </>;
+    
+        
     };
 
     return (
