@@ -132,7 +132,7 @@ const FolderList = () => {
           {posts.length > 0 ? (
             posts.map((post) => (
               <Link
-                to={`/gallery`}
+                to={`/myTeam/gallery`}
                 // to={`/gallery/${uid}`}
                 key={post.key}
                 onClick={() => saveAs(post.projectID)}

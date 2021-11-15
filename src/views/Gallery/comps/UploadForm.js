@@ -125,7 +125,7 @@ const UploadForm = () => {
 
   function deleteFolder() {
     teamService.deleteFolder(teamID, name, folderID);
-    history.push("/imagesfolder");
+    history.push("/myTeam/gallery/folder/imagesfolder");
   }
 
   //   const handleChange = (e) => {

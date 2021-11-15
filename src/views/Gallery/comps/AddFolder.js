@@ -133,7 +133,7 @@ export default function AddFolder() {
             // window.location.reload(false);
             console.log(teamID)
             console.log(foldername.current.value)
-            history.push("/gallery")
+            history.push("/myTeam/gallery")
         }
     
     };

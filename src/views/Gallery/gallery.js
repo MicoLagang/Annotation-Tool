@@ -13,6 +13,8 @@ import { Container } from 'react-bootstrap';
 function App() {
   const [selectedImg, setSelectedImg] = useState(null);
   const {teamID} = useParams()
+
+  // window.location.reload(false);
   return (
     <>
           <TopNav/>

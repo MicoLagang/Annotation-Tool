@@ -21,6 +21,8 @@ const FolderList = () => {
   const history = useHistory();
   const currentUserRole = localStorage.getItem("currentUserRole");
 
+  const TeamCollection = projectFirestore.collection("TEAM").doc(teamID)
+
   const createTeam = {
     backgroundColor: "#FFD803",
   };
@@ -73,7 +75,7 @@ const FolderList = () => {
     teamService.deleteTeam(teamID);
     projectMembersService.deleteTeam(teamID);
     // await toast.success("Team Deleted");
-    history.push("/");
+    history.push("/myTeam");
   }
 
   function getValue() {
@@ -114,24 +116,22 @@ const FolderList = () => {
     };
 
     // console.log(teamID)
+    
 
     const update = () => {
-      projectFirestore
-        .collection("TEAM")
-        .doc(teamID)
+      TeamCollection
         .update({
           name: role,
         })
         .then(() => {
+          
           toast.success("EDIT SUCCESS");
           setTimeout(function() {
-            history.push("/");
+            history.push("/myTeam");
           }, 5000);
         })
         .catch(() => {
           toast.error("Something went wrong!");
-          console.log(teamID);
-          console.log(role);
         });
     };
 
@@ -186,7 +186,7 @@ const FolderList = () => {
   }
 
   function showTeamMembers() {
-    history.push("/teamMembers");
+    history.push("/myTeam/gallery/teamMembers");
   }
 
   return (
@@ -237,7 +237,7 @@ const FolderList = () => {
         {posts.length > 0 ? (
           posts.map((post) => (
             <Link
-              to={`/folder`}
+              to={`/myTeam/gallery/folder`}
               onClick={() => saveAs(post.key)}
               key={post.key}
               style={cardLink}

@@ -80,6 +80,7 @@ import myProject from './views/myProject/myProject'
 import teamMembers from './views/Team/teamMembers';
 import AddMember from './views/Team/AddMember';
 import { ImageProvider } from './logic/context/imageContext';
+import BreadCrumb from './views/components/BreadCrumb';
 
 interface IProps {
     projectType: ProjectType;
@@ -117,25 +118,28 @@ const App: React.FC<IProps> = ({ projectType, windowSize, ObjectDetectorLoaded, 
                 <AuthProvider>
                     <ImageProvider>
                     <Switch>
+            
                         <PrivateRoute exact path="/" component={Dashboard} />
+              
                         {/* <PrivateRoute exact path="/" component={Layout} /> */}
                         {/* <PrivateRoute exact path="/" component={Header} /> */}
                         
                         {/* <PrivateRoute exact path="/tool" component={Tool} /> */}
                         <PrivateRoute exact path="/tool" component={Tool} />
-                        <PrivateRoute exact path="/gallery" component={Gallery} />
+                        <PrivateRoute exact path="/myTeam/gallery" component={Gallery} />
                         <PrivateRoute exact path="/project" component={Project} />
 
                         <PrivateRoute exact path="/myTeam" component={myTeam} />
                         <PrivateRoute exact path="/myProject" component={myProject} />
-                        <PrivateRoute exact path="/teamMembers" component={teamMembers} />
+                        <PrivateRoute exact path="/myTeam/gallery/teamMembers" component={teamMembers} />
+                        <PrivateRoute exact path="/myTeam/gallery/folder/teamMembers" component={teamMembers} />
                       
                         {/* <PrivateRoute exact path="/test" component={test} /> */}
                         {/* <Route exact path="/team/:name"> <TestTeam></TestTeam> </Route> */}
-                        <PrivateRoute exact path="/folder" component={FolderImages}> <FolderImages/> </PrivateRoute>
-                        <PrivateRoute exact path="/imagesfolder" component={ImagesFolder}> <ImagesFolder/> </PrivateRoute>
-                        <PrivateRoute exact path="/galleryimagesfolder" component={UploadImagesGallery}> <UploadImagesGallery/> </PrivateRoute>
-                        <PrivateRoute exact path="/team/:name" component={Team}> <Team/> </PrivateRoute>
+                        <PrivateRoute exact path="/myTeam/gallery/folder" component={FolderImages}/> 
+                        <PrivateRoute exact path="/myTeam/gallery/folder/imagesfolder" component={ImagesFolder}/> 
+                        <PrivateRoute exact path="/myTeam/gallery/folder/imagesfolder/galleryimagesfolder" component={UploadImagesGallery}/> 
+                        <PrivateRoute exact path="/team/:name" component={Team}/>
                         <Container className="mt-5 d-flex justify-content-center" style={{ minHeight: "100vh" }}>
                             <div className="w-100" style={{ maxWidth: '400px' }}>
                                 <PrivateRoute exact path="/new" component={CreateTeam} />

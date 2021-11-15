@@ -44,7 +44,7 @@ export default function TestTeam(post) {
         .collection("IMAGESFOLDER")
         .add({ name: foldername.current.value, totalImages: 0 });
       // window.location.reload(false);
-      history.push("/imagesfolder");
+      history.push("/myTeam/gallery/folder/imagesfolder");
       console.log(teamID);
       console.log(foldername.current.value);
     }

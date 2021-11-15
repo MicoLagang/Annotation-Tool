@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { useAuth } from "../../logic/context/AuthContext";
 import { useHistory } from "react-router-dom";
+import BreadCrumb from "../components/BreadCrumb";
 
 export default function TopNav() {
   const [error, setError] = useState("");
@@ -20,6 +21,7 @@ export default function TopNav() {
     }
   }
   return (
+    <>
     <Navbar
       className="mb-3"
       collapseOnSelect
@@ -32,9 +34,9 @@ export default function TopNav() {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link href="/tool">Tool</Nav.Link>
+            {/* <Nav.Link href="/tool">Tool</Nav.Link> */}
           </Nav>
-          <Nav>
+          {/* <Nav>
             <NavDropdown title={currentUser.email} id="collasible-nav-dropdown">
               <NavDropdown.Item href="/update-profile">
                 Profile
@@ -43,9 +45,14 @@ export default function TopNav() {
               <NavDropdown.Divider />
               <NavDropdown.Item onClick={handleLogout}>Logout</NavDropdown.Item>
             </NavDropdown>
-          </Nav>
+          </Nav> */}
         </Navbar.Collapse>
       </Container>
     </Navbar>
+    <Container>
+    <BreadCrumb/>
+    </Container>
+   
+     </>
   );
 }

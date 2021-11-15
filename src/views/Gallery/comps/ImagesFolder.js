@@ -80,7 +80,7 @@ export default function TestTeam() {
 
     <>
       <TopNav></TopNav>
-
+      <br></br>
       <Container>
         <div className="row">
           <Link
@@ -98,7 +98,7 @@ export default function TestTeam() {
           {posts.length > 0 ? (
             posts.map((post) => (
               <Link
-                to={`/galleryimagesfolder`}
+                to={`/myTeam/gallery/folder/imagesfolder/galleryimagesfolder`}
                 onClick={() => saveAs(post)}
                 key={post.key}
                 style={cardLink}

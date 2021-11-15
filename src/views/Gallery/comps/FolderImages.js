@@ -181,17 +181,8 @@ export default function TestTeam(post) {
 
     <>
       <TopNav />
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
 
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
-
+    <br></br>
       <Container>
         <ToastContainer />
         {currentUserRole === "admin" && (
@@ -214,7 +205,7 @@ export default function TestTeam(post) {
         />
         <div className="row d-flex align-items-center justify-content-center">
           <Link
-            to={`/imagesfolder`}
+            to={`/myTeam/gallery/folder/imagesfolder`}
             style={cardLink}
             className="col-lg-3 col-md-4 col-sm-12 mb-3"
           >
@@ -226,7 +217,7 @@ export default function TestTeam(post) {
           </Link>
 
           <Link
-            to={`/teamMembers`}
+            to={`/myTeam/gallery/folder/teamMembers`}
             style={cardLink}
             className="col-lg-3 col-md-4 col-sm-12 mb-3"
           >

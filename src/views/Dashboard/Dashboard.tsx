@@ -9,8 +9,10 @@ import Swal from "sweetalert2";
 import projectMembersService from '../../services/projectMembers.service'
 import { projectFirestore } from '../../firebase'
 import Member from '../AddMembers/Member'
+import BreadCrumb from '../components/BreadCrumb'
 
 export default function Dashboard() {
+
 
     const [error, setError] = useState('')
     const { currentUser, logout } = useAuth()
@@ -183,7 +185,7 @@ export default function Dashboard() {
                             <Nav.Link href="/tool">Tool</Nav.Link>
                             {/* <Nav.Link href="/gallery">Gallery</Nav.Link> */}
                             <Nav.Link href={`/myTeam`}>My Team</Nav.Link>
-                            <Nav.Link href={`/myProject`}>My Projects</Nav.Link>
+                            {/* <Nav.Link href={`/myProject`}>My Projects</Nav.Link> */}
                         </Nav>
                         <Nav>
                         <Nav.Link></Nav.Link>
@@ -237,6 +239,7 @@ export default function Dashboard() {
                     </Col> */}
                         <Col xs={10}>
                             {/* <CreateTeam {...({ addOrEdit, currentId, teamsObjects })} /> */}
+                            {/* <BreadCrumb/> */}
                             <TeamList />
                         </Col>
                     </Row>

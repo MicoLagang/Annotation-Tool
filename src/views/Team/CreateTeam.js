@@ -169,7 +169,7 @@ export default class CreateTeam extends Component {
                     {/* <button className="btn btn-success w-100" href="/" onClick={this.createTeam}>
                       Back
                     </button> */}
-                    <Link to="/">Back</Link>
+                    <Link to="/myTeam">Back</Link>
                   </div>
                 ) : (
                     <div>
