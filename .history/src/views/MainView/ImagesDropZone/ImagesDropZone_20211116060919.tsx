@@ -33,8 +33,7 @@ const ImagesDropZone: React.FC<IProps> = ({ updateActiveImageIndex, addImageData
 
     const timer = ms => new Promise(res => setTimeout(res, ms))
     const { imagesData, setImagesData } = useImage()
-    const [loading, setLoading] = useState(false)
-    const [imagesLoaded, setImagesLoaded] = useState(0)
+    const [ loading, setLoading]  = useState(false)
 
     useEffect(() => {
         load()
@@ -107,7 +106,6 @@ const ImagesDropZone: React.FC<IProps> = ({ updateActiveImageIndex, addImageData
                     acceptedFiles[i] = file;
                     console.log(file)
                 };
-                setImagesLoaded(imagesLoaded + 1);
                 await timer(1000);
             }
             setLoading(true);
@@ -119,7 +117,7 @@ const ImagesDropZone: React.FC<IProps> = ({ updateActiveImageIndex, addImageData
     const getLoadingContent = () => {
         return <>
             {loading
-                ? <div className="text-center">
+                ? <div>
                     <ToastContainer />
                     <p>All Images are loaded. Start annotating now?</p>
                     <TextButton
@@ -128,10 +126,7 @@ const ImagesDropZone: React.FC<IProps> = ({ updateActiveImageIndex, addImageData
                         onClick={() => startEditor(ProjectType.OBJECT_DETECTION)}
             />
                 </div>
-            : <div className="text-center">
-                    <p>Loading images...</p>
-                    <Spinner animation="border" />
-                </div>
+            : <Spinner animation="border" />
             }
             </>
     }

@@ -16,7 +16,6 @@ import { ImageDataUtil } from "../../../utils/ImageDataUtil";
 import { useImage } from '../../../logic/context/imageContext';
 import { motion } from 'framer-motion';
 import { toast, ToastContainer } from "react-toastify";
-import { Spinner } from 'react-bootstrap'
 
 interface IProps {
     updateActiveImageIndex: (activeImageIndex: number) => any;
@@ -33,8 +32,7 @@ const ImagesDropZone: React.FC<IProps> = ({ updateActiveImageIndex, addImageData
 
     const timer = ms => new Promise(res => setTimeout(res, ms))
     const { imagesData, setImagesData } = useImage()
-    const [loading, setLoading] = useState(false)
-    const [imagesLoaded, setImagesLoaded] = useState(0)
+    const [ loading, setLoading]  = useState(false)
 
     useEffect(() => {
         load()
@@ -107,10 +105,9 @@ const ImagesDropZone: React.FC<IProps> = ({ updateActiveImageIndex, addImageData
                     acceptedFiles[i] = file;
                     console.log(file)
                 };
-                setImagesLoaded(imagesLoaded + 1);
                 await timer(1000);
             }
-            setLoading(true);
+
             console.log(acceptedFiles.length)
             if (acceptedFiles.length > 0) toast.success("All images are loaded!")
         }
@@ -118,21 +115,13 @@ const ImagesDropZone: React.FC<IProps> = ({ updateActiveImageIndex, addImageData
 
     const getLoadingContent = () => {
         return <>
-            {loading
-                ? <div className="text-center">
-                    <ToastContainer />
+            <ToastContainer />
                     <p>All Images are loaded. Start annotating now?</p>
                     <TextButton
                     label={"Start"}
                         isDisabled={acceptedFiles.length > 0}
                         onClick={() => startEditor(ProjectType.OBJECT_DETECTION)}
-            />
-                </div>
-            : <div className="text-center">
-                    <p>Loading images...</p>
-                    <Spinner animation="border" />
-                </div>
-            }
+                    />
             </>
     }
 

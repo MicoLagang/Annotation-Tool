@@ -34,7 +34,7 @@ const ImagesDropZone: React.FC<IProps> = ({ updateActiveImageIndex, addImageData
     const timer = ms => new Promise(res => setTimeout(res, ms))
     const { imagesData, setImagesData } = useImage()
     const [loading, setLoading] = useState(false)
-    const [imagesLoaded, setImagesLoaded] = useState(0)
+    let imagesLoaded = 0;
 
     useEffect(() => {
         load()
@@ -107,7 +107,8 @@ const ImagesDropZone: React.FC<IProps> = ({ updateActiveImageIndex, addImageData
                     acceptedFiles[i] = file;
                     console.log(file)
                 };
-                setImagesLoaded(imagesLoaded + 1);
+                imagesLoaded = imagesLoaded + 1;
+                console.log(imagesLoaded)
                 await timer(1000);
             }
             setLoading(true);
@@ -129,7 +130,7 @@ const ImagesDropZone: React.FC<IProps> = ({ updateActiveImageIndex, addImageData
             />
                 </div>
             : <div className="text-center">
-                    <p>Loading images...</p>
+                    <p>Loading {acceptedFiles.length} images</p>
                     <Spinner animation="border" />
                 </div>
             }

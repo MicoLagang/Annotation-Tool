@@ -129,7 +129,7 @@ const ImagesDropZone: React.FC<IProps> = ({ updateActiveImageIndex, addImageData
             />
                 </div>
             : <div className="text-center">
-                    <p>Loading images...</p>
+                    <p>Loading {imagesLoaded} images</p>
                     <Spinner animation="border" />
                 </div>
             }
