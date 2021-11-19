@@ -59,7 +59,7 @@ function ImageGrid() {
       setImagesID([...imagesID, doc.id]);
       console.log(imagesURL);
       console.log(imagesID);
-      return;
+      break;
     }
     for (let i = 0; i < imagesURL.length; i++) {
       if (doc.url == imagesURL[i]) {

@@ -59,14 +59,13 @@ function ImageGrid() {
       setImagesID([...imagesID, doc.id]);
       console.log(imagesURL);
       console.log(imagesID);
-      return;
     }
     for (let i = 0; i < imagesURL.length; i++) {
       if (doc.url == imagesURL[i]) {
         const tempArray = imagesURL.filter((element) => element != doc.url);
         setImagesURL(tempArray);
         console.log(imagesURL);
-        break;
+        return;
       } else {
         setImagesURL([...imagesURL, doc.url]);
         console.log(imagesURL);
@@ -78,7 +77,7 @@ function ImageGrid() {
         const tempArray = imagesID.filter((element) => element != doc.id);
         setImagesID(tempArray);
         console.log(imagesID);
-        break;
+        return;
       } else {
         setImagesID([...imagesID, doc.id]);
         console.log(imagesID);

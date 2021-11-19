@@ -53,23 +53,18 @@ function ImageGrid() {
   }
 
   function addImage(doc) {
-    console.log(imagesURL.length);
     if (imagesURL.length == 0) {
       setImagesURL([...imagesURL, doc.url]);
       setImagesID([...imagesID, doc.id]);
-      console.log(imagesURL);
-      console.log(imagesID);
       return;
     }
     for (let i = 0; i < imagesURL.length; i++) {
       if (doc.url == imagesURL[i]) {
         const tempArray = imagesURL.filter((element) => element != doc.url);
         setImagesURL(tempArray);
-        console.log(imagesURL);
-        break;
+        return;
       } else {
         setImagesURL([...imagesURL, doc.url]);
-        console.log(imagesURL);
       }
     }
 
@@ -77,13 +72,14 @@ function ImageGrid() {
       if (doc.id == imagesID[i]) {
         const tempArray = imagesID.filter((element) => element != doc.id);
         setImagesID(tempArray);
-        console.log(imagesID);
-        break;
+        return;
       } else {
         setImagesID([...imagesID, doc.id]);
-        console.log(imagesID);
       }
     }
+
+    console.log(imagesURL);
+    console.log(imagesID);
   }
 
   function annotateFolder() {

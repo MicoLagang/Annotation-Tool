@@ -1,7 +1,6 @@
 import React from "react";
 import { useLocation, Link } from "react-router-dom";
-// import { Breadcrumb } from "antd";
-import { Breadcrumb, BreadcrumbItem } from "reactstrap";
+import { Breadcrumb } from "antd";
 
 const BreadCrumb = () => {
   const location = useLocation();
@@ -13,21 +12,21 @@ const BreadCrumb = () => {
       <div>
         <Breadcrumb>
           {pathnames.length > 0 ? (
-            <BreadcrumbItem>
+            <Breadcrumb.Item>
               <Link to="/">Home</Link>
-            </BreadcrumbItem>
+            </Breadcrumb.Item>
           ) : (
-            <BreadcrumbItem>Home</BreadcrumbItem>
+            <Breadcrumb.Item>Home</Breadcrumb.Item>
           )}
           {pathnames.map((name, index) => {
             const routeTo = `/${pathnames.slice(0, index + 1).join("/")}`;
             const isLast = index === pathnames.length - 1;
             return isLast ? (
-              <BreadcrumbItem>{capatilize(name)}</BreadcrumbItem>
+              <Breadcrumb.Item>{capatilize(name)}</Breadcrumb.Item>
             ) : (
-              <BreadcrumbItem>
+              <Breadcrumb.Item>
                 <Link to={`${routeTo}`}>{capatilize(name)}</Link>
-              </BreadcrumbItem>
+              </Breadcrumb.Item>
             );
           })}
         </Breadcrumb>
