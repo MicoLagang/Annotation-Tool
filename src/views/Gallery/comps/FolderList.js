@@ -22,7 +22,7 @@ const FolderList = () => {
   const currentUserRole = localStorage.getItem("currentUserRole");
 
   const TeamCollection = projectFirestore.collection("TEAM").doc(teamID)
-
+  var batch = projectFirestore.batch();
   const createTeam = {
     backgroundColor: "#FFD803",
   };
@@ -119,12 +119,18 @@ const FolderList = () => {
     
 
     const update = () => {
-      TeamCollection
+      // TeamCollection
+      //   .update({
+      //     name: role,
+      //   })
+      projectFirestore.collection("TEAMMEMBERS").doc("hzTKmtVrydm2v3urelJm")
         .update({
-          name: role,
+          TeamName: role,
         })
         .then(() => {
-          
+          // projectFirestore.collection("TEAMMEMBERS").where("projectID", "==", teamID).update({
+          //   TeamName: role,
+          // })
           toast.success("EDIT SUCCESS");
           setTimeout(function() {
             history.push("/myTeam");
