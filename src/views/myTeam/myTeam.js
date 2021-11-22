@@ -60,6 +60,10 @@ const FolderList = () => {
     console.log(ID);
   }
 
+
+  
+  localStorage.removeItem("currentUserRole");
+
   return (
     // <div className="container">
     //   <Link to="/new">

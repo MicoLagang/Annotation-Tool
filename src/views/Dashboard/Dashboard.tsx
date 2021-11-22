@@ -10,6 +10,7 @@ import projectMembersService from '../../services/projectMembers.service'
 import { projectFirestore } from '../../firebase'
 import Member from '../AddMembers/Member'
 import BreadCrumb from '../components/BreadCrumb'
+import TopNav from '../Navigation/TopNav'
 
 export default function Dashboard() {
 
@@ -23,6 +24,8 @@ export default function Dashboard() {
 
     const [teamsObjects, setTeamsObjects] = useState(0)
     var [currentId, setCurrentId] = useState("")
+
+    localStorage.setItem("currentUserEmail", currentUser.email);
 
     // const [projectID, setProjectID] = useState("");
 
@@ -169,53 +172,15 @@ export default function Dashboard() {
           });
       }
 
+      localStorage.clear();
+
   
 
 
     return (
         <>
-        
-        
-            <Navbar collapseOnSelect expand="xl" style={createTeam} variant="dark">
-                <Container>
-                    <Navbar.Brand href="#home">Ilabel</Navbar.Brand>
-                    <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-                    <Navbar.Collapse id="responsive-navbar-nav">
-                        <Nav className="me-auto">
-                            <Nav.Link href="/tool">Tool</Nav.Link>
-                            {/* <Nav.Link href="/gallery">Gallery</Nav.Link> */}
-                            <Nav.Link href={`/myTeam`}>My Team</Nav.Link>
-                            {/* <Nav.Link href={`/myProject`}>My Projects</Nav.Link> */}
-                        </Nav>
-                        <Nav>
-                        <Nav.Link></Nav.Link>
-                        <Nav.Link 
-                        // onClick={JoinTeam} 
-                        id="collasible-nav">
 
-                        {/* <img
-            alt="logo"
-            src="https://www.kindpng.com/picc/m/169-1699400_svg-png-icon-free-android-notification-icon-png.png"
-            width="30"
-            height="30"
-            className="d-inline-block align-top"
-          /> */}    
-          NOTIF
-                            <a style={alert}></a>
-                            
-                        </Nav.Link>
-                            <NavDropdown title={currentUser.email} id="collasible-nav-dropdown">
-                                
-                                <NavDropdown.Item href="/update-profile">Profile</NavDropdown.Item>
-                                <NavDropdown.Item href="/teams">My Teams</NavDropdown.Item>
-                                <NavDropdown.Item onClick={JoinTeam}>Join Project</NavDropdown.Item>                     
-                                <NavDropdown.Divider />
-                                <NavDropdown.Item onClick={handleLogout}>Logout</NavDropdown.Item>
-                            </NavDropdown>
-                        </Nav>
-                    </Navbar.Collapse>
-                </Container>
-            </Navbar>
+            <TopNav></TopNav>
             <div>
                 <Container>
                     <Row>
