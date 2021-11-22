@@ -149,8 +149,8 @@ export default class CreateTeam extends Component {
     return (
       <div className="submit-form">
         {this.state.submitted ? (
-          <div className="text-center">
-            <h4 className="text-center mb-4">Team Created Successfully!</h4>
+          <div>
+            <h4 className="text-center mb-4">You submitted successfully!</h4>
             {/* <button className="btn btn-success w-100" href="/" onClick={this.createTeam}>
                       Back
                     </button> */}

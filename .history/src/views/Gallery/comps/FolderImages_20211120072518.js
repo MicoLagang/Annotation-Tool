@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, Container, Modal } from "react-bootstrap";
+import { Card, Container, Modal, Button } from "react-bootstrap";
 import { TextField } from "@material-ui/core";
 import { Link, useHistory } from "react-router-dom";
 import TopNav from "../../Navigation/TopNav";
@@ -8,8 +8,6 @@ import projectMembersService from "../../../services/projectMembers.service";
 import teamService from "../../../services/team.service";
 import { toast, ToastContainer } from "react-toastify";
 import { Bar } from "react-chartjs-2";
-
-import Button from "@material-ui/core/Button";
 
 export default function TestTeam(post) {
   const teamID = localStorage.getItem("currentTeamID");
@@ -101,8 +99,8 @@ export default function TestTeam(post) {
         .then(() => {
           toast.success("EDIT SUCCESS");
           setTimeout(function() {
-            history.push("/myTeam/gallery");
-          }, 2000);
+            history.push("/gallery");
+          }, 5000);
         })
         .catch(() => {
           toast.error("Something went wrong!");
@@ -238,7 +236,6 @@ export default function TestTeam(post) {
             edit
           </button>
         )}
-        <Button variant="contained">Hello World</Button>
         <MyVerticallyCenteredModal
           show={modalShow}
           onHide={() => setModalShow(false)}

@@ -302,7 +302,6 @@ function Login(props) {
                     variant="contained"
                     color="primary"
                     size="large"
-                    type="submit"
                   >
                     Login
                   </Button>

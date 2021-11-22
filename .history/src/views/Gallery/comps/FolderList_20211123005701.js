@@ -187,7 +187,7 @@ const FolderList = () => {
       <ToastContainer />
       <br></br>
 
-      <Nav className="justify-content-center">
+      {/* <Nav className="justify-content-center">
         {currentUserRole === "admin" && (
           <NavItem>
             <NavLink href="/addfolder">
@@ -273,7 +273,7 @@ const FolderList = () => {
             </NavLink>
           </NavItem>
         )}
-      </Nav>
+      </Nav> */}
 
       {/* {currentUserRole === "admin" && (
         <button onClick={deleteTeam}>delete</button>

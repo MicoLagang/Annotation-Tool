@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { projectFirestore } from "../../../firebase";
 import { Link, useHistory } from "react-router-dom";
 import { Modal, Card } from "react-bootstrap";
-import { TextField } from "@material-ui/core";
+import { TextField, Button } from "@material-ui/core";
 import teamService from "../../../services/team.service";
 import { toast, ToastContainer } from "react-toastify";
 import projectMembersService from "../../../services/projectMembers.service";
-import { Button, Nav, NavItem, NavLink } from "reactstrap";
+// import { Button, Nav, NavItem, NavLink } from "reactstrap";
 
 const FolderList = () => {
   const [loading, setLoading] = useState(true);
@@ -187,7 +187,7 @@ const FolderList = () => {
       <ToastContainer />
       <br></br>
 
-      <Nav className="justify-content-center">
+      {/* <Nav className="justify-content-center">
         {currentUserRole === "admin" && (
           <NavItem>
             <NavLink href="/addfolder">
@@ -273,7 +273,7 @@ const FolderList = () => {
             </NavLink>
           </NavItem>
         )}
-      </Nav>
+      </Nav> */}
 
       {/* {currentUserRole === "admin" && (
         <button onClick={deleteTeam}>delete</button>

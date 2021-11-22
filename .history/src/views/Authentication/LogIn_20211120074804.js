@@ -133,6 +133,8 @@ import { useUserDispatch, loginUser } from "../../context/UserContext";
 
 import userServices from "../../services/user.services";
 
+import { useHistory } from "react-router-dom";
+
 function Login(props) {
   var classes = useStyles();
 
@@ -164,6 +166,8 @@ function Login(props) {
 
   const passwordConfirmRef = useRef();
   const { signup, currentUser1 } = useAuth();
+
+  const history = useHistory();
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -302,7 +306,6 @@ function Login(props) {
                     variant="contained"
                     color="primary"
                     size="large"
-                    type="submit"
                   >
                     Login
                   </Button>
