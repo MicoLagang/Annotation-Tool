@@ -8,6 +8,8 @@ body {
   height: 200px;
   border: 1px solid #f1f1f1;
   perspective: 1000px;
+  transition-delay:2s;
+
 }
 
 .flip-box-inner {
@@ -15,8 +17,9 @@ body {
   width: 100%;
   height: 100%;
   text-align: center;
-  transition: transform 0.8s;
+  transition-delay: 0.8s;
   transform-style: preserve-3d;
+  transition-delay:2s;
 }
 
 .flip-box:hover .flip-box-inner {
@@ -30,6 +33,8 @@ body {
   height: 100%;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
+  transition-duration: 10ms;
+
 }
 
 .flip-box-front {
@@ -41,4 +46,5 @@ body {
   background-color: #555;
   color: white;
   transform: rotateY(180deg);
+
 }

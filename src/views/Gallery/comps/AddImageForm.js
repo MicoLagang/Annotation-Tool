@@ -59,6 +59,7 @@ export default function AddImageForm(post) {
       const newImage = e.target.files[i];
       newImage["id"] = Math.random();
       setImages((prevState) => [...prevState, newImage]);
+      console.log(newImage)
     }
     fetchTotalImages();
   };
@@ -83,8 +84,10 @@ export default function AddImageForm(post) {
     fetchTotalImages();
     const promises = [];
     images.map(async (image) => {
-      const uploadTask = projectStorage.ref(image.name);
       const increment = firebase.firestore.FieldValue.increment(1);
+      const uploadTask = projectStorage.ref(
+        `${new Date().getTime()}_${image.name}`
+      );
       const collectionRef = projectFirestore
         .collection("TEAM")
         .doc(teamID)

@@ -63,6 +63,7 @@ const FolderList = () => {
 
   
   localStorage.removeItem("currentUserRole");
+  localStorage.removeItem("currentTeamID");
 
   return (
     // <div className="container">
