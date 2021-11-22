@@ -147,7 +147,7 @@ function ImageGrid() {
       <ToastContainer />
       {currentUserRole !== "contributor" && (
         <div>
-          {imagesURL.length > 0 && (
+          {imagesURL.length > 0 && currentUserRole === "admin" && (
             <div>
               <p>Selected: {imagesID.length}</p>
               {/* <Link to="/tool" onClick={() => showSelectedImage()}>
@@ -158,21 +158,18 @@ function ImageGrid() {
               <Link onClick={() => clearSelection()}>Clear</Link>
             </div>
           )}
-          {currentUserRole===""&&
-          <Link to="/tool" onClick={() => annotateFolder()}>
-            Annotate This Folder
-          </Link>
-          }
-           {currentUserRole==="contributor"&&
-          <Link to="/tool" onClick={() => annotateFolder()}>
-            Annotate This Folder
-          </Link>
-          }
-            {currentUserRole==="admin"&&
-          <Link to="/tool" onClick={() => annotateFolder()}>
-            Annotate This Folder
-          </Link>
-          }
+
+          {currentUserRole === "annotator" && (
+            <Link to="/tool" onClick={() => annotateFolder()}>
+              Annotate This Folder
+            </Link>
+          )}
+
+          {currentUserRole === "admin" && (
+            <Link to="/tool" onClick={() => annotateFolder()}>
+              Annotate This Folder
+            </Link>
+          )}
 
           <div className="row">
             {docs &&
@@ -213,41 +210,6 @@ function ImageGrid() {
                     <p></p>
                   )}
                 </Link>
-                // <div class="flip-box">
-                //   <div class="flip-box-inner">
-                //     <div class="flip-box-front">
-                //       <Link
-                //         // to="/tool"
-                //         style={cardLink}
-                //         className="col-lg-3 col-md-4 col-sm-12 mb-3"
-                //       >
-                //         <Card
-                //           key={doc.id}
-                //           border="primary"
-                //           className="h-100"
-                //           style={{
-                //             backgroundImage: `url(${doc.url})`,
-                //             backgroundRepeat: "no-repeat",
-                //             backgroundPosition: "center",
-                //             backgroundSize: "cover",
-                //             border: isActive(doc) ? "4px solid" : "",
-                //           }}
-                //           onClick={() => addImage(doc)}
-                //         ></Card>
-                //         <p className="text-center">{doc.name}</p>
-                //         {isAnnotated(doc) ? (
-                //           <p className="text-center">Annotated</p>
-                //         ) : (
-                //           <p></p>
-                //         )}
-                //       </Link>
-                //     </div>
-                //     <div class="flip-box-back">
-                //       <h2>Paris</h2>
-                //       <p>What an amazing city</p>
-                //     </div>
-                //   </div>
-                // </div>
               ))}
           </div>
         </div>
@@ -255,81 +217,45 @@ function ImageGrid() {
 
       {currentUserRole === "contributor" && (
         <div className="row">
-                      {docs &&
-              docs.map((doc) => (
-                <Link
-                  // to="/tool"
-                  style={cardLink}
-                  className="col-lg-3 col-md-4 col-sm-12 mb-3"
-                >
-                  <div class="flip-box">
-                    <div class="flip-box-inner">
-                      <div class="flip-box-front">
-                        <Card
-                          key={doc.id}
-                          border="primary"
-                          className="h-100"
-                          style={{
-                            backgroundImage: `url(${doc.url})`,
-                            backgroundRepeat: "no-repeat",
-                            backgroundPosition: "center",
-                            backgroundSize: "cover",
-                            border: isActive(doc) ? "4px solid" : "",
-                          }}
-                          
-                        ></Card>
-                      </div>
-                      <div class="flip-box-back p-3">
-                        <p>Name: {doc.name}</p>
-                        <p>Description: {doc.description}</p>
-                        <p>Uploaded by: {doc.email}</p>
-                      </div>
+          {docs &&
+            docs.map((doc) => (
+              <Link
+                // to="/tool"
+                style={cardLink}
+                className="col-lg-3 col-md-4 col-sm-12 mb-3"
+              >
+                <div class="flip-box">
+                  <div class="flip-box-inner">
+                    <div class="flip-box-front">
+                      <Card
+                        key={doc.id}
+                        border="primary"
+                        className="h-100"
+                        style={{
+                          backgroundImage: `url(${doc.url})`,
+                          backgroundRepeat: "no-repeat",
+                          backgroundPosition: "center",
+                          backgroundSize: "cover",
+                          border: isActive(doc) ? "4px solid" : "",
+                        }}
+                      ></Card>
+                    </div>
+                    <div class="flip-box-back p-3">
+                      <p>Name: {doc.name}</p>
+                      <p>Description: {doc.description}</p>
+                      <p>Uploaded by: {doc.email}</p>
                     </div>
                   </div>
+                </div>
 
-                  <p className="text-center">{doc.name}</p>
-                  {isAnnotated(doc) ? (
-                    <p className="text-center">Annotated</p>
-                  ) : (
-                    <p></p>
-                  )}
-                </Link>
-                // <div class="flip-box">
-                //   <div class="flip-box-inner">
-                //     <div class="flip-box-front">
-                //       <Link
-                //         // to="/tool"
-                //         style={cardLink}
-                //         className="col-lg-3 col-md-4 col-sm-12 mb-3"
-                //       >
-                //         <Card
-                //           key={doc.id}
-                //           border="primary"
-                //           className="h-100"
-                //           style={{
-                //             backgroundImage: `url(${doc.url})`,
-                //             backgroundRepeat: "no-repeat",
-                //             backgroundPosition: "center",
-                //             backgroundSize: "cover",
-                //             border: isActive(doc) ? "4px solid" : "",
-                //           }}
-                //           onClick={() => addImage(doc)}
-                //         ></Card>
-                //         <p className="text-center">{doc.name}</p>
-                //         {isAnnotated(doc) ? (
-                //           <p className="text-center">Annotated</p>
-                //         ) : (
-                //           <p></p>
-                //         )}
-                //       </Link>
-                //     </div>
-                //     <div class="flip-box-back">
-                //       <h2>Paris</h2>
-                //       <p>What an amazing city</p>
-                //     </div>
-                //   </div>
-                // </div>
-              ))}
+                <p className="text-center">{doc.name}</p>
+                {isAnnotated(doc) ? (
+                  <p className="text-center">Annotated</p>
+                ) : (
+                  <p></p>
+                )}
+              </Link>
+            ))}
         </div>
       )}
     </>

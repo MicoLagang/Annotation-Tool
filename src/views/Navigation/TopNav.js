@@ -91,7 +91,7 @@ export default function TopNav() {
             <Nav className="me-auto">
               <Nav.Link href="/tool">Tool</Nav.Link>
               <Nav.Link href={`/myTeam`}>My Team</Nav.Link>
-              <Nav.Link onClick={JoinTeam}>Join Project</Nav.Link>
+              <Nav.Link onClick={JoinTeam}>Join Team</Nav.Link>
             </Nav>
             <Nav>
               <Nav.Link></Nav.Link>
