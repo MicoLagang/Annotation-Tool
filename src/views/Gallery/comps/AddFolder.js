@@ -110,6 +110,7 @@ import { Button } from '@material-ui/core'
 import { projectFirestore } from '../../../firebase';
 import { useParams,useHistory } from 'react-router-dom'
 import teamMemberServices from '../../../services/team.member.services';
+import { toast, ToastContainer } from "react-toastify";
 
 export default function AddFolder() {
 
@@ -129,11 +130,11 @@ export default function AddFolder() {
             console.log('yawa');
             console.log(foldername.current.value)
             projectFirestore.collection('TEAM').doc(teamID).collection('FOLDERS').add({name:foldername.current.value});
+            toast.success("LOADING PLEASE WAIT");
+            setTimeout(function() {
+                history.push("/myTeam/gallery")
+            }, 5000);
             
-            // window.location.reload(false);
-            console.log(teamID)
-            console.log(foldername.current.value)
-            history.push("/myTeam/gallery")
         }
     
     };
@@ -142,6 +143,7 @@ export default function AddFolder() {
     return (
         <div className="submit-form"> 
            <h2 className="text-center mb-4">Create your Project</h2>
+           <ToastContainer/>
              <Form >
               
               {/* <div>{teamID}</div> */}

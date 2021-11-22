@@ -87,8 +87,6 @@ class TutorialDataService {
         .then(function() {
           // File deleted successfully
           console.log("File Deleted");
-
-          ref.delete();
         })
         .catch(function(error) {
           // Some Error occurred
@@ -96,6 +94,8 @@ class TutorialDataService {
 
       // console.log("File in database after delete exists : " + fileRef.exists());
     });
+
+    ref.delete();
   }
 
   update(key, value) {

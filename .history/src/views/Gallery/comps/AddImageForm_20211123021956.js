@@ -79,13 +79,11 @@ export default function AddImageForm(post) {
       });
   }
 
-  async function handleUpload() {
-    await fetchTotalImages();
+  function handleUpload() {
+    fetchTotalImages();
     const promises = [];
     images.map(async (image) => {
-      const uploadTask = projectStorage.ref(
-        `${new Date().getTime()}_${image.name}`
-      );
+      const uploadTask = projectStorage.ref(`${folderName}_${totalImages}`);
       const increment = firebase.firestore.FieldValue.increment(1);
       const collectionRef = projectFirestore
         .collection("TEAM")

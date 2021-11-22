@@ -172,6 +172,8 @@ export default function Dashboard() {
           });
       }
 
+      localStorage.clear();
+
   
 
 

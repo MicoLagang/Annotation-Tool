@@ -62,6 +62,7 @@ class TutorialDataService {
   }
 
   deleteImages(teamID, name, folderID, imageID) {
+    let imageDetails;
     const ref = db
       .doc(teamID)
       .collection("FOLDERS")
@@ -71,31 +72,30 @@ class TutorialDataService {
       .collection("IMAGES")
       .doc(imageID);
 
-    ref.get().then((snapshot) => {
-      console.log(snapshot.data().url);
+    ref.get().then((snapshot) => (imageDetails = snapshot.data()));
 
-      var fileUrl = snapshot.data().url;
+    console.log(imageDetails);
 
-      // Create a reference to the file to delete
-      var fileRef = storage.refFromURL(fileUrl);
+    // var fileUrl =
+    //   "https://firebasestorage.googleapis.com/v0/b/ilabel-tool.appspot.com/o/1637607064404_shell.jpg?alt=media&token=062f57ef-a24d-409e-8ea7-1d0ddc283b66";
 
-      // console.log("File in database before delete exists : " + fileRef.exists());
+    // // Create a reference to the file to delete
+    // var fileRef = storage.refFromURL(fileUrl);
 
-      // Delete the file using the delete() method
-      fileRef
-        .delete()
-        .then(function() {
-          // File deleted successfully
-          console.log("File Deleted");
+    // // console.log("File in database before delete exists : " + fileRef.exists());
 
-          ref.delete();
-        })
-        .catch(function(error) {
-          // Some Error occurred
-        });
+    // // Delete the file using the delete() method
+    // fileRef
+    //   .delete()
+    //   .then(function() {
+    //     // File deleted successfully
+    //     console.log("File Deleted");
+    //   })
+    //   .catch(function(error) {
+    //     // Some Error occurred
+    //   });
 
-      // console.log("File in database after delete exists : " + fileRef.exists());
-    });
+    // // console.log("File in database after delete exists : " + fileRef.exists());
   }
 
   update(key, value) {
