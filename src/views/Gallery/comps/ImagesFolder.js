@@ -84,8 +84,7 @@ export default function TestTeam() {
       <br></br>
       <Container>
         <div className="row">
-
-          {userRole ==="" &&
+       {userRole ==="admin" &&
           <Link
             to={`/createimagesfolder`}
             style={cardLink}
@@ -97,7 +96,7 @@ export default function TestTeam() {
               </Card.Body>
             </Card>
           </Link>
-          } {userRole ==="admin" &&
+          }{userRole ==="contributor" &&
           <Link
             to={`/createimagesfolder`}
             style={cardLink}
@@ -109,7 +108,7 @@ export default function TestTeam() {
               </Card.Body>
             </Card>
           </Link>
-          }       
+          }          
 
           {posts.length > 0 ? (
             posts.map((post) => (
