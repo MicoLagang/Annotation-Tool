@@ -111,7 +111,7 @@ export default function TestTeam() {
             <Button variant="contained">Create Images Folder</Button>
           </Link>
         )}
-        <div className="row mt-3">
+        <div className="row mt-4">
           {posts.length > 0 ? (
             posts.map((post) => (
               <Link

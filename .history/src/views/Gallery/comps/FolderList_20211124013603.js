@@ -6,7 +6,7 @@ import { TextField } from "@material-ui/core";
 import teamService from "../../../services/team.service";
 import { toast, ToastContainer } from "react-toastify";
 import projectMembersService from "../../../services/projectMembers.service";
-import { Nav, NavItem, NavLink } from "reactstrap";
+import { Button, Nav, NavItem, NavLink } from "reactstrap";
 import Swal from "sweetalert2";
 import TeamMembers from "../../Team/TeamMembers";
 import Button from "@material-ui/core/Button";
@@ -225,7 +225,7 @@ function FolderList() {
               <Button variant="contained">Create Project</Button>
             </Link>
           )}
-          <div className="row mt-3">
+          <div className="row">
             {posts.length > 0 ? (
               posts.map((post) => (
                 <Link

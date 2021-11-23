@@ -67,9 +67,9 @@ const App: React.FC<IProps> = ({ projectType, windowSize, ObjectDetectorLoaded, 
                         <PrivateRoute exact path="/myProject" component={myProject} />
                         <PrivateRoute exact path="/myTeam" component={myTeam} />
                         <PrivateRoute exact path="/myTeam/gallery" component={Gallery} />
-                        <PrivateRoute exact path="/myTeam/gallery/teamMembers" component={TeamMembers} />
+                        <PrivateRoute exact path="/myTeam/gallery/teamMembers" component={teamMembers} />
                         <PrivateRoute exact path="/myTeam/gallery/folder" component={FolderImages}/> 
-                        <PrivateRoute exact path="/myTeam/gallery/folder/teamMembers" component={TeamMembers} />
+                        <PrivateRoute exact path="/myTeam/gallery/folder/teamMembers" component={teamMembers} />
                         <PrivateRoute exact path="/myTeam/gallery/folder/imagesfolder" component={ImagesFolder}/> 
                         <PrivateRoute exact path="/myTeam/gallery/folder/imagesfolder/galleryimagesfolder" component={UploadImagesGallery}/> 
                         <PrivateRoute exact path="/team/:name" component={Team} />

@@ -6,12 +6,11 @@ import { TextField } from "@material-ui/core";
 import teamService from "../../../services/team.service";
 import { toast, ToastContainer } from "react-toastify";
 import projectMembersService from "../../../services/projectMembers.service";
-import { Nav, NavItem, NavLink } from "reactstrap";
+import { Button, Nav, NavItem, NavLink } from "reactstrap";
 import Swal from "sweetalert2";
 import TeamMembers from "../../Team/TeamMembers";
-import Button from "@material-ui/core/Button";
 
-function FolderList() {
+const FolderList = () => {
   const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState([]);
   const [teamName, setTeamName] = useState();
@@ -50,7 +49,7 @@ function FolderList() {
       .onSnapshot((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           getPostsFromFirebase.push({
-            ...doc.data(),
+            ...doc.data(), //spread operator
             key: doc.id, // `id` given to us by Firebase
           });
         });
@@ -132,6 +131,7 @@ function FolderList() {
     };
 
     // console.log(teamID)
+
     const update = () => {
       TeamCollection.update({
         name: role,
@@ -161,15 +161,15 @@ function FolderList() {
         </Modal.Header>
         <Modal.Body>
           {/* <TextField
-                  id="teamID"
-                  value={teamID}
-                  onChange={handleChange("teamID")}
-                  margin="normal"
-                  // placeholder="Email Adress"
-                  type="text"
-                  fullWidth
-                  disabled
-                /> */}
+            id="teamID"
+            value={teamID}
+            onChange={handleChange("teamID")}
+            margin="normal"
+            // placeholder="Email Adress"
+            type="text"
+            fullWidth
+            disabled
+          /> */}
 
           <TextField
             id="Role"
@@ -211,21 +211,21 @@ function FolderList() {
         className="mb-3"
       >
         <Tab eventKey="projects" title="Projects">
-          {currentUserRole === "admin" && (
-            <Link
-              to={`/Addfolder`}
-              style={cardLink}
-              className="col-lg-3 col-md-4 col-sm-12 mb-3"
-            >
-              {/* <Card border="dark" style={createTeam} className="h-100">
-                <Card.Body className="d-flex align-items-center justify-content-center">
-                  <Card.Title>Create Project</Card.Title>
-                </Card.Body>
-              </Card> */}
-              <Button variant="contained">Create Project</Button>
-            </Link>
-          )}
-          <div className="row mt-3">
+          <div className="row">
+            {currentUserRole === "admin" && (
+              <Link
+                to={`/Addfolder`}
+                style={cardLink}
+                className="col-lg-3 col-md-4 col-sm-12 mb-3"
+              >
+                <Card border="dark" style={createTeam} className="h-100">
+                  <Card.Body className="d-flex align-items-center justify-content-center">
+                    <Card.Title>Create Project</Card.Title>
+                  </Card.Body>
+                </Card>
+              </Link>
+            )}
+
             {posts.length > 0 ? (
               posts.map((post) => (
                 <Link
@@ -371,23 +371,23 @@ function FolderList() {
       </Tabs>
 
       {/* {currentUserRole === "admin" && (
-              <button onClick={deleteTeam}>delete</button>
-            )}
-            {currentUserRole === "admin" && (
-              <button
-                onClick={() => {
-                  setModalShow(true);
-                  getValue();
-                }}
-              >
-                edit
-              </button>
-            )}
-            {currentUserRole === "admin" && (
-              <Button color="primary" onClick={showTeamMembers}>
-                Team Members
-              </Button>
-            )} */}
+        <button onClick={deleteTeam}>delete</button>
+      )}
+      {currentUserRole === "admin" && (
+        <button
+          onClick={() => {
+            setModalShow(true);
+            getValue();
+          }}
+        >
+          edit
+        </button>
+      )}
+      {currentUserRole === "admin" && (
+        <Button color="primary" onClick={showTeamMembers}>
+          Team Members
+        </Button>
+      )} */}
 
       <MyVerticallyCenteredModal
         show={modalShow}
@@ -396,6 +396,6 @@ function FolderList() {
       />
     </>
   );
-}
+};
 
 export default FolderList;

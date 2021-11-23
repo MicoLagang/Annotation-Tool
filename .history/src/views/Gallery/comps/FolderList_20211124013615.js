@@ -225,7 +225,7 @@ function FolderList() {
               <Button variant="contained">Create Project</Button>
             </Link>
           )}
-          <div className="row mt-3">
+          <div className="row">
             {posts.length > 0 ? (
               posts.map((post) => (
                 <Link

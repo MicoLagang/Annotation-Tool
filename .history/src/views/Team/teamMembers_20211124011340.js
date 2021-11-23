@@ -163,6 +163,8 @@ const TeamMembers = () => {
 
   return (
     <>
+      <TopNav />
+      <br></br>
       <Container>
         <Table striped bordered hover>
           <thead>

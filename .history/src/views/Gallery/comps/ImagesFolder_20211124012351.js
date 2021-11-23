@@ -8,7 +8,6 @@ import useStorage from "../hooks/useStorage";
 import { Card, Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import TopNav from "../../Navigation/TopNav";
-import Button from "@material-ui/core/Button";
 
 export default function TestTeam() {
   // const { name } = useParams()
@@ -82,36 +81,34 @@ export default function TestTeam() {
 
     <>
       <Container>
-        {userRole === "admin" && (
-          <Link
-            to={`/createimagesfolder`}
-            style={cardLink}
-            className="col-lg-3 col-md-4 col-sm-12 mb-5"
-          >
-            {/* <Card border="dark" style={createTeam} className="h-100">
+        <div className="row">
+          {userRole === "admin" && (
+            <Link
+              to={`/createimagesfolder`}
+              style={cardLink}
+              className="col-lg-3 col-md-4 col-sm-12 mb-3"
+            >
+              <Card border="dark" style={createTeam} className="h-100">
                 <Card.Body className="d-flex align-items-center justify-content-center">
                   <Card.Title>Create Images Folder</Card.Title>
                 </Card.Body>
-              </Card> */}
+              </Card>
+            </Link>
+          )}
+          {userRole === "contributor" && (
+            <Link
+              to={`/createimagesfolder`}
+              style={cardLink}
+              className="col-lg-3 col-md-4 col-sm-12 mb-3"
+            >
+              <Card border="dark" style={createTeam} className="h-100">
+                <Card.Body className="d-flex align-items-center justify-content-center">
+                  <Card.Title>Create Images Folder</Card.Title>
+                </Card.Body>
+              </Card>
+            </Link>
+          )}
 
-            <Button variant="contained">Create Images Folder</Button>
-          </Link>
-        )}
-        {userRole === "contributor" && (
-          <Link
-            to={`/createimagesfolder`}
-            style={cardLink}
-            className="col-lg-3 col-md-4 col-sm-12 mb-5"
-          >
-            {/* <Card border="dark" style={createTeam} className="h-100">
-                <Card.Body className="d-flex align-items-center justify-content-center">
-                  <Card.Title>Create Images Folder</Card.Title>
-                </Card.Body>
-              </Card> */}
-            <Button variant="contained">Create Images Folder</Button>
-          </Link>
-        )}
-        <div className="row mt-3">
           {posts.length > 0 ? (
             posts.map((post) => (
               <Link

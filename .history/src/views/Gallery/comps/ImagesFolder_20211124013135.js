@@ -86,7 +86,7 @@ export default function TestTeam() {
           <Link
             to={`/createimagesfolder`}
             style={cardLink}
-            className="col-lg-3 col-md-4 col-sm-12 mb-5"
+            className="col-lg-3 col-md-4 col-sm-12 mb-3"
           >
             {/* <Card border="dark" style={createTeam} className="h-100">
                 <Card.Body className="d-flex align-items-center justify-content-center">
@@ -101,7 +101,7 @@ export default function TestTeam() {
           <Link
             to={`/createimagesfolder`}
             style={cardLink}
-            className="col-lg-3 col-md-4 col-sm-12 mb-5"
+            className="col-lg-3 col-md-4 col-sm-12 mb-3"
           >
             {/* <Card border="dark" style={createTeam} className="h-100">
                 <Card.Body className="d-flex align-items-center justify-content-center">
@@ -111,7 +111,7 @@ export default function TestTeam() {
             <Button variant="contained">Create Images Folder</Button>
           </Link>
         )}
-        <div className="row mt-3">
+        <div className="row">
           {posts.length > 0 ? (
             posts.map((post) => (
               <Link
