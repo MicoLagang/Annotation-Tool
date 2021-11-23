@@ -16,6 +16,17 @@ const useStyles = makeStyles({
   root: {
     minWidth: 275,
   },
+  bullet: {
+    display: "inline-block",
+    margin: "0 2px",
+    transform: "scale(0.8)",
+  },
+  title: {
+    fontSize: 14,
+  },
+  pos: {
+    marginBottom: 12,
+  },
 });
 
 const FolderList = () => {
@@ -25,6 +36,7 @@ const FolderList = () => {
   const uid = localStorage.getItem("currentUserUID");
 
   const classes = useStyles();
+  const bull = <span className={classes.bullet}>•</span>;
 
   const createTeam = {
     backgroundColor: "#FFD803",
@@ -92,12 +104,14 @@ const FolderList = () => {
                 </Card.Body>
               </Card> */}
 
-              <Card className="d-flex align-items-center justify-content-center">
+              <Card className={classes.root}>
                 <CardContent>
                   <Typography variant="h5" component="h2">
                     {post.name}
                   </Typography>
-                  <Typography color="textSecondary">{post.TeamCode}</Typography>
+                  <Typography className={classes.pos} color="textSecondary">
+                    {post.TeamCode}
+                  </Typography>
                 </CardContent>
               </Card>
             </Link>

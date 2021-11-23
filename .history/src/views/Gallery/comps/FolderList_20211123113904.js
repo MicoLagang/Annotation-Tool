@@ -8,7 +8,6 @@ import { toast, ToastContainer } from "react-toastify";
 import projectMembersService from "../../../services/projectMembers.service";
 import { Button, Nav, NavItem, NavLink } from "reactstrap";
 import Swal from "sweetalert2";
-import teamMembers from "../../Team/teamMembers";
 
 const FolderList = () => {
   const [loading, setLoading] = useState(true);
@@ -246,9 +245,6 @@ const FolderList = () => {
               <h6>No Project yet</h6>
             )}
           </div>
-        </Tab>
-        <Tab eventKey="teamMembers" title="Team Members">
-          <teamMembers></teamMembers>
         </Tab>
         <Tab eventKey="settings" title="Settings">
           <Nav className="justify-content-center">

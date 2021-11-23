@@ -221,22 +221,23 @@ export default function TestTeam(post) {
     <>
       <TopNav />
 
+      <Tabs
+        defaultActiveKey="home"
+        transition={false}
+        id="noanim-tab-example"
+        className="mb-3"
+      >
+        <Tab eventKey="home" title="Home">
+          Tab 1
+        </Tab>
+        <Tab eventKey="profile" title="Profile">
+          Tab 2
+        </Tab>
+      </Tabs>
+
       <Container>
         {/* <Bar data={data} options={options} /> */}
         <ToastContainer />
-        <Tabs
-          defaultActiveKey="home"
-          transition={false}
-          id="noanim-tab-example"
-          className="mb-3"
-        >
-          <Tab eventKey="home" title="Home">
-            Tab 1
-          </Tab>
-          <Tab eventKey="profile" title="Profile">
-            Tab 2
-          </Tab>
-        </Tabs>
         {currentUserRole === "admin" && (
           <button onClick={deleteProject}>delete</button>
         )}{" "}

@@ -5,26 +5,11 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../logic/context/AuthContext";
 import projectMembersService from "../../services/projectMembers.service";
 
-import { makeStyles } from "@material-ui/core/styles";
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-
-const useStyles = makeStyles({
-  root: {
-    minWidth: 275,
-  },
-});
-
 const FolderList = () => {
   const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState([]);
   const { currentUser, logout } = useAuth();
   const uid = localStorage.getItem("currentUserUID");
-
-  const classes = useStyles();
 
   const createTeam = {
     backgroundColor: "#FFD803",
@@ -82,7 +67,7 @@ const FolderList = () => {
               style={cardLink}
               className="col-lg-3 col-md-4 col-sm-12 mb-3"
             >
-              {/* <Card border="dark" className="h-100">
+              <Card border="dark" className="h-100">
                 <Card.Body className="d-flex align-items-center justify-content-center">
                   <Card.Title>
                     {post.name}
@@ -90,15 +75,6 @@ const FolderList = () => {
                     <h6 align="center">{post.TeamCode}</h6>
                   </Card.Title>
                 </Card.Body>
-              </Card> */}
-
-              <Card className="d-flex align-items-center justify-content-center">
-                <CardContent>
-                  <Typography variant="h5" component="h2">
-                    {post.name}
-                  </Typography>
-                  <Typography color="textSecondary">{post.TeamCode}</Typography>
-                </CardContent>
               </Card>
             </Link>
           ))

@@ -5,26 +5,16 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../logic/context/AuthContext";
 import projectMembersService from "../../services/projectMembers.service";
 
-import { makeStyles } from "@material-ui/core/styles";
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-
-const useStyles = makeStyles({
-  root: {
-    minWidth: 275,
-  },
-});
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
+import { CardActionArea } from "@mui/material";
 
 const FolderList = () => {
   const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState([]);
   const { currentUser, logout } = useAuth();
   const uid = localStorage.getItem("currentUserUID");
-
-  const classes = useStyles();
 
   const createTeam = {
     backgroundColor: "#FFD803",
@@ -82,6 +72,19 @@ const FolderList = () => {
               style={cardLink}
               className="col-lg-3 col-md-4 col-sm-12 mb-3"
             >
+              <Card sx={{ maxWidth: 345 }}>
+                <CardActionArea>
+                  <CardContent>
+                    <Typography gutterBottom variant="h5" component="div">
+                      {post.name}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {post.TeamCode}
+                    </Typography>
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+
               {/* <Card border="dark" className="h-100">
                 <Card.Body className="d-flex align-items-center justify-content-center">
                   <Card.Title>
@@ -91,15 +94,6 @@ const FolderList = () => {
                   </Card.Title>
                 </Card.Body>
               </Card> */}
-
-              <Card className="d-flex align-items-center justify-content-center">
-                <CardContent>
-                  <Typography variant="h5" component="h2">
-                    {post.name}
-                  </Typography>
-                  <Typography color="textSecondary">{post.TeamCode}</Typography>
-                </CardContent>
-              </Card>
             </Link>
           ))
         ) : (

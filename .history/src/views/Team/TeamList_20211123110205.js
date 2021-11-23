@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { projectFirestore } from "../../firebase";
 import { Link } from "react-router-dom";
-// import { Card } from "react-bootstrap";
+import { Card } from "react-bootstrap";
 import { useAuth } from "../../logic/context/AuthContext";
 import projectMembersService from "../../services/projectMembers.service";
 
@@ -16,6 +16,17 @@ const useStyles = makeStyles({
   root: {
     minWidth: 275,
   },
+  bullet: {
+    display: "inline-block",
+    margin: "0 2px",
+    transform: "scale(0.8)",
+  },
+  title: {
+    fontSize: 14,
+  },
+  pos: {
+    marginBottom: 12,
+  },
 });
 
 const FolderList = () => {
@@ -25,6 +36,7 @@ const FolderList = () => {
   const uid = localStorage.getItem("currentUserUID");
 
   const classes = useStyles();
+  const bull = <span className={classes.bullet}>•</span>;
 
   const createTeam = {
     backgroundColor: "#FFD803",
@@ -92,13 +104,30 @@ const FolderList = () => {
                 </Card.Body>
               </Card> */}
 
-              <Card className="d-flex align-items-center justify-content-center">
+              <Card className={classes.root}>
                 <CardContent>
-                  <Typography variant="h5" component="h2">
-                    {post.name}
+                  <Typography
+                    className={classes.title}
+                    color="textSecondary"
+                    gutterBottom
+                  >
+                    Word of the Day
                   </Typography>
-                  <Typography color="textSecondary">{post.TeamCode}</Typography>
+                  <Typography variant="h5" component="h2">
+                    be{bull}nev{bull}o{bull}lent
+                  </Typography>
+                  <Typography className={classes.pos} color="textSecondary">
+                    adjective
+                  </Typography>
+                  <Typography variant="body2" component="p">
+                    well meaning and kindly.
+                    <br />
+                    {'"a benevolent smile"'}
+                  </Typography>
                 </CardContent>
+                <CardActions>
+                  <Button size="small">Learn More</Button>
+                </CardActions>
               </Card>
             </Link>
           ))

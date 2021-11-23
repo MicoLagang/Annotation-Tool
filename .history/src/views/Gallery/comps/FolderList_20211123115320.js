@@ -21,6 +21,40 @@ const FolderList = () => {
 
   const TeamCollection = projectFirestore.collection("TEAM").doc(teamID);
 
+  // const { daata } = props;
+  console.log(props);
+  const [value, setValue] = useState({
+    uid: daata.uid,
+    role: daata.name,
+    // teamID: daata.TeamCode,
+    status: daata.Status,
+    key: daata.key,
+  });
+
+  const { uid, role, status, key } = value;
+
+  const handleChange = (uid) => (e) => {
+    e.preventDefault();
+    setValue({ ...value, [uid]: e.target.value });
+  };
+
+  // console.log(teamID)
+
+  const update = () => {
+    TeamCollection.update({
+      name: role,
+    })
+      .then(() => {
+        toast.success("EDIT SUCCESS");
+        setTimeout(function() {
+          history.push("/myTeam");
+        }, 5000);
+      })
+      .catch(() => {
+        toast.error("Something went wrong!");
+      });
+  };
+
   const createTeam = {
     backgroundColor: "#FFD803",
   };
@@ -251,7 +285,25 @@ const FolderList = () => {
           <teamMembers></teamMembers>
         </Tab>
         <Tab eventKey="settings" title="Settings">
-          <Nav className="justify-content-center">
+          <TextField
+            id="Role"
+            value={role}
+            onChange={handleChange("role")}
+            margin="normal"
+            // placeholder="Email Adress"
+            type="text"
+            fullWidth
+          />
+
+          <Button
+            onClick={update}
+            // variant="contained"
+            color="secondary"
+            size="large"
+          >
+            Edit
+          </Button>
+          {/* <Nav className="justify-content-center">
             {currentUserRole === "admin" && (
               <NavItem>
                 <NavLink href="/addfolder">
@@ -366,7 +418,7 @@ const FolderList = () => {
                 </NavLink>
               </NavItem>
             )}
-          </Nav>
+          </Nav> */}
         </Tab>
       </Tabs>
 

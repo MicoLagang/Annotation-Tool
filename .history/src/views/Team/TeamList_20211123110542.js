@@ -92,8 +92,8 @@ const FolderList = () => {
                 </Card.Body>
               </Card> */}
 
-              <Card className="d-flex align-items-center justify-content-center">
-                <CardContent>
+              <Card className={classes.root}>
+                <CardContent className="d-flex align-items-center justify-content-center">
                   <Typography variant="h5" component="h2">
                     {post.name}
                   </Typography>

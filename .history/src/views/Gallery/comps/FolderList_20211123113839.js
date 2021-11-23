@@ -8,7 +8,6 @@ import { toast, ToastContainer } from "react-toastify";
 import projectMembersService from "../../../services/projectMembers.service";
 import { Button, Nav, NavItem, NavLink } from "reactstrap";
 import Swal from "sweetalert2";
-import teamMembers from "../../Team/teamMembers";
 
 const FolderList = () => {
   const [loading, setLoading] = useState(true);
@@ -212,19 +211,19 @@ const FolderList = () => {
       >
         <Tab eventKey="projects" title="Projects">
           <div className="row">
-            {currentUserRole === "admin" && (
-              <Link
-                to={`/Addfolder`}
-                style={cardLink}
-                className="col-lg-3 col-md-4 col-sm-12 mb-3"
-              >
-                <Card border="dark" style={createTeam} className="h-100">
-                  <Card.Body className="d-flex align-items-center justify-content-center">
-                    <Card.Title>Create Project</Card.Title>
-                  </Card.Body>
-                </Card>
-              </Link>
-            )}
+            {/* {currentUserRole === "admin" && (
+          <Link
+            to={`/Addfolder`}
+            style={cardLink}
+            className="col-lg-3 col-md-4 col-sm-12 mb-3"
+          >
+            <Card border="dark" style={createTeam} className="h-100">
+              <Card.Body className="d-flex align-items-center justify-content-center">
+                <Card.Title>Create Project</Card.Title>
+              </Card.Body>
+            </Card>
+          </Link>
+        )} */}
 
             {posts.length > 0 ? (
               posts.map((post) => (
@@ -246,9 +245,6 @@ const FolderList = () => {
               <h6>No Project yet</h6>
             )}
           </div>
-        </Tab>
-        <Tab eventKey="teamMembers" title="Team Members">
-          <teamMembers></teamMembers>
         </Tab>
         <Tab eventKey="settings" title="Settings">
           <Nav className="justify-content-center">
