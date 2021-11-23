@@ -8,7 +8,7 @@ import { toast, ToastContainer } from "react-toastify";
 import projectMembersService from "../../../services/projectMembers.service";
 import { Button, Nav, NavItem, NavLink } from "reactstrap";
 import Swal from "sweetalert2";
-import teamMembers from "../../Team/teamMembers";
+import team from "../../Team/teamMembers";
 
 const FolderList = () => {
   const [loading, setLoading] = useState(true);
@@ -248,7 +248,7 @@ const FolderList = () => {
           </div>
         </Tab>
         <Tab eventKey="teamMembers" title="Team Members">
-          <teamMembers></teamMembers>
+          <team/>
         </Tab>
         <Tab eventKey="settings" title="Settings">
           <Nav className="justify-content-center">

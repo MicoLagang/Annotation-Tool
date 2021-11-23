@@ -3,6 +3,7 @@ import { Container} from 'react-bootstrap'
 import TeamList from '../Team/TeamList'
 import { useAuth } from '../../logic/context/AuthContext'
 import TopNav from '../Navigation/TopNav'
+import teamMembers from '../Team/teamMembers'
 
 export default function Dashboard() {
     const { currentUser, logout } = useAuth()
@@ -15,6 +16,7 @@ export default function Dashboard() {
             <TopNav></TopNav>
             <Container>
                 <TeamList />
+                {/* <teamMembers/> */}
             </Container>
         </>
     )
