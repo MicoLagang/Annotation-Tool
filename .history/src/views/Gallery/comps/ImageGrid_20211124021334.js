@@ -6,7 +6,6 @@ import { useImage } from "../../../logic/context/imageContext";
 import { projectFirestore } from "../../../firebase";
 import teamService from "../../../services/team.service";
 import { toast, ToastContainer } from "react-toastify";
-import Button from "@material-ui/core/Button";
 
 function ImageGrid() {
   const { docs } = useFirestore("TEAM");
@@ -112,7 +111,6 @@ function ImageGrid() {
     });
     console.log(arr);
     setImagesData(arr);
-    history.push("/tool");
   }
 
   function isActive(doc) {
@@ -153,89 +151,34 @@ function ImageGrid() {
   return (
     <>
       <ToastContainer />
-
-      {/* <Button className="m-2" variant="contained" href="/UploadImage">
-        Add Image
-      </Button> */}
-
       {currentUserRole !== "contributor" && (
         <div>
-          {imagesURL.length > 0 ? (
-            <>
-              {imagesURL.length > 0 && currentUserRole === "admin" && (
-                <div>
-                  <Button className="m-2" color="primary">
-                    {imagesID.length} image selected
-                  </Button>
-                  <Button
-                    className="m-2"
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => deleteSelectedImage()}
-                  >
-                    Delete
-                  </Button>
-                  <Button
-                    className="m-2"
-                    variant="outlined"
-                    onClick={() => clearSelection()}
-                  >
-                    Clear
-                  </Button>
-                </div>
-              )}
-            </>
-          ) : (
-            <>
-              {currentUserRole === "annotator" && (
-                <>
-                  <Button
-                    className="m-2"
-                    variant="contained"
-                    href="/UploadImage"
-                  >
-                    Add Image
-                  </Button>
-                  <Button
-                    className="m-2"
-                    variant="contained"
-                    onClick={() => annotateFolder()}
-                  >
-                    Annotate This Folder
-                  </Button>
-                </>
-              )}
+          {imagesURL.length > 0 && currentUserRole === "admin" && (
+            <div>
+              <p>Selected: {imagesID.length}</p>
+              {/* <Link to="/tool" onClick={() => showSelectedImage()}>
+                Annotate
+              </Link> */}
+              <br></br>
+              <Link onClick={() => deleteSelectedImage()}>Delete</Link>
+              <Link onClick={() => clearSelection()}>Clear</Link>
+            </div>
+          )}
 
-              {currentUserRole === "admin" && (
-                <>
-                  <Button
-                    className="m-2"
-                    variant="contained"
-                    href="/UploadImage"
-                  >
-                    Add Image
-                  </Button>
-                  <Button
-                    className="m-2"
-                    variant="contained"
-                    onClick={() => annotateFolder()}
-                  >
-                    Annotate This Folder
-                  </Button>
-                </>
-              )}
+          {currentUserRole === "annotator" && (
+            <Link to="/tool" onClick={() => annotateFolder()}>
+              Annotate This Folder
+            </Link>
+          )}
 
-              {currentUserRole === "admin" && (
-                <Button
-                  className="m-2"
-                  variant="contained"
-                  color="secondary"
-                  onClick={deleteFolder}
-                >
-                  Delete This Folder
-                </Button>
-              )}
-            </>
+          {currentUserRole === "admin" && (
+            <Link to="/tool" onClick={() => annotateFolder()}>
+              Annotate This Folder
+            </Link>
+          )}
+
+          {currentUserRole === "admin" && (
+            <button onClick={deleteFolder}>Delete This Folder</button>
           )}
 
           <div className="row">
@@ -263,6 +206,7 @@ function ImageGrid() {
                         ></Card>
                       </div>
                       <div class="flip-box-back p-3">
+                        <p>Name: {doc.name}</p>
                         <p>Description: {doc.description}</p>
                         <p>Uploaded by: {doc.email}</p>
                       </div>
@@ -286,6 +230,7 @@ function ImageGrid() {
           {docs &&
             docs.map((doc) => (
               <Link
+                // to="/tool"
                 style={cardLink}
                 className="col-lg-3 col-md-4 col-sm-12 mb-3"
               >
@@ -306,6 +251,7 @@ function ImageGrid() {
                       ></Card>
                     </div>
                     <div class="flip-box-back p-3">
+                      <p>Name: {doc.name}</p>
                       <p>Description: {doc.description}</p>
                       <p>Uploaded by: {doc.email}</p>
                     </div>

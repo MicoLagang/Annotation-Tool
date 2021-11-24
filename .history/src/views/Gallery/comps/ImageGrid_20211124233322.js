@@ -154,88 +154,56 @@ function ImageGrid() {
     <>
       <ToastContainer />
 
-      {/* <Button className="m-2" variant="contained" href="/UploadImage">
+      <Button className="m-2" variant="contained" href="/UploadImage">
         Add Image
-      </Button> */}
+      </Button>
 
       {currentUserRole !== "contributor" && (
         <div>
-          {imagesURL.length > 0 ? (
-            <>
-              {imagesURL.length > 0 && currentUserRole === "admin" && (
-                <div>
-                  <Button className="m-2" color="primary">
-                    {imagesID.length} image selected
-                  </Button>
-                  <Button
-                    className="m-2"
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => deleteSelectedImage()}
-                  >
-                    Delete
-                  </Button>
-                  <Button
-                    className="m-2"
-                    variant="outlined"
-                    onClick={() => clearSelection()}
-                  >
-                    Clear
-                  </Button>
-                </div>
-              )}
-            </>
-          ) : (
-            <>
-              {currentUserRole === "annotator" && (
-                <>
-                  <Button
-                    className="m-2"
-                    variant="contained"
-                    href="/UploadImage"
-                  >
-                    Add Image
-                  </Button>
-                  <Button
-                    className="m-2"
-                    variant="contained"
-                    onClick={() => annotateFolder()}
-                  >
-                    Annotate This Folder
-                  </Button>
-                </>
-              )}
+          {currentUserRole === "annotator" && (
+            <Button
+              className="m-2"
+              variant="contained"
+              onClick={() => annotateFolder()}
+            >
+              Annotate This Folder
+            </Button>
+          )}
 
-              {currentUserRole === "admin" && (
-                <>
-                  <Button
-                    className="m-2"
-                    variant="contained"
-                    href="/UploadImage"
-                  >
-                    Add Image
-                  </Button>
-                  <Button
-                    className="m-2"
-                    variant="contained"
-                    onClick={() => annotateFolder()}
-                  >
-                    Annotate This Folder
-                  </Button>
-                </>
-              )}
+          {currentUserRole === "admin" && (
+            <Button
+              className="m-2"
+              variant="contained"
+              onClick={() => annotateFolder()}
+            >
+              Annotate This Folder
+            </Button>
+          )}
 
-              {currentUserRole === "admin" && (
-                <Button
-                  className="m-2"
-                  variant="contained"
-                  color="secondary"
-                  onClick={deleteFolder}
-                >
-                  Delete This Folder
-                </Button>
-              )}
-            </>
+          {currentUserRole === "admin" && (
+            <Button className="m-2" variant="contained" onClick={deleteFolder}>
+              Delete This Folder
+            </Button>
+          )}
+
+          {imagesURL.length > 0 && currentUserRole === "admin" && (
+            <div>
+              <p>{imagesID.length} image selected</p>
+              <Button
+                className="m-2"
+                variant="contained"
+                onClick={() => deleteSelectedImage()}
+              >
+                Delete
+              </Button>
+              <Button
+                className="m-2"
+                variant="contained"
+                onClick={() => clearSelection()}
+              >
+                Clear
+              </Button>
+            </div>
           )}
 
           <div className="row">
@@ -286,6 +254,7 @@ function ImageGrid() {
           {docs &&
             docs.map((doc) => (
               <Link
+                // to="/tool"
                 style={cardLink}
                 className="col-lg-3 col-md-4 col-sm-12 mb-3"
               >

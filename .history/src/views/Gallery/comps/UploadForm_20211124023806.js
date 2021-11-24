@@ -124,6 +124,8 @@ const UploadForm = () => {
         animate={{ width: progress + "%" }}
       ></motion.div>
 
+      <a href="/UploadImage">Add Image</a>
+
       {/* {currentUserRole === "admin" && (
         <button onClick={deleteFolder}>Delete This Folder</button>
       )} */}

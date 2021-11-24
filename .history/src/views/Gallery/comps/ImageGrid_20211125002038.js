@@ -218,6 +218,7 @@ function ImageGrid() {
                   <Button
                     className="m-2"
                     variant="contained"
+                    color="primary"
                     onClick={() => annotateFolder()}
                   >
                     Annotate This Folder

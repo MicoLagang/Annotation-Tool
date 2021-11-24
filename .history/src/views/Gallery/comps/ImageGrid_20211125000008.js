@@ -163,25 +163,31 @@ function ImageGrid() {
           {imagesURL.length > 0 ? (
             <>
               {imagesURL.length > 0 && currentUserRole === "admin" && (
-                <div>
-                  <Button className="m-2" color="primary">
-                    {imagesID.length} image selected
-                  </Button>
-                  <Button
-                    className="m-2"
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => deleteSelectedImage()}
-                  >
-                    Delete
-                  </Button>
-                  <Button
-                    className="m-2"
-                    variant="outlined"
-                    onClick={() => clearSelection()}
-                  >
-                    Clear
-                  </Button>
+                <div className="row">
+                  <div className="col-4">
+                    {/* <div className=" d-flex align-items-center justify-content-center">
+                      <p></p>
+                    </div> */}
+                    <Button className="m-2" disabled>
+                      {imagesID.length} image selected
+                    </Button>
+                  </div>
+                  <div className="col">
+                    <Button
+                      className="m-2"
+                      variant="contained"
+                      onClick={() => deleteSelectedImage()}
+                    >
+                      Delete
+                    </Button>
+                    <Button
+                      className="m-2"
+                      variant="contained"
+                      onClick={() => clearSelection()}
+                    >
+                      Clear
+                    </Button>
+                  </div>
                 </div>
               )}
             </>
@@ -229,7 +235,6 @@ function ImageGrid() {
                 <Button
                   className="m-2"
                   variant="contained"
-                  color="secondary"
                   onClick={deleteFolder}
                 >
                   Delete This Folder

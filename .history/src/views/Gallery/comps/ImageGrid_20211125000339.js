@@ -229,7 +229,6 @@ function ImageGrid() {
                 <Button
                   className="m-2"
                   variant="contained"
-                  color="secondary"
                   onClick={deleteFolder}
                 >
                   Delete This Folder

@@ -32,6 +32,8 @@ export default function TestTeam() {
   useEffect(() => {
     const getPostsFromFirebase = [];
     const subscriber = projectFirestore
+      // .collection("FolderImages")
+      // .collection('teams').doc('JviFAFCWPy0VPJFeCBPZ').collection('FolderImages').doc('HceEccV4vOIkrNX4CYeB')
       .doc(`TEAM/${teamID}`)
       .collection("FOLDERS")
       .doc(name)
@@ -61,6 +63,23 @@ export default function TestTeam() {
   }
 
   return (
+    //     <div>
+
+    // <Title/>
+    //     {/* <input
+    //         type="file"
+    //         multiple
+
+    //     /> */}
+    // <UploadForm/>
+
+    //   <ImageGrid setSelectedImg={setSelectedImg} />
+    //         {/* <h2>Team { name }</h2>
+
+    //
+
+    //     </div>
+
     <>
       <Container>
         {userRole === "admin" && (
@@ -69,6 +88,12 @@ export default function TestTeam() {
             style={cardLink}
             className="col-lg-3 col-md-4 col-sm-12 mb-5"
           >
+            {/* <Card border="dark" style={createTeam} className="h-100">
+                <Card.Body className="d-flex align-items-center justify-content-center">
+                  <Card.Title>Create Images Folder</Card.Title>
+                </Card.Body>
+              </Card> */}
+
             <Button variant="contained">Create Images Folder</Button>
           </Link>
         )}
@@ -78,6 +103,11 @@ export default function TestTeam() {
             style={cardLink}
             className="col-lg-3 col-md-4 col-sm-12 mb-5"
           >
+            {/* <Card border="dark" style={createTeam} className="h-100">
+                <Card.Body className="d-flex align-items-center justify-content-center">
+                  <Card.Title>Create Images Folder</Card.Title>
+                </Card.Body>
+              </Card> */}
             <Button variant="contained">Create Images Folder</Button>
           </Link>
         )}
@@ -91,6 +121,8 @@ export default function TestTeam() {
                 style={cardLink}
                 className="col-lg-3 col-md-4 col-sm-12 mb-3"
               >
+                {/* {name} */}
+                {/* {post.key} */}
                 <Card className="h-100">
                   <Card.Body className="d-flex align-items-center justify-content-center">
                     <Card.Title>{post.name}</Card.Title>

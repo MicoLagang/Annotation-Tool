@@ -164,20 +164,19 @@ function ImageGrid() {
             <>
               {imagesURL.length > 0 && currentUserRole === "admin" && (
                 <div>
-                  <Button className="m-2" color="primary">
+                  <Button className="m-2" color="secondary">
                     {imagesID.length} image selected
                   </Button>
                   <Button
                     className="m-2"
                     variant="contained"
-                    color="secondary"
                     onClick={() => deleteSelectedImage()}
                   >
                     Delete
                   </Button>
                   <Button
                     className="m-2"
-                    variant="outlined"
+                    variant="contained"
                     onClick={() => clearSelection()}
                   >
                     Clear
@@ -229,7 +228,6 @@ function ImageGrid() {
                 <Button
                   className="m-2"
                   variant="contained"
-                  color="secondary"
                   onClick={deleteFolder}
                 >
                   Delete This Folder

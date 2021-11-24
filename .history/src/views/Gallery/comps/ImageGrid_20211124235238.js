@@ -160,82 +160,71 @@ function ImageGrid() {
 
       {currentUserRole !== "contributor" && (
         <div>
-          {imagesURL.length > 0 ? (
-            <>
-              {imagesURL.length > 0 && currentUserRole === "admin" && (
-                <div>
-                  <Button className="m-2" color="primary">
-                    {imagesID.length} image selected
+          {}
+          {currentUserRole === "annotator" &&
+            currentUserRole ===
+              "admin"(
+                <>
+                  <Button
+                    className="m-2"
+                    variant="contained"
+                    href="/UploadImage"
+                  >
+                    Add Image
                   </Button>
                   <Button
                     className="m-2"
                     variant="contained"
-                    color="secondary"
-                    onClick={() => deleteSelectedImage()}
+                    onClick={() => annotateFolder()}
                   >
-                    Delete
+                    Annotate This Folder
                   </Button>
-                  <Button
-                    className="m-2"
-                    variant="outlined"
-                    onClick={() => clearSelection()}
-                  >
-                    Clear
-                  </Button>
-                </div>
+                </>
               )}
+
+          {/* {currentUserRole === "admin" && (
+            <>
+              <Button className="m-2" variant="contained" href="/UploadImage">
+                Add Image
+              </Button>
+              <Button
+                className="m-2"
+                variant="contained"
+                onClick={() => annotateFolder()}
+              >
+                Annotate This Folder
+              </Button>
             </>
-          ) : (
-            <>
-              {currentUserRole === "annotator" && (
-                <>
-                  <Button
-                    className="m-2"
-                    variant="contained"
-                    href="/UploadImage"
-                  >
-                    Add Image
-                  </Button>
-                  <Button
-                    className="m-2"
-                    variant="contained"
-                    onClick={() => annotateFolder()}
-                  >
-                    Annotate This Folder
-                  </Button>
-                </>
-              )}
+          )} */}
 
-              {currentUserRole === "admin" && (
-                <>
-                  <Button
-                    className="m-2"
-                    variant="contained"
-                    href="/UploadImage"
-                  >
-                    Add Image
-                  </Button>
-                  <Button
-                    className="m-2"
-                    variant="contained"
-                    onClick={() => annotateFolder()}
-                  >
-                    Annotate This Folder
-                  </Button>
-                </>
-              )}
+          {currentUserRole === "admin" && (
+            <Button className="m-2" variant="contained" onClick={deleteFolder}>
+              Delete This Folder
+            </Button>
+          )}
 
-              {currentUserRole === "admin" && (
+          {imagesURL.length > 0 && currentUserRole === "admin" && (
+            <div className="row">
+              <div className="col-3">
+                <p>{imagesID.length} image selected</p>
+              </div>
+              <div className="col">
                 <Button
                   className="m-2"
                   variant="contained"
-                  color="secondary"
-                  onClick={deleteFolder}
+                  onClick={() => deleteSelectedImage()}
                 >
-                  Delete This Folder
+                  Delete
                 </Button>
-              )}
-            </>
+                <Button
+                  className="m-2"
+                  variant="contained"
+                  onClick={() => clearSelection()}
+                >
+                  Clear
+                </Button>
+              </div>
+            </div>
           )}
 
           <div className="row">

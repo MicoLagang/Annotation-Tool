@@ -83,7 +83,7 @@ export default function TopNav() {
 
   return (
     <>
-      <Navbar collapseOnSelect expand="md" style={createTeam} variant="dark">
+      <Navbar collapseOnSelect style={createTeam} variant="dark">
         <Container>
           <Navbar.Brand href="/">Ilabel</Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
