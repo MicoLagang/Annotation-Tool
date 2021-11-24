@@ -1,17 +1,16 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { projectFirestore } from "../../../firebase";
 import { Link, useHistory } from "react-router-dom";
-import { Modal, Card, Tabs, Tab ,Form} from "react-bootstrap";
+import { Modal, Card, Tabs, Tab } from "react-bootstrap";
 import { TextField } from "@material-ui/core";
 import teamService from "../../../services/team.service";
 import { toast, ToastContainer } from "react-toastify";
 import projectMembersService from "../../../services/projectMembers.service";
-import { Nav, NavItem, NavLink } from "reactstrap";
+import { Button, Nav, NavItem, NavLink } from "reactstrap";
 import Swal from "sweetalert2";
 import TeamMembers from "../../Team/TeamMembers";
-import Button from "@material-ui/core/Button";
 
-function FolderList() {
+const FolderList = () => {
   const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState([]);
   const [teamName, setTeamName] = useState();
@@ -19,7 +18,7 @@ function FolderList() {
   const teamID = localStorage.getItem("currentTeamID");
   const history = useHistory();
   const currentUserRole = localStorage.getItem("currentUserRole");
-  const teamNameref = useRef();
+
   const TeamCollection = projectFirestore.collection("TEAM").doc(teamID);
 
   const createTeam = {
@@ -40,16 +39,7 @@ function FolderList() {
     uid: "",
   });
 
-  const [value, setValue] = useState();
-
-
-  const handleChange = (id) => (e) => {
-    e.preventDefault();
-    setValue({ ...value, [id]: e.target.value });
-  };
-
   useEffect(() => {
-    getValue();
     const getPostsFromFirebase = [];
     const subscriber = projectFirestore
       // .collection("FolderImages")
@@ -59,13 +49,12 @@ function FolderList() {
       .onSnapshot((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           getPostsFromFirebase.push({
-            ...doc.data(),
+            ...doc.data(), //spread operator
             key: doc.id, // `id` given to us by Firebase
           });
         });
         setPosts(getPostsFromFirebase);
         setLoading(false);
-        console.log(posts)
       });
 
     // return cleanup function
@@ -113,7 +102,6 @@ function FolderList() {
         if (doc.exists) {
           console.log("Document data:", doc.data());
           setUpdata(doc.data());
-          setValue(doc.data().name);
         } else {
           // doc.data() will be undefined in this case
           console.log("No such document!");
@@ -123,21 +111,6 @@ function FolderList() {
         console.log("Error getting document:", error);
       });
   }
-
-  const update = () => {
-    TeamCollection.update({
-      name: teamNameref.current.value,
-    })
-      .then(() => {
-        toast.success("EDIT SUCCESS");
-        setTimeout(function() {
-          history.push("/myTeam");
-        }, 5000);
-      })
-      .catch(() => {
-        toast.error("Something went wrong!");
-      });
-  };
 
   function MyVerticallyCenteredModal(props) {
     const { daata } = props;
@@ -157,10 +130,7 @@ function FolderList() {
       setValue({ ...value, [uid]: e.target.value });
     };
 
-
-
-    console.log(value)
-    console.log(handleChange)
+    // console.log(teamID)
 
     const update = () => {
       TeamCollection.update({
@@ -191,15 +161,15 @@ function FolderList() {
         </Modal.Header>
         <Modal.Body>
           {/* <TextField
-                  id="teamID"
-                  value={teamID}
-                  onChange={handleChange("teamID")}
-                  margin="normal"
-                  // placeholder="Email Adress"
-                  type="text"
-                  fullWidth
-                  disabled
-                /> */}
+            id="teamID"
+            value={teamID}
+            onChange={handleChange("teamID")}
+            margin="normal"
+            // placeholder="Email Adress"
+            type="text"
+            fullWidth
+            disabled
+          /> */}
 
           <TextField
             id="Role"
@@ -231,7 +201,6 @@ function FolderList() {
     history.push("/myTeam/gallery/teamMembers");
   }
 
-  console.log(value)
   return (
     <>
       <ToastContainer />
@@ -242,21 +211,21 @@ function FolderList() {
         className="mb-3"
       >
         <Tab eventKey="projects" title="Projects">
-          {currentUserRole === "admin" && (
-            <Link
-              to={`/Addfolder`}
-              style={cardLink}
-              className="col-lg-3 col-md-4 col-sm-12 mb-3"
-            >
-              {/* <Card border="dark" style={createTeam} className="h-100">
-                <Card.Body className="d-flex align-items-center justify-content-center">
-                  <Card.Title>Create Project</Card.Title>
-                </Card.Body>
-              </Card> */}
-              <Button variant="contained">Create Project</Button>
-            </Link>
-          )}
-          <div className="row mt-3">
+          <div className="row">
+            {currentUserRole === "admin" && (
+              <Link
+                to={`/Addfolder`}
+                style={cardLink}
+                className="col-lg-3 col-md-4 col-sm-12 mb-3"
+              >
+                <Card border="dark" style={createTeam} className="h-100">
+                  <Card.Body className="d-flex align-items-center justify-content-center">
+                    <Card.Title>Create Project</Card.Title>
+                  </Card.Body>
+                </Card>
+              </Link>
+            )}
+
             {posts.length > 0 ? (
               posts.map((post) => (
                 <Link
@@ -281,93 +250,78 @@ function FolderList() {
         <Tab eventKey="teamMembers" title="Team Members">
           <TeamMembers></TeamMembers>
         </Tab>
-
-        
         <Tab eventKey="settings" title="Settings">
-          {/* <Nav className="justify-content-center"> */}
-
-              
-
+          <Nav className="justify-content-center">
             {currentUserRole === "admin" && (
-              // <NavItem>
-              //   <NavLink>
-              //     <Button
-              //       color="primary"
-              //       round
-              //       outline
-              //       onClick={() => {
-              //         setModalShow(true);
-              //         getValue();
-              //       }}
-              //     >
-              //       <svg
-              //         xmlns="http://www.w3.org/2000/svg"
-              //         width="16"
-              //         height="16"
-              //         fill="currentColor"
-              //         class="bi bi-pen"
-              //         viewBox="0 0 16 16"
-              //       >
-              //         <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z" />
-              //       </svg>
-              //     </Button>
-              //   </NavLink>
-              // </NavItem>
-              <>
-              <Card style={{ width: '19rem' }}>
-                <Card.Img variant="top"
-                //  src="holder.js/100px180" 
-                 />
-                <Card.Body>
-                  <Card.Title >EDIT PROJECT NAME</Card.Title>
-                  <Form.Group className="mb-3" controlId="formBasicEmail">
-                    {/* <Form.Label>Email address</Form.Label> */}
-                    <Form.Control 
-                    type="text" 
-                    defaultValue={value}
-                    ref={teamNameref}
-                    />
-                    <Form.Text className="text-muted">
-                      Edit your project name
-                    </Form.Text>
-                  </Form.Group>
-                  <Button variant="contained" onClick={update}>EDIT</Button>
-                </Card.Body>
-              </Card>
-              <br></br>
-
-              <Card style={{ width: '19rem' }}>
-                <Card.Img variant="top"
-                //  src="holder.js/100px180" 
-                 />
-                <Card.Body>
-                <Card.Title>DELETE THIS PROJECT</Card.Title>
-                  <Card.Text>
-                  Once you delete a project, there is no going back. Please be certain.
-                  </Card.Text>
-                  <Button variant="contained" onClick={deleteTeam}>DELETE</Button>
-                </Card.Body>
-              </Card>
-
-              <br></br>
-              <Card style={{ width: '19rem' }}>
-                <Card.Img variant="top"
-                //  src="holder.js/100px180" 
-                 />
-                <Card.Body>
-                <Card.Title>ARCHIVE THIS PROJECT</Card.Title>
-                  <Card.Text>
-                  Mark this project as archived.
-                  </Card.Text>
-                  <Button variant="contained" onClick={deleteTeam}>ARCHIVE</Button>
-                </Card.Body>
-              </Card>
-              
-              </>
+              <NavItem>
+                <NavLink href="/addfolder">
+                  <Button color="primary" round outline>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      class="bi bi-folder-plus"
+                      viewBox="0 0 16 16"
+                    >
+                      <path d="m.5 3 .04.87a1.99 1.99 0 0 0-.342 1.311l.637 7A2 2 0 0 0 2.826 14H9v-1H2.826a1 1 0 0 1-.995-.91l-.637-7A1 1 0 0 1 2.19 4h11.62a1 1 0 0 1 .996 1.09L14.54 8h1.005l.256-2.819A2 2 0 0 0 13.81 3H9.828a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 6.172 1H2.5a2 2 0 0 0-2 2zm5.672-1a1 1 0 0 1 .707.293L7.586 3H2.19c-.24 0-.47.042-.683.12L1.5 2.98a1 1 0 0 1 1-.98h3.672z" />
+                      <path d="M13.5 10a.5.5 0 0 1 .5.5V12h1.5a.5.5 0 1 1 0 1H14v1.5a.5.5 0 1 1-1 0V13h-1.5a.5.5 0 0 1 0-1H13v-1.5a.5.5 0 0 1 .5-.5z" />
+                    </svg>
+                  </Button>
+                </NavLink>
+              </NavItem>
+            )}
+            {currentUserRole === "admin" && (
+              <NavItem>
+                <NavLink>
+                  <Button
+                    color="primary"
+                    round
+                    outline
+                    onClick={() => {
+                      setModalShow(true);
+                      getValue();
+                    }}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      class="bi bi-pen"
+                      viewBox="0 0 16 16"
+                    >
+                      <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z" />
+                    </svg>
+                  </Button>
+                </NavLink>
+              </NavItem>
             )}
 
-            
-            {/* {currentUserRole === "admin" && (
+            {currentUserRole === "admin" && (
+              <NavItem>
+                <NavLink>
+                  <Button
+                    color="primary"
+                    round
+                    outline
+                    onClick={showTeamMembers}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      class="bi bi-table"
+                      viewBox="0 0 16 16"
+                    >
+                      <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm15 2h-4v3h4V4zm0 4h-4v3h4V8zm0 4h-4v3h3a1 1 0 0 0 1-1v-2zm-5 3v-3H6v3h4zm-5 0v-3H1v2a1 1 0 0 0 1 1h3zm-4-4h4V8H1v3zm0-4h4V4H1v3zm5-3v3h4V4H6zm4 4H6v3h4V8z" />
+                    </svg>
+                  </Button>
+                </NavLink>
+              </NavItem>
+            )}
+            {currentUserRole === "admin" && (
               <NavItem>
                 <NavLink>
                   <Button color="primary" round outline onClick={deleteTeam}>
@@ -388,30 +342,52 @@ function FolderList() {
                   </Button>
                 </NavLink>
               </NavItem>
-            )} */}
-
-          {/* </Nav> */}
+            )}
+            {currentUserRole === "admin" && (
+              <NavItem>
+                <NavLink>
+                  <Button
+                    color="primary"
+                    round
+                    outline
+                    onClick={showTeamMembers}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      class="bi bi-table"
+                      viewBox="0 0 16 16"
+                    >
+                      <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm15 2h-4v3h4V4zm0 4h-4v3h4V8zm0 4h-4v3h3a1 1 0 0 0 1-1v-2zm-5 3v-3H6v3h4zm-5 0v-3H1v2a1 1 0 0 0 1 1h3zm-4-4h4V8H1v3zm0-4h4V4H1v3zm5-3v3h4V4H6zm4 4H6v3h4V8z" />
+                    </svg>
+                  </Button>
+                </NavLink>
+              </NavItem>
+            )}
+          </Nav>
         </Tab>
       </Tabs>
 
       {/* {currentUserRole === "admin" && (
-              <button onClick={deleteTeam}>delete</button>
-            )}
-            {currentUserRole === "admin" && (
-              <button
-                onClick={() => {
-                  setModalShow(true);
-                  getValue();
-                }}
-              >
-                edit
-              </button>
-            )}
-            {currentUserRole === "admin" && (
-              <Button color="primary" onClick={showTeamMembers}>
-                Team Members
-              </Button>
-            )} */}
+        <button onClick={deleteTeam}>delete</button>
+      )}
+      {currentUserRole === "admin" && (
+        <button
+          onClick={() => {
+            setModalShow(true);
+            getValue();
+          }}
+        >
+          edit
+        </button>
+      )}
+      {currentUserRole === "admin" && (
+        <Button color="primary" onClick={showTeamMembers}>
+          Team Members
+        </Button>
+      )} */}
 
       <MyVerticallyCenteredModal
         show={modalShow}
@@ -420,6 +396,6 @@ function FolderList() {
       />
     </>
   );
-}
+};
 
 export default FolderList;

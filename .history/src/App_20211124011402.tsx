@@ -22,6 +22,7 @@ import Project from './views/Project/Project';
 import Gallery from '../src/views/Gallery/gallery'
 import FolderImages from './views/Gallery/comps/FolderImages';
 
+
 import { ThemeProvider } from "@material-ui/styles";
 import { CssBaseline } from "@material-ui/core";
 

@@ -7,7 +7,6 @@ import { projectFirestore } from "../../../firebase";
 import projectMembersService from "../../../services/projectMembers.service";
 import teamService from "../../../services/team.service";
 import { toast, ToastContainer } from "react-toastify";
-import ImagesFolder from "../comps/ImagesFolder";
 // import { Bar } from "react-chartjs-2";
 
 import Button from "@material-ui/core/Button";
@@ -232,15 +231,12 @@ export default function TestTeam(post) {
           className="mb-3"
         >
           <Tab eventKey="images" title="Images">
-            <ImagesFolder></ImagesFolder>
-
             <MyVerticallyCenteredModal
               show={modalShow}
               onHide={() => setModalShow(false)}
               daata={updata}
             />
-
-            {/* <div className="row d-flex align-items-center justify-content-center">
+            <div className="row d-flex align-items-center justify-content-center">
               <Link
                 to={`/myTeam/gallery/folder/imagesfolder`}
                 style={cardLink}
@@ -264,7 +260,7 @@ export default function TestTeam(post) {
                   </Card.Body>
                 </Card>
               </Link>
-            </div> */}
+            </div>
           </Tab>
           <Tab eventKey="settings" title="Settings">
             {currentUserRole === "admin" && (
@@ -280,6 +276,7 @@ export default function TestTeam(post) {
                 edit
               </button>
             )}
+            <Button variant="contained">Hello World</Button>
           </Tab>
         </Tabs>
       </Container>
