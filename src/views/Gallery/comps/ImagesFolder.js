@@ -5,10 +5,13 @@ import ImageGrid from "./ImageGrid";
 import Title from "./Title";
 import UploadForm from "./UploadForm";
 import useStorage from "../hooks/useStorage";
-import { Card, Container } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import TopNav from "../../Navigation/TopNav";
 import Button from "@material-ui/core/Button";
+import Card  from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
+import Typography from "@material-ui/core/Typography";
 
 export default function TestTeam() {
   // const { name } = useParams()
@@ -121,12 +124,12 @@ export default function TestTeam() {
                 style={cardLink}
                 className="col-lg-3 col-md-4 col-sm-12 mb-3"
               >
-                {/* {name} */}
-                {/* {post.key} */}
-                <Card border="dark" className="h-100">
-                  <Card.Body className="d-flex align-items-center justify-content-center">
-                    <Card.Title>{post.name}</Card.Title>
-                  </Card.Body>
+                <Card className="d-flex align-items-center justify-content-center h-100">
+                  <CardContent>
+                    <Typography variant="h5" component="h2">
+                      {post.name}
+                    </Typography>
+                  </CardContent>
                 </Card>
               </Link>
             ))

@@ -122,11 +122,12 @@ export default function AddFolder() {
     function saveData(){
 
         const data = {
-            teamName : foldername.current.value
+            teamName : foldername.current.value,
+            teamID : teamID,
         }
 
         if(foldername.current.value){
-            teamMemberServices.create(data)
+            // teamMemberServices.create(data)
             console.log('yawa');
             console.log(foldername.current.value)
             projectFirestore.collection('TEAM').doc(teamID).collection('FOLDERS').add({name:foldername.current.value});

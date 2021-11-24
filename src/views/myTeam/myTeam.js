@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { projectFirestore } from "../../firebase";
 import { Link, useParams } from "react-router-dom";
-import { Card, Container } from "react-bootstrap";
+import {  Container } from "react-bootstrap";
 import TopNav from "../Navigation/TopNav";
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
+import Typography from "@material-ui/core/Typography";
 import projectMembersService from "../../services/projectMembers.service";
 
 const FolderList = () => {
@@ -125,11 +128,18 @@ const FolderList = () => {
             style={cardLink}
             className="col-lg-3 col-md-4 col-sm-12 mb-3"
           >
-            <Card border="dark" style={createTeam} className="h-100">
+            {/* <Card style={createTeam} className="h-100">
               <Card.Body className="d-flex align-items-center justify-content-center">
                 <Card.Title>Create Team</Card.Title>
               </Card.Body>
-            </Card>
+            </Card> */}
+            <Card style={createTeam} className="d-flex align-items-center justify-content-center h-100">
+                <CardContent>
+                  <Typography variant="h5" component="h2">
+                    Create Team
+                  </Typography>
+                </CardContent>
+              </Card>
           </Link>
 
           {posts.length > 0 ? (
@@ -142,14 +152,23 @@ const FolderList = () => {
                 style={cardLink}
                 className="col-lg-3 col-md-4 col-sm-12 mb-3"
               >
-                <Card border="dark" className="h-100">
+                {/* <Card className="d-flex align-items-center justify-content-center h-100">
                   <Card.Body className="d-flex align-items-center justify-content-center">
                     <Card.Title>
                       {post.TeamName}
                       <h6 align="center">{post.TeamCode}</h6>
                     </Card.Title>
                   </Card.Body>
+                </Card> */}
+                <Card className="d-flex align-items-center justify-content-center h-100">
+                  <CardContent>
+                    <Typography variant="h5" component="h2">
+                      {post.TeamName}
+                    </Typography>
+                    <Typography color="textSecondary">{post.TeamCode}</Typography>
+                  </CardContent>
                 </Card>
+                
               </Link>
             ))
           ) : (

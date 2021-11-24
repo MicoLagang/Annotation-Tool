@@ -62,6 +62,18 @@ class TutorialDataService {
       }
     });
   }
+
+  editTeamMembers(value,teamID){
+    const response =projectFirestore.collection("TEAMMEMBERS").where("projectID", "==", teamID);
+
+    response.get().then(function(querySnapshot) {
+      querySnapshot.forEach(function(doc) {
+        doc.ref.update({
+          TeamName : value,
+        })
+      });
+    });
+  }
 }
 
 export default new TutorialDataService();

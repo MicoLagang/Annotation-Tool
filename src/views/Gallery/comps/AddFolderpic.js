@@ -10,6 +10,7 @@ import TopNav from "../../Navigation/TopNav";
 import { projectFirestore } from "../../../firebase";
 import { Form } from "react-bootstrap";
 import { Button } from "@material-ui/core";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function TestTeam(post) {
   // const {teamID} = useParams()
@@ -34,8 +35,6 @@ export default function TestTeam(post) {
 
   function saveData() {
     if (foldername.current.value) {
-      console.log("yawa");
-      console.log(foldername.current.value);
       projectFirestore
         .collection("TEAM")
         .doc(teamID)
@@ -43,10 +42,10 @@ export default function TestTeam(post) {
         .doc(name)
         .collection("IMAGESFOLDER")
         .add({ name: foldername.current.value, totalImages: 1 });
-      // window.location.reload(false);
-      history.push("/myTeam/gallery/folder/imagesfolder");
-      console.log(teamID);
-      console.log(foldername.current.value);
+        toast.success("LOADING PLEASE WAIT");
+        setTimeout(function() {
+          history.push("/myTeam/gallery/folder");
+        }, 5000);
     }
   }
 
@@ -65,6 +64,7 @@ export default function TestTeam(post) {
 
     <>
       {/* <TopNav/> */}
+      <ToastContainer/>
       <div className="submit-form">
         <h2 className="text-center mb-4">Create Images Folder</h2>
         <Form>

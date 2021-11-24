@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Card, Container, Modal, Tabs, Tab } from "react-bootstrap";
+import React, { useEffect, useState,useRef } from "react";
+import {  Container, Modal, Tabs, Tab ,Form} from "react-bootstrap";
 import { TextField } from "@material-ui/core";
 import { Link, useHistory } from "react-router-dom";
 import TopNav from "../../Navigation/TopNav";
@@ -8,9 +8,13 @@ import projectMembersService from "../../../services/projectMembers.service";
 import teamService from "../../../services/team.service";
 import { toast, ToastContainer } from "react-toastify";
 import ImagesFolder from "../comps/ImagesFolder";
+import Card  from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
+import Typography from "@material-ui/core/Typography";
 // import { Bar } from "react-chartjs-2";
 
 import Button from "@material-ui/core/Button";
+import Swal from "sweetalert2";
 
 export default function TestTeam(post) {
   const teamID = localStorage.getItem("currentTeamID");
@@ -22,6 +26,8 @@ export default function TestTeam(post) {
   const uid = localStorage.getItem("currentUserUID");
   const history = useHistory();
   const [modalShow, setModalShow] = React.useState(false);
+  const [value, setValue] = useState();
+  const projectNameref = useRef();
 
   projectMembersService.getRole(uid, teamID);
 
@@ -44,9 +50,32 @@ export default function TestTeam(post) {
   });
 
   function deleteProject() {
-    teamService.deleteProject(teamID, name);
-    history.push("/myTeam/gallery");
+
+    
+    
+
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire("Deleted!", "Your file has been deleted.", "success");
+        setTimeout(function() {
+          teamService.deleteProject(teamID, name);
+          history.push("/myTeam/gallery");
+        }, 2000);
+      }
+    });
   }
+
+  useEffect(() => {
+    getValue()
+  }, [loading]); // empty dependencies array => useEffect only called once
 
   function getValue() {
     var docRef = projectFirestore
@@ -61,6 +90,7 @@ export default function TestTeam(post) {
         if (doc.exists) {
           console.log("Document data:", doc.data());
           setUpdata(doc.data());
+          setValue(doc.data().name)
         } else {
           console.log("No such document!");
         }
@@ -69,6 +99,26 @@ export default function TestTeam(post) {
         console.log("Error getting document:", error);
       });
   }
+
+  const update = () => {
+    projectFirestore
+      .collection("TEAM")
+      .doc(teamID)
+      .collection("FOLDERS")
+      .doc(name)
+      .update({
+        name: projectNameref.current.value,
+      })
+      .then(() => {
+        toast.success("EDIT SUCCESS");
+        setTimeout(function() {
+          history.push("/myTeam/gallery");
+        }, 5000);
+      })
+      .catch(() => {
+        toast.error("Something went wrong!");
+      });
+  };
 
   function MyVerticallyCenteredModal(props) {
     const { daata } = props;
@@ -267,18 +317,49 @@ export default function TestTeam(post) {
             </div> */}
           </Tab>
           <Tab eventKey="settings" title="Settings">
+          
             {currentUserRole === "admin" && (
-              <button onClick={deleteProject}>delete</button>
-            )}{" "}
-            {currentUserRole === "admin" && (
-              <button
-                onClick={() => {
-                  setModalShow(true);
-                  getValue();
-                }}
-              >
-                edit
-              </button>
+              // <button
+              //   onClick={() => {
+              //     setModalShow(true);
+              //     getValue();
+              //   }}
+              // >
+              //   edit
+              // </button>
+              <Card style={{ width: '19rem' }}>
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="div">
+                EDIT PROJECT NAME
+                </Typography>
+                <Form.Group className="mb-3" controlId="formBasicEmail">
+                  <Form.Control 
+                  type="text" 
+                  defaultValue={value}
+                  ref={projectNameref}
+                  />
+                  <Form.Text className="text-muted">
+                    Edit your project name
+                  </Form.Text>
+                </Form.Group>
+                <Button variant="contained" onClick={update}>UPDATE</Button>
+              </CardContent>
+            </Card>   
+              
+            )}
+            <br></br>
+              {currentUserRole === "admin" && (
+                            <Card style={{ width: '19rem' }}>
+                            <CardContent>
+                              <Typography gutterBottom variant="h5" component="div">
+                              DELETE THIS PROJECT
+                              </Typography>
+                              <Typography variant="body2" color="text.secondary">
+                              Once you delete a project, there is no going back. Please be certain.
+                              </Typography>
+                              <Button variant="contained" onClick={deleteProject}>DELETE</Button>
+                            </CardContent>
+                          </Card>
             )}
           </Tab>
         </Tabs>

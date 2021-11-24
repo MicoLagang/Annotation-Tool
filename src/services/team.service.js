@@ -109,6 +109,14 @@ class TutorialDataService {
   deleteAll() {
     return db.remove();
   }
+
+  editTeam(value,teamID){
+    return db.doc(teamID).update({
+      name : value,
+    })
+    console.log(value)
+    console.log(teamID)
+  }
 }
 
 export default new TutorialDataService();

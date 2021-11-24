@@ -1,15 +1,18 @@
 import React, { useEffect, useRef, useState } from "react";
 import { projectFirestore } from "../../../firebase";
 import { Link, useHistory } from "react-router-dom";
-import { Modal, Card, Tabs, Tab ,Form} from "react-bootstrap";
+import { Modal ,Tabs, Tab ,Form} from "react-bootstrap";
 import { TextField } from "@material-ui/core";
 import teamService from "../../../services/team.service";
 import { toast, ToastContainer } from "react-toastify";
 import projectMembersService from "../../../services/projectMembers.service";
-import { Nav, NavItem, NavLink } from "reactstrap";
 import Swal from "sweetalert2";
 import TeamMembers from "../../Team/TeamMembers";
 import Button from "@material-ui/core/Button";
+import Card  from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
+import Typography from "@material-ui/core/Typography";
+import teamMemberServices from "../../../services/team.member.services";
 
 function FolderList() {
   const [loading, setLoading] = useState(true);
@@ -42,11 +45,6 @@ function FolderList() {
 
   const [value, setValue] = useState();
 
-
-  const handleChange = (id) => (e) => {
-    e.preventDefault();
-    setValue({ ...value, [id]: e.target.value });
-  };
 
   useEffect(() => {
     getValue();
@@ -98,6 +96,7 @@ function FolderList() {
         setTimeout(function() {
           teamService.deleteTeam(teamID);
           projectMembersService.deleteTeam(teamID);
+          teamMemberServices.deleteproject(teamID)
           history.push("/myTeam");
         }, 1000);
       }
@@ -124,19 +123,19 @@ function FolderList() {
       });
   }
 
-  const update = () => {
-    TeamCollection.update({
-      name: teamNameref.current.value,
-    })
-      .then(() => {
-        toast.success("EDIT SUCCESS");
-        setTimeout(function() {
+   const update = () => {
+
+    try{
+      teamService.editTeam(teamNameref.current.value,teamID)
+      projectMembersService.editTeamMembers(teamNameref.current.value,teamID)
+    }catch(e){
+      toast.error("Something went wrong!");
+    } finally{
+      toast.success("EDIT SUCCESS");
+          setTimeout(function() {
           history.push("/myTeam");
         }, 5000);
-      })
-      .catch(() => {
-        toast.error("Something went wrong!");
-      });
+    }
   };
 
   function MyVerticallyCenteredModal(props) {
@@ -266,11 +265,19 @@ function FolderList() {
                   style={cardLink}
                   className="col-lg-3 col-md-4 col-sm-12 mb-3"
                 >
-                  <Card border="dark" className="h-100">
+                  {/* <Card  className="h-100">
                     <Card.Body className="d-flex align-items-center justify-content-center">
                       <Card.Title>{post.name}</Card.Title>
                     </Card.Body>
-                  </Card>
+                  </Card> */}
+                <Card className="d-flex align-items-center justify-content-center h-100">
+                  <CardContent>
+                    <Typography variant="h5" component="h2">
+                      {post.name}
+                    </Typography>
+                  </CardContent>
+                </Card>
+
                 </Link>
               ))
             ) : (
@@ -314,53 +321,49 @@ function FolderList() {
               //   </NavLink>
               // </NavItem>
               <>
+
+
               <Card style={{ width: '19rem' }}>
-                <Card.Img variant="top"
-                //  src="holder.js/100px180" 
-                 />
-                <Card.Body>
-                  <Card.Title >EDIT PROJECT NAME</Card.Title>
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                  EDIT TEAM NAME
+                  </Typography>
                   <Form.Group className="mb-3" controlId="formBasicEmail">
-                    {/* <Form.Label>Email address</Form.Label> */}
                     <Form.Control 
                     type="text" 
                     defaultValue={value}
                     ref={teamNameref}
                     />
                     <Form.Text className="text-muted">
-                      Edit your project name
+                      Edit your team name
                     </Form.Text>
                   </Form.Group>
-                  <Button variant="contained" onClick={update}>EDIT</Button>
-                </Card.Body>
-              </Card>
+                  <Button variant="contained" onClick={update}>UPDATE</Button>
+                </CardContent>
+              </Card>              
               <br></br>
-
               <Card style={{ width: '19rem' }}>
-                <Card.Img variant="top"
-                //  src="holder.js/100px180" 
-                 />
-                <Card.Body>
-                <Card.Title>DELETE THIS PROJECT</Card.Title>
-                  <Card.Text>
-                  Once you delete a project, there is no going back. Please be certain.
-                  </Card.Text>
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                  DELETE THIS TEAM
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                  Once you delete a team, there is no going back. Please be certain.
+                  </Typography>
                   <Button variant="contained" onClick={deleteTeam}>DELETE</Button>
-                </Card.Body>
+                </CardContent>
               </Card>
-
               <br></br>
               <Card style={{ width: '19rem' }}>
-                <Card.Img variant="top"
-                //  src="holder.js/100px180" 
-                 />
-                <Card.Body>
-                <Card.Title>ARCHIVE THIS PROJECT</Card.Title>
-                  <Card.Text>
-                  Mark this project as archived.
-                  </Card.Text>
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                    ARCHIVE THIS TEAM
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                  Mark this team as archived
+                  </Typography>
                   <Button variant="contained" onClick={deleteTeam}>ARCHIVE</Button>
-                </Card.Body>
+                </CardContent>
               </Card>
               
               </>
