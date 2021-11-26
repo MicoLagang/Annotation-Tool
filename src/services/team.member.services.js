@@ -30,6 +30,24 @@ class teamMembers {
     return db.remove();
   }
 
+  deleteproject(value){
+    const response =projectFirestore.collection("PROJECTMEMBERS").where("teamID", "==", value);
+
+    response.get().then(function(querySnapshot) {
+      querySnapshot.forEach(function(doc) {
+        doc.ref.delete();
+      });
+    });
+  }
+
+  editTeamMembers(value,teamID){
+    return db.doc(teamID).update({
+      name : value,
+    })
+    console.log(value)
+    console.log(teamID)
+  }
+
 }
 
 export default new teamMembers();
