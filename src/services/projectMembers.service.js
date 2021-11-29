@@ -13,9 +13,6 @@ class TutorialDataService {
 
   create(tutorial) {
     return db.add(tutorial);
-
-    // return db.add(teamID);
-    // return db.collection("teams").doc(tutorial).collection('folderimages');
   }
 
   update(key, value) {
@@ -70,6 +67,29 @@ class TutorialDataService {
       querySnapshot.forEach(function(doc) {
         doc.ref.update({
           TeamName : value,
+        })
+      });
+    });
+  }
+  unArchiveTeam(key){
+    const response =projectFirestore.collection("TEAMMEMBERS").where("projectID", "==", key);
+
+    response.get().then(function(querySnapshot) {
+      querySnapshot.forEach(function(doc) {
+        doc.ref.update({
+          isArchive : false,
+        })
+      });
+    });
+  }
+  
+  ArchiveTeam(key){
+    const response =projectFirestore.collection("TEAMMEMBERS").where("projectID", "==", key);
+
+    response.get().then(function(querySnapshot) {
+      querySnapshot.forEach(function(doc) {
+        doc.ref.update({
+          isArchive : true,
         })
       });
     });

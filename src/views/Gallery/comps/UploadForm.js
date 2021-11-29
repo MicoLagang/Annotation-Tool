@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { Refresh } from "@material-ui/icons";
 import { useParams, useHistory } from "react-router-dom";
 import { folder } from "jszip";
-import teamService from "../../../services/team.service";
+// import teamService from "../../../services/team.service";
 import firebase from "firebase/app";
 import { useAuth } from "../../../logic/context/AuthContext";
 
@@ -111,10 +111,6 @@ const UploadForm = () => {
     });
   }
 
-  function deleteFolder() {
-    teamService.deleteFolder(teamID, name, folderID);
-    history.push("/myTeam/gallery/folder");
-  }
 
   // function imagePopup() {
   //   Swal.fire({
@@ -127,43 +123,17 @@ const UploadForm = () => {
   //   });
   // }
 
-  //   const handleChange = (e) => {
-  //     for (let i = 0; i < e.target.files.length; i++) {
-  //         const newImage = e.target.files[i];
-  //         console.log(newImage)
-  //         newImage["id"] = Math.random();
-  //         setFile((prevState) => [...prevState, newImage]);
-  //     }
-  // };
-
   return (
-    // <form>
-    //   {/* <label> */}
-    //     <input type="file" multiple onChange={handleChange} />
-    //     {/* <span>+</span> */}
-    //   {/* </label> */}
-    //   <div className="output">
-    //     { file && <div>{ file.name }</div> }
-    //     { file && <ProgressBar file={file} setFile={setFile} /> }
-    //   </div>
-
-    // </form>
     <div>
       <motion.div
         className="progress-bar"
         initial={{ width: 0 }}
         animate={{ width: progress + "%" }}
       ></motion.div>
-      <br />
-      <br />
-      <a href="/UploadImage">Choose File</a>
-      {/* <button onClick={handleUpload}>Upload</button> */}
-      {currentUserRole === "admin" && (
-        <button onClick={deleteFolder}>Delete This Folder</button>
-      )}
-      <br />
 
-      <br />
+      {/* {currentUserRole === "admin" && (
+        <button onClick={deleteFolder}>Delete This Folder</button>
+      )} */}
     </div>
   );
 };

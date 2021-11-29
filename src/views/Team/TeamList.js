@@ -41,6 +41,7 @@ const FolderList = () => {
     const subscriber = projectFirestore
       .collection("TEAM")
       .where("status", "==", "Public")
+      .where("isArchive", "==",false)
       .onSnapshot((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           getPostsFromFirebase.push({

@@ -40,6 +40,7 @@ import TeamMembers from './views/Team/TeamMembers';
 import AddMember from './views/Team/AddMember';
 import { ImageProvider } from './logic/context/imageContext';
 import AddImageForm from './views/Gallery/comps/AddImageForm';
+import ArchiveTeam from './views/Team/ArchiveTeam';
 
 interface IProps {
     projectType: ProjectType;
@@ -62,6 +63,7 @@ const App: React.FC<IProps> = ({ projectType, windowSize, ObjectDetectorLoaded, 
             
                         <PrivateRoute exact path="/" component={Dashboard} />
                         <PrivateRoute exact path="/tool" component={Tool} />
+                        <PrivateRoute exact path="/archive" component={ArchiveTeam} />
                         <PrivateRoute exact path="/project" component={Project} />
                         <PrivateRoute exact path="/myProject" component={myProject} />
                         <PrivateRoute exact path="/myTeam" component={myTeam} />
@@ -69,7 +71,7 @@ const App: React.FC<IProps> = ({ projectType, windowSize, ObjectDetectorLoaded, 
                         <PrivateRoute exact path="/myTeam/gallery/teamMembers" component={TeamMembers} />
                         <PrivateRoute exact path="/myTeam/gallery/folder" component={FolderImages}/> 
                         <PrivateRoute exact path="/myTeam/gallery/folder/teamMembers" component={TeamMembers} />
-                        <PrivateRoute exact path="/myTeam/gallery/folder/imagesfolder" component={ImagesFolder}/> 
+                        <PrivateRoute exact path="/myTeam/gallery/folder/imagesfolder" component={UploadImagesGallery}/> 
                         <PrivateRoute exact path="/myTeam/gallery/folder/imagesfolder/galleryimagesfolder" component={UploadImagesGallery}/> 
                         <PrivateRoute exact path="/team/:name" component={Team} />
                                 

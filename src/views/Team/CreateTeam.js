@@ -94,6 +94,7 @@ export default class CreateTeam extends Component {
     // const { currentUser, logout } = useAuth();
 
     const createdAt = timestamp();
+    const currentUserEmail  = localStorage.getItem("currentUserEmail");
 
     const data = {
       name: this.state.name,
@@ -102,7 +103,9 @@ export default class CreateTeam extends Component {
       status: this.state.status,
       TeamCode: this.state.key,
       createdAt: createdAt,
+      userEmail:currentUserEmail,
       updatedAt: "",
+      isArchive: false,
     };
 
     const currentUserID = localStorage.getItem("currentUserUID");
@@ -115,7 +118,8 @@ export default class CreateTeam extends Component {
       Status: "true",
       createdAt: createdAt,
       updatedAt: "",
-      email: this.state.contactEmail,
+      email: currentUserEmail,
+      isArchive:false,
     };
 
     teamService

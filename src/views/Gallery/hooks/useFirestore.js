@@ -4,16 +4,12 @@ import { useParams } from "react-router-dom";
 
 const useFirestore = (collection, sub) => {
   const [docs, setDocs] = useState([]);
-  // const { name } = useParams()
-  // const {teamID} = useParams()
-  // const {folderID} = useParams()
+
   const teamID = localStorage.getItem("currentTeamID");
   const name = localStorage.getItem("currentProjectID");
   const folderID = localStorage.getItem("currentImagesFolderID");
 
   useEffect(() => {
-    // const unsub = projectFirestore.collection(collection).doc(name).collection("images")
-    // const unsub = projectFirestore.collection(collection).doc(teamID).collection("FOLDERS").doc(name).collection('images')
     const unsub = projectFirestore
       .collection("TEAM")
       .doc(teamID)

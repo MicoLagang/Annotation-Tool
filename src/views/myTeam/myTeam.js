@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { projectFirestore } from "../../firebase";
 import { Link, useParams } from "react-router-dom";
-import {  Container } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import TopNav from "../Navigation/TopNav";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -36,6 +36,7 @@ const FolderList = () => {
       .collection("TEAMMEMBERS")
       .where("uid", "==", uid)
       .where("Status", "==", "true")
+      .where("isArchive", "==",false)
       .onSnapshot((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           getPostsFromFirebase.push({
@@ -133,13 +134,16 @@ const FolderList = () => {
                 <Card.Title>Create Team</Card.Title>
               </Card.Body>
             </Card> */}
-            <Card style={createTeam} className="d-flex align-items-center justify-content-center h-100">
-                <CardContent>
-                  <Typography variant="h5" component="h2">
-                    Create Team
-                  </Typography>
-                </CardContent>
-              </Card>
+            <Card
+              style={createTeam}
+              className="d-flex align-items-center justify-content-center h-100"
+            >
+              <CardContent>
+                <Typography variant="h5" component="h2">
+                  Create Team
+                </Typography>
+              </CardContent>
+            </Card>
           </Link>
 
           {posts.length > 0 ? (
@@ -165,10 +169,11 @@ const FolderList = () => {
                     <Typography variant="h5" component="h2">
                       {post.TeamName}
                     </Typography>
-                    <Typography color="textSecondary">{post.TeamCode}</Typography>
+                    <Typography color="textSecondary">
+                      {post.TeamCode}
+                    </Typography>
                   </CardContent>
                 </Card>
-                
               </Link>
             ))
           ) : (

@@ -15,10 +15,21 @@ class TutorialDataService {
     return db;
   }
 
+  getImageFolderData(teamID, name, folderID) {
+    return db
+      .doc(teamID)
+      .collection("FOLDERS")
+      .doc(name)
+      .collection("IMAGESFOLDER")
+      .doc(folderID)
+      .get();
+  }
+
   create(tutorial) {
     return db.add(tutorial);
     // return db.collection("teams").doc(tutorial).collection('folderimages');
   }
+
   joinTeam(teamId, member) {
     return db
       .doc(teamId)
@@ -31,8 +42,10 @@ class TutorialDataService {
   deleteTeam(teamID) {
     // console.log(teamID)
     // return db.doc(teamID).delete()
-    const response = projectFirestore.collection("TEAM").doc(teamID);
-    response.delete();
+    projectFirestore
+      .collection("TEAM")
+      .doc(teamID)
+      .delete();
     //   projectFirestore.collection("TEAM").doc(teamID).get().then(querySnapshot => {
     //     querySnapshot.docs.forEach(snapshot => {
     //         snapshot.ref.delete();
@@ -110,12 +123,57 @@ class TutorialDataService {
     return db.remove();
   }
 
-  editTeam(value,teamID){
+  editTeam(value, teamID) {
     return db.doc(teamID).update({
-      name : value,
+      name: value,
+    });
+  }
+
+  submitAnnotation(teamID, name, folderID) {
+    return db
+      .doc(teamID)
+      .collection("FOLDERS")
+      .doc(name)
+      .collection("IMAGESFOLDER")
+      .doc(folderID)
+      .update({
+        isSubmitted: true,
+      });
+  }
+
+  acceptAnnotaion(teamID, name, folderID) {
+    return db
+      .doc(teamID)
+      .collection("FOLDERS")
+      .doc(name)
+      .collection("IMAGESFOLDER")
+      .doc(folderID)
+      .update({
+        isAccepted: true,
+      });
+  }
+
+  rejectAnnotation(teamID, name, folderID) {
+    return db
+      .doc(teamID)
+      .collection("FOLDERS")
+      .doc(name)
+      .collection("IMAGESFOLDER")
+      .doc(folderID)
+      .update({
+        isSubmitted: false,
+      });
+  }
+  unArchiveTeam(key){
+    return db.doc(key).update({
+      isArchive: false,
     })
-    console.log(value)
-    console.log(teamID)
+  }
+
+  ArchiveTeam(key){
+    return db.doc(key).update({
+      isArchive: true,
+    })
   }
 }
 

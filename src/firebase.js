@@ -24,6 +24,7 @@ var storage = app.storage();
 const projectStorage = firebase.storage();
 const projectFirestore = firebase.firestore();
 const timestamp = firebase.firestore.FieldValue.serverTimestamp;
+const appAuth = firebase.auth();
 
 // export default fireDb.database();
-export { projectStorage, projectFirestore, timestamp,storage, firebase, fireDb as default };
+export { projectStorage, projectFirestore, timestamp,storage, firebase, fireDb as default,appAuth };

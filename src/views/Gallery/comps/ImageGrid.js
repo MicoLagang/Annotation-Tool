@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from "react";
 import useFirestore from "../hooks/useFirestore";
 import { Card, Container } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useParams, useHistory } from "react-router-dom";
 import { useImage } from "../../../logic/context/imageContext";
 import { projectFirestore } from "../../../firebase";
 import teamService from "../../../services/team.service";
 import { toast, ToastContainer } from "react-toastify";
+import Button from "@material-ui/core/Button";
+import Swal from "sweetalert2/dist/sweetalert2.js";
 
 function ImageGrid() {
   const { docs } = useFirestore("TEAM");
   const { imagesData, setImagesData } = useImage();
+  const history = useHistory();
 
   const [imagesID, setImagesID] = useState([]);
   const [imagesURL, setImagesURL] = useState([]);
@@ -23,6 +26,8 @@ function ImageGrid() {
   const folderID = localStorage.getItem("currentImagesFolderID");
   let data = [];
   let annotationData;
+  let imageFolderData;
+  const [imageFolder, setImageFolder] = useState(''); 
 
   const cardLink = {
     color: "#000000",
@@ -30,11 +35,17 @@ function ImageGrid() {
     height: "200px",
   };
 
-  const cardsStyle = {};
-
   useEffect(() => {
     getAnnotationData();
   }, []);
+
+  function getImageFolderData() {
+    teamService.getImageFolderData(teamID, name, folderID).then((data) => {
+      // imageFolderData = data.data().isSubmitted;
+      return data.data().isSubmitted;
+    });
+  }
+
 
   function getAnnotationData() {
     projectFirestore
@@ -110,6 +121,7 @@ function ImageGrid() {
     });
     console.log(arr);
     setImagesData(arr);
+    history.push("/tool");
   }
 
   function isActive(doc) {
@@ -131,10 +143,8 @@ function ImageGrid() {
             .split(".")
             .filter((item) => item);
           if (doc.name == SliceImageName[0]) {
-            console.log("match");
             return true;
           } else {
-            console.log("did not...");
             continue;
           }
         }
@@ -142,37 +152,179 @@ function ImageGrid() {
     } else console.log("no records");
   }
 
+  function deleteFolder() {
+    teamService.deleteFolder(teamID, name, folderID);
+    history.push("/myTeam/gallery/folder");
+  }
+
+  function submitAnnotation() {
+    Swal.fire({
+      title: "Are you sure to submit annotation?",
+      showDenyButton: true,
+      confirmButtonText: "Submit",
+      denyButtonText: `Cancel`,
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        Swal.fire("Annotation Successfully Submitted!", "", "success");
+        teamService.submitAnnotation(teamID, name, folderID);
+      } else if (result.isDenied) {
+        Swal.fire("Submission Cancelled", "", "info");
+      }
+    });
+  }
+
+  function acceptAnnotaion() {
+    Swal.fire({
+      title: "Are you sure to accept the submitted annotation?",
+      showDenyButton: true,
+      confirmButtonText: "Accept",
+      denyButtonText: `Cancel`,
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        Swal.fire("Annotation Data Accepted Successfully!", "", "success");
+        teamService.acceptAnnotaion(teamID, name, folderID);
+      } else if (result.isDenied) {
+        Swal.fire("Action is cancelled", "", "info");
+      }
+    });
+  }
+
+  function rejectAnnotation() {
+    Swal.fire({
+      title: "Are you sure to reject the submitted annotation?",
+      showDenyButton: true,
+      confirmButtonText: "Reject",
+      denyButtonText: `Cancel`,
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        Swal.fire("Annotation is rejected!", "", "success");
+        teamService.rejectAnnotation(teamID, name, folderID);
+      } else if (result.isDenied) {
+        Swal.fire("Action is cancelled", "", "info");
+      }
+    });
+  }
+
   return (
     <>
       <ToastContainer />
       {currentUserRole !== "contributor" && (
         <div>
-          {imagesURL.length > 0 && currentUserRole === "admin" && (
-            <div>
-              <p>Selected: {imagesID.length}</p>
-              {/* <Link to="/tool" onClick={() => showSelectedImage()}>
-                Annotate
-              </Link> */}
-              <br></br>
-              <Link onClick={() => deleteSelectedImage()}>Delete</Link>
-              <Link onClick={() => clearSelection()}>Clear</Link>
-            </div>
-          )}
+          {imagesURL.length > 0 ? (
+            <>
+              {imagesURL.length > 0 && currentUserRole === "admin" && (
+                <div>
+                  <Button className="m-2" color="primary">
+                    {imagesID.length} image selected
+                  </Button>
+                  <Button
+                    className="m-2"
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => deleteSelectedImage()}
+                  >
+                    Delete
+                  </Button>
+                  <Button
+                    className="m-2"
+                    variant="outlined"
+                    onClick={() => clearSelection()}
+                  >
+                    Clear
+                  </Button>
+                </div>
+              )}
+            </>
+          ) : (
+            <>
+              {currentUserRole === "annotator" && docs.length > 0 && (
+                <>
+                  <Button
+                    className="m-2"
+                    variant="contained"
+                    onClick={() => annotateFolder()}
+                  >
+                    Annotate This Folder
+                  </Button>
+                  <Button
+                    className="m-2"
+                    variant="contained"
+                    onClick={() => submitAnnotation()}
+                  >
+                    Submit Annotation
+                  </Button>
+                </>
+              )}
 
-          {currentUserRole === "annotator" && (
-            <Link to="/tool" onClick={() => annotateFolder()}>
-              Annotate This Folder
-            </Link>
-          )}
 
-          {currentUserRole === "admin" && (
-            <Link to="/tool" onClick={() => annotateFolder()}>
-              Annotate This Folder
-            </Link>
+
+              {currentUserRole === "validator" && (
+                <>                            
+                       <>
+                  {docs.length > 0 && (
+                    <Button
+                      className="m-2"
+                      variant="contained"
+                      onClick={() => annotateFolder()}
+                    >
+                      View Annotation
+                    </Button>
+                  )}
+                       <Button
+                         className="m-2"
+                         variant="contained"
+                         onClick={() => acceptAnnotaion()}
+                       >
+                         Accept Annotation
+                       </Button>
+                       <Button
+                         className="m-2"
+                         variant="contained"
+                         onClick={() => rejectAnnotation()}
+                       >
+                         Reject Annotation
+                       </Button>
+                     </>
+                </>
+              )}
+
+              {currentUserRole === "admin" && (
+                <>
+                  <Button
+                    className="m-2"
+                    variant="contained"
+                    href="/UploadImage"
+                  >
+                    Add Image
+                  </Button>
+                  {docs.length > 0 && (
+                    <Button
+                      className="m-2"
+                      variant="contained"
+                      onClick={() => annotateFolder()}
+                    >
+                      Annotate This Folder
+                    </Button>
+                  )}
+
+                  <Button
+                    className="m-2"
+                    variant="contained"
+                    color="secondary"
+                    onClick={deleteFolder}
+                  >
+                    Delete This Folder
+                  </Button>
+                </>
+              )}
+            </>
           )}
 
           <div className="row">
-            {docs &&
+            {docs.length > 0 ? (
               docs.map((doc) => (
                 <Link
                   // to="/tool"
@@ -196,67 +348,76 @@ function ImageGrid() {
                         ></Card>
                       </div>
                       <div class="flip-box-back p-3">
-                        <p>Name: {doc.name}</p>
                         <p>Description: {doc.description}</p>
                         <p>Uploaded by: {doc.email}</p>
+                        {isAnnotated(doc) ? (
+                          <p className="text-center">Annotated</p>
+                        ) : (
+                          <p className="text-center">Not Annotated</p>
+                        )}
                       </div>
                     </div>
                   </div>
 
                   <p className="text-center">{doc.name}</p>
-                  {isAnnotated(doc) ? (
-                    <p className="text-center">Annotated</p>
-                  ) : (
-                    <p></p>
-                  )}
                 </Link>
-              ))}
+              ))
+            ) : (
+              <p>No Image Uploaded Yet</p>
+            )}
           </div>
         </div>
       )}
 
       {currentUserRole === "contributor" && (
-        <div className="row">
-          {docs &&
-            docs.map((doc) => (
-              <Link
-                // to="/tool"
-                style={cardLink}
-                className="col-lg-3 col-md-4 col-sm-12 mb-3"
-              >
-                <div class="flip-box">
-                  <div class="flip-box-inner">
-                    <div class="flip-box-front">
-                      <Card
-                        key={doc.id}
-                        border="primary"
-                        className="h-100"
-                        style={{
-                          backgroundImage: `url(${doc.url})`,
-                          backgroundRepeat: "no-repeat",
-                          backgroundPosition: "center",
-                          backgroundSize: "cover",
-                          border: isActive(doc) ? "4px solid" : "",
-                        }}
-                      ></Card>
-                    </div>
-                    <div class="flip-box-back p-3">
-                      <p>Name: {doc.name}</p>
-                      <p>Description: {doc.description}</p>
-                      <p>Uploaded by: {doc.email}</p>
+        <>
+          <Button className="m-2" variant="contained" href="/UploadImage">
+            Add Image
+          </Button>
+          <div className="row">
+            {docs.length > 0 ? (
+              docs.map((doc) => (
+                <Link
+                  // to="/tool"
+                  style={cardLink}
+                  className="col-lg-3 col-md-4 col-sm-12 mb-3"
+                >
+                  <div class="flip-box" onClick={() => addImage(doc)}>
+                    <div class="flip-box-inner">
+                      <div class="flip-box-front">
+                        <Card
+                          key={doc.id}
+                          border="primary"
+                          className="h-100"
+                          style={{
+                            backgroundImage: `url(${doc.url})`,
+                            backgroundRepeat: "no-repeat",
+                            backgroundPosition: "center",
+                            backgroundSize: "cover",
+                            border: isActive(doc) ? "4px solid" : "",
+                          }}
+                        ></Card>
+                      </div>
+                      <div class="flip-box-back p-3">
+                        <p>Description: {doc.description}</p>
+                        <p>Uploaded by: {doc.email}</p>
+                        {isAnnotated(doc) ? (
+                          <p className="text-center">Annotated</p>
+                        ) : (
+                          <p className="text-center">Not Annotated</p>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <p className="text-center">{doc.name}</p>
-                {isAnnotated(doc) ? (
-                  <p className="text-center">Annotated</p>
-                ) : (
-                  <p></p>
-                )}
-              </Link>
-            ))}
-        </div>
+                  <p className="text-center">{doc.name}</p>
+                </Link>
+              ))
+            ) : (
+              <p>No Image Uploaded Yet</p>
+            )}
+          </div>
+        </>
       )}
     </>
   );

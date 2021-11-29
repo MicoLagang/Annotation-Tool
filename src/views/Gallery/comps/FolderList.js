@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { projectFirestore } from "../../../firebase";
 import { Link, useHistory } from "react-router-dom";
-import { Modal ,Tabs, Tab ,Form} from "react-bootstrap";
+import { Modal, Tabs, Tab, Form } from "react-bootstrap";
 import { TextField } from "@material-ui/core";
 import teamService from "../../../services/team.service";
 import { toast, ToastContainer } from "react-toastify";
@@ -9,10 +9,11 @@ import projectMembersService from "../../../services/projectMembers.service";
 import Swal from "sweetalert2";
 import TeamMembers from "../../Team/TeamMembers";
 import Button from "@material-ui/core/Button";
-import Card  from "@material-ui/core/Card";
+import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import teamMemberServices from "../../../services/team.member.services";
+import Role from "../../components/Role";
 
 function FolderList() {
   const [loading, setLoading] = useState(true);
@@ -45,7 +46,6 @@ function FolderList() {
 
   const [value, setValue] = useState();
 
-
   useEffect(() => {
     getValue();
     const getPostsFromFirebase = [];
@@ -63,7 +63,7 @@ function FolderList() {
         });
         setPosts(getPostsFromFirebase);
         setLoading(false);
-        console.log(posts)
+        console.log(posts);
       });
 
     // return cleanup function
@@ -96,7 +96,7 @@ function FolderList() {
         setTimeout(function() {
           teamService.deleteTeam(teamID);
           projectMembersService.deleteTeam(teamID);
-          teamMemberServices.deleteproject(teamID)
+          teamMemberServices.deleteproject(teamID);
           history.push("/myTeam");
         }, 1000);
       }
@@ -123,18 +123,17 @@ function FolderList() {
       });
   }
 
-   const update = () => {
-
-    try{
-      teamService.editTeam(teamNameref.current.value,teamID)
-      projectMembersService.editTeamMembers(teamNameref.current.value,teamID)
-    }catch(e){
+  const update = () => {
+    try {
+      teamService.editTeam(teamNameref.current.value, teamID);
+      projectMembersService.editTeamMembers(teamNameref.current.value, teamID);
+    } catch (e) {
       toast.error("Something went wrong!");
-    } finally{
+    } finally {
       toast.success("EDIT SUCCESS");
-          setTimeout(function() {
-          history.push("/myTeam");
-        }, 5000);
+      setTimeout(function() {
+        history.push("/myTeam");
+      }, 5000);
     }
   };
 
@@ -156,10 +155,8 @@ function FolderList() {
       setValue({ ...value, [uid]: e.target.value });
     };
 
-
-
-    console.log(value)
-    console.log(handleChange)
+    console.log(value);
+    console.log(handleChange);
 
     const update = () => {
       TeamCollection.update({
@@ -229,11 +226,32 @@ function FolderList() {
   function showTeamMembers() {
     history.push("/myTeam/gallery/teamMembers");
   }
+  function archiveTeam(){
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, Archive it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire("Archived!", "Your team has been move to Archive .", "success");
+        teamService.ArchiveTeam(teamID);
+        projectMembersService.ArchiveTeam(teamID);
+        history.push("/")
+      }
+    });
+  
+  }
 
-  console.log(value)
+  console.log(value);
   return (
     <>
       <ToastContainer />
+
+      <Role />
 
       <Tabs
         defaultActiveKey="projects"
@@ -270,14 +288,13 @@ function FolderList() {
                       <Card.Title>{post.name}</Card.Title>
                     </Card.Body>
                   </Card> */}
-                <Card className="d-flex align-items-center justify-content-center h-100">
-                  <CardContent>
-                    <Typography variant="h5" component="h2">
-                      {post.name}
-                    </Typography>
-                  </CardContent>
-                </Card>
-
+                  <Card className="d-flex align-items-center justify-content-center h-100">
+                    <CardContent>
+                      <Typography variant="h5" component="h2">
+                        {post.name}
+                      </Typography>
+                    </CardContent>
+                  </Card>
                 </Link>
               ))
             ) : (
@@ -289,88 +306,88 @@ function FolderList() {
           <TeamMembers></TeamMembers>
         </Tab>
 
-        
         <Tab eventKey="settings" title="Settings">
           {/* <Nav className="justify-content-center"> */}
 
-              
-
-            {currentUserRole === "admin" && (
-              // <NavItem>
-              //   <NavLink>
-              //     <Button
-              //       color="primary"
-              //       round
-              //       outline
-              //       onClick={() => {
-              //         setModalShow(true);
-              //         getValue();
-              //       }}
-              //     >
-              //       <svg
-              //         xmlns="http://www.w3.org/2000/svg"
-              //         width="16"
-              //         height="16"
-              //         fill="currentColor"
-              //         class="bi bi-pen"
-              //         viewBox="0 0 16 16"
-              //       >
-              //         <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z" />
-              //       </svg>
-              //     </Button>
-              //   </NavLink>
-              // </NavItem>
-              <>
-
-
-              <Card style={{ width: '19rem' }}>
+          {currentUserRole === "admin" && (
+            // <NavItem>
+            //   <NavLink>
+            //     <Button
+            //       color="primary"
+            //       round
+            //       outline
+            //       onClick={() => {
+            //         setModalShow(true);
+            //         getValue();
+            //       }}
+            //     >
+            //       <svg
+            //         xmlns="http://www.w3.org/2000/svg"
+            //         width="16"
+            //         height="16"
+            //         fill="currentColor"
+            //         class="bi bi-pen"
+            //         viewBox="0 0 16 16"
+            //       >
+            //         <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z" />
+            //       </svg>
+            //     </Button>
+            //   </NavLink>
+            // </NavItem>
+            <>
+              <Card style={{ width: "19rem" }}>
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
-                  EDIT TEAM NAME
+                    EDIT TEAM NAME
                   </Typography>
                   <Form.Group className="mb-3" controlId="formBasicEmail">
-                    <Form.Control 
-                    type="text" 
-                    defaultValue={value}
-                    ref={teamNameref}
+                    <Form.Control
+                      type="text"
+                      defaultValue={value}
+                      ref={teamNameref}
                     />
                     <Form.Text className="text-muted">
                       Edit your team name
                     </Form.Text>
                   </Form.Group>
-                  <Button variant="contained" onClick={update}>UPDATE</Button>
-                </CardContent>
-              </Card>              
-              <br></br>
-              <Card style={{ width: '19rem' }}>
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="div">
-                  DELETE THIS TEAM
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                  Once you delete a team, there is no going back. Please be certain.
-                  </Typography>
-                  <Button variant="contained" onClick={deleteTeam}>DELETE</Button>
+                  <Button variant="contained" onClick={update}>
+                    UPDATE
+                  </Button>
                 </CardContent>
               </Card>
               <br></br>
-              <Card style={{ width: '19rem' }}>
+              <Card style={{ width: "19rem" }}>
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                    DELETE THIS TEAM
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Once you delete a team, there is no going back. Please be
+                    certain.
+                  </Typography>
+                  <Button variant="contained" onClick={deleteTeam}>
+                    DELETE
+                  </Button>
+                </CardContent>
+              </Card>
+              <br></br>
+              <Card style={{ width: "19rem" }}>
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
                     ARCHIVE THIS TEAM
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                  Mark this team as archived
+                    Mark this team as archived
                   </Typography>
-                  <Button variant="contained" onClick={deleteTeam}>ARCHIVE</Button>
+                  <Button variant="contained" onClick={archiveTeam}>
+                    ARCHIVE
+                  </Button>
                 </CardContent>
               </Card>
-              
-              </>
-            )}
+            </>
+          )}
 
-            
-            {/* {currentUserRole === "admin" && (
+          {/* {currentUserRole === "admin" && (
               <NavItem>
                 <NavLink>
                   <Button color="primary" round outline onClick={deleteTeam}>

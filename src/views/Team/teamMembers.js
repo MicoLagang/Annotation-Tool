@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { projectFirestore } from "../../firebase";
+import { appAuth, projectFirestore } from "../../firebase";
 import { Link, useParams } from "react-router-dom";
 import { Card, Container, Table, Modal, Button, Form } from "react-bootstrap";
 import TopNav from "../Navigation/TopNav";
@@ -15,32 +15,12 @@ const TeamMembers = () => {
 
   const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState([]);
-  // const {teamID} = useParams()
+
   const teamID = localStorage.getItem("currentTeamID");
   const currentUserRole = localStorage.getItem("currentUserRole");
 
-  const [updata, setUpdata] = useState({
-    data: {
-      role: "",
-      status: "",
-    },
-    uid: "",
-  });
-
-  const createTeam = {
-    backgroundColor: "#FFD803",
-  };
-
-  const cardLink = {
-    color: "#000000",
-    textDecoration: "none",
-    height: "130px",
-  };
-
   var rand = require("random-key");
   rand.generate(7);
-
-  // console.log(rand.generate(5))
 
   useEffect(() => {
     const getPostsFromFirebase = [];
@@ -68,98 +48,51 @@ const TeamMembers = () => {
     return <h1>loading firebase data...</h1>;
   }
 
-  function MyVerticallyCenteredModal(props) {
-    const { daata } = props;
-    console.log(daata);
-    console.log(daata.uid);
-    const [value, setValue] = useState({
-      uid: daata.uid,
-      role: daata.role,
-      teamID: daata.TeamCode,
-      status: daata.Status,
-      key: daata.key,
+  async function openModal(post) {
+    const { value: role } = await Swal.fire({
+      title: "Update User Role",
+      input: "select",
+      inputOptions: {
+        contributor: "Contributor",
+        annotator: "Annotator",
+        validator: "Validator",
+      },
+      inputPlaceholder: "Select Role",
+      showCancelButton: true,
+      inputValidator: (value) => {
+        return new Promise((resolve) => {
+          console.log(value);
+          if (value) {
+            console.log("if");
+            resolve();
+          } else {
+            console.log("else");
+            resolve("You need to select role");
+          }
+          // resolve();
+        });
+      },
     });
 
-    console.log(value);
-
-    const { uid, role, teamID, status, key } = value;
-
-    const handleChange = (uid) => (e) => {
-      e.preventDefault();
-      setValue({ ...value, [uid]: e.target.value });
-    };
-
-    const update = () => {
+    if (role) {
       projectFirestore
         .collection("TEAMMEMBERS")
-        .doc(daata.key)
+        .doc(post.key)
         .update({
           Status: "true",
           role: role,
         })
         .then(() => {
-          toast.success("User had been accepted");
+          Swal.fire(`User role update to ${role}`);
           setTimeout(function() {
             window.location.reload();
-            console.log(teamID);
-            console.log(daata.key);
-            console.log(role);
-          }, 5000);
+          }, 3000);
         })
-        .catch(() => {
-          toast.error("Something went wrong!");
-        });
-    };
-
-    return (
-      <Modal
-        {...props}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-      >
-        <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">
-            Modal heading
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <TextField
-            id="teamID"
-            value={teamID}
-            onChange={handleChange("teamID")}
-            margin="normal"
-            // placeholder="Email Adress"
-            type="text"
-            fullWidth
-            disabled
-          />
-
-          <TextField
-            id="Role"
-            value={role}
-            onChange={handleChange("role")}
-            margin="normal"
-            // placeholder="Email Adress"
-            type="text"
-            fullWidth
-          />
-
-          <Button
-            onClick={update}
-            // variant="contained"
-            color="secondary"
-            size="large"
-          >
-            Accept
-          </Button>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={props.onHide}>Close</Button>
-        </Modal.Footer>
-      </Modal>
-    );
+        .catch(() => {});
+    }
   }
+
+
 
   return (
     <>
@@ -167,7 +100,7 @@ const TeamMembers = () => {
         <Table striped bordered hover>
           <thead>
             <tr>
-              <th>User ID</th>
+              {/* <th>User ID</th> */}
               <th>Email</th>
               <th>Role</th>
               {currentUserRole === "admin" && <th>Action</th>}
@@ -177,32 +110,31 @@ const TeamMembers = () => {
             posts.map((post) => (
               <tbody>
                 <tr>
-                  <td>{post.uid}</td>
+                  {/* <td>{post.uid}</td> */}
                   <td>{post.email}</td>
                   <td>{post.role}</td>
                   {currentUserRole === "admin" && (
                     <td>
-                      {/* <Link
-        to={`/addMember/${post.uid}`} 
-      >
-        EDIT
-         </Link> */}
-
-                      <Button
-                        variant="primary"
-                        onClick={() => {
-                          setUpdata(post);
-                          setModalShow(true);
-                        }}
-                      >
-                        ACCEPT
-                      </Button>
-
-                      <MyVerticallyCenteredModal
-                        show={modalShow}
-                        onHide={() => setModalShow(false)}
-                        daata={updata}
-                      />
+                      {post.role === "admin" ? (
+                        <Button
+                          disabled
+                          variant="primary"
+                          onClick={() => {
+                            openModal(post);
+                          }}
+                        >
+                          Edit
+                        </Button>
+                      ) : (
+                        <Button
+                          variant="primary"
+                          onClick={() => {
+                            openModal(post);
+                          }}
+                        >
+                          Edit
+                        </Button>
+                      )}
                     </td>
                   )}
                 </tr>
