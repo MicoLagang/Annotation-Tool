@@ -7,26 +7,22 @@ import Toolbar from "@material-ui/core/Toolbar";
 import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
+import MenuIcon from "@material-ui/icons/Menu";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
+import AddIcon from "@material-ui/icons/Add";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
-
 import AccountCircle from "@material-ui/icons/AccountCircle";
-import MenuIcon from "@material-ui/icons/Menu";
-import AddIcon from "@material-ui/icons/Add";
-import GroupIcon from "@material-ui/icons/Group";
-import BuildIcon from "@material-ui/icons/Build";
-
-import { Container } from "react-bootstrap";
 
 import { useAuth } from "../../logic/context/AuthContext";
 import { useHistory } from "react-router-dom";
 import Swal from "sweetalert2";
 import projectMembersService from "../../services/projectMembers.service";
 import { projectFirestore } from "../../firebase";
+
 import BreadCrumb from "../components/BreadCrumb";
-import { ListItemIcon } from "@material-ui/core";
+import { Container } from "react-bootstrap";
 
 const drawerWidth = 240;
 
@@ -68,6 +64,17 @@ export default function TopNav() {
     color: "red",
   };
 
+  const itemList = [
+    {
+      text: "My Team",
+      link: () => history.push("/myTeam"),
+    },
+    {
+      text: "Annotation Tool",
+      link: () => history.push("/tool"),
+    },
+  ];
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -84,26 +91,12 @@ export default function TopNav() {
     setAnchorEl(event.currentTarget);
   };
 
-  const itemList = [
-    {
-      text: "My Team",
-      icon: <GroupIcon />,
-      link: () => history.push("/myTeam"),
-    },
-    {
-      text: "Annotation Tool",
-      icon: <BuildIcon />,
-      link: () => history.push("/tool"),
-    },
-  ];
-
   const list = () => (
     <List style={{ width: drawerWidth }} onClick={() => setOpen(false)}>
       {itemList.map((item, index) => {
-        const { text, icon, link } = item;
+        const { text, link } = item;
         return (
           <ListItem button key={text} onClick={link}>
-            {icon && <ListItemIcon>{icon}</ListItemIcon>}
             <ListItemText primary={text}></ListItemText>
           </ListItem>
         );
@@ -236,9 +229,9 @@ export default function TopNav() {
           {list()}
         </Drawer>
       </Box>
-      {/* <Container className="mt-3">
+      <Container className="mt-3">
         <BreadCrumb />
-      </Container> */}
+      </Container>
     </>
   );
 }

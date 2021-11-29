@@ -15,8 +15,7 @@ import Menu from "@material-ui/core/Menu";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import MenuIcon from "@material-ui/icons/Menu";
 import AddIcon from "@material-ui/icons/Add";
-import GroupIcon from "@material-ui/icons/Group";
-import BuildIcon from "@material-ui/icons/Build";
+import GroupsIcon from "@material-ui/icons/GroupsIcon";
 
 import { Container } from "react-bootstrap";
 
@@ -87,12 +86,11 @@ export default function TopNav() {
   const itemList = [
     {
       text: "My Team",
-      icon: <GroupIcon />,
+      icon: <GroupsIcon />,
       link: () => history.push("/myTeam"),
     },
     {
       text: "Annotation Tool",
-      icon: <BuildIcon />,
       link: () => history.push("/tool"),
     },
   ];
@@ -236,9 +234,9 @@ export default function TopNav() {
           {list()}
         </Drawer>
       </Box>
-      {/* <Container className="mt-3">
+      <Container className="mt-3">
         <BreadCrumb />
-      </Container> */}
+      </Container>
     </>
   );
 }

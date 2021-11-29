@@ -2,31 +2,31 @@ import React, { useState, useEffect } from "react";
 import { styled, useTheme } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 import Drawer from "@material-ui/core/Drawer";
+import CssBaseline from "@material-ui/core/CssBaseline";
 import MuiAppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
+import MenuIcon from "@material-ui/icons/Menu";
 import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
+import InboxIcon from "@material-ui/icons/MoveToInbox";
+import MailIcon from "@material-ui/icons/Mail";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
-
 import AccountCircle from "@material-ui/icons/AccountCircle";
-import MenuIcon from "@material-ui/icons/Menu";
-import AddIcon from "@material-ui/icons/Add";
-import GroupIcon from "@material-ui/icons/Group";
-import BuildIcon from "@material-ui/icons/Build";
 
-import { Container } from "react-bootstrap";
-
+import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { useAuth } from "../../logic/context/AuthContext";
 import { useHistory } from "react-router-dom";
+import firebaseDb from "../../firebase";
 import Swal from "sweetalert2";
 import projectMembersService from "../../services/projectMembers.service";
 import { projectFirestore } from "../../firebase";
+
 import BreadCrumb from "../components/BreadCrumb";
-import { ListItemIcon } from "@material-ui/core";
 
 const drawerWidth = 240;
 
@@ -68,6 +68,17 @@ export default function TopNav() {
     color: "red",
   };
 
+  const itemList = [
+    {
+      text: "My Team",
+      link: () => history.push("/myTeam"),
+    },
+    {
+      text: "Annotation Tool",
+      link: () => history.push("/tool"),
+    },
+  ];
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -84,26 +95,12 @@ export default function TopNav() {
     setAnchorEl(event.currentTarget);
   };
 
-  const itemList = [
-    {
-      text: "My Team",
-      icon: <GroupIcon />,
-      link: () => history.push("/myTeam"),
-    },
-    {
-      text: "Annotation Tool",
-      icon: <BuildIcon />,
-      link: () => history.push("/tool"),
-    },
-  ];
-
   const list = () => (
     <List style={{ width: drawerWidth }} onClick={() => setOpen(false)}>
       {itemList.map((item, index) => {
-        const { text, icon, link } = item;
+        const { text, link } = item;
         return (
           <ListItem button key={text} onClick={link}>
-            {icon && <ListItemIcon>{icon}</ListItemIcon>}
             <ListItemText primary={text}></ListItemText>
           </ListItem>
         );
@@ -167,79 +164,116 @@ export default function TopNav() {
   }
 
   return (
-    <>
-      <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="static" open={open}>
-          <Toolbar>
+    <Box sx={{ display: "flex" }}>
+      <CssBaseline />
+      <AppBar position="fixed" open={open}>
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleDrawerOpen}
+            edge="start"
+            sx={{ mr: 2, ...(open && { display: "none" }) }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography
+            variant="h6"
+            noWrap
+            component="div"
+            sx={{ flexGrow: 1 }}
+            onClick={() => history.push("/")}
+          >
+            Ilabel
+          </Typography>
+          <div>
             <IconButton
-              onClick={handleDrawerOpen}
-              edge="start"
               size="large"
-              edge="start"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleMenu}
               color="inherit"
-              aria-label="open drawer"
-              sx={{ mr: 2 }}
             >
-              <MenuIcon />
+              <AccountCircle />
             </IconButton>
-            <Typography
-              variant="h6"
-              noWrap
-              component="div"
-              sx={{ flexGrow: 1 }}
-              onClick={() => history.push("/")}
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
             >
-              Ilabel
-            </Typography>
-            <Box sx={{ flexGrow: 1 }} />
-            <IconButton color="inherit" onClick={JoinTeam}>
-              <AddIcon />
-            </IconButton>
-            <div>
-              <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleMenu}
-                color="inherit"
+              <MenuItem onClick={handleClose}>Profile</MenuItem>
+              <MenuItem onClick={handleClose}>My account</MenuItem>
+            </Menu>
+          </div>
+        </Toolbar>
+      </AppBar>
+      <Navbar
+        collapseOnSelect
+        expand="md"
+        style={createTeam}
+        variant="dark"
+        className="mt-5"
+      >
+        <Container>
+          <Navbar.Brand href="/">Ilabel</Navbar.Brand>
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav">
+            <Nav className="me-auto">
+              <Nav.Link href="/tool">Tool</Nav.Link>
+              <Nav.Link href={`/myTeam`}>My Team</Nav.Link>
+              <Nav.Link onClick={JoinTeam}>Join Team</Nav.Link>
+            </Nav>
+            <Nav>
+              <Nav.Link></Nav.Link>
+              <Nav.Link
+                // onClick={JoinTeam}
+                id="collasible-nav"
               >
-                <AccountCircle />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  class="bi bi-bell"
+                  viewBox="0 0 16 16"
+                >
+                  <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z" />
+                </svg>
+              </Nav.Link>
+              <NavDropdown
+                title={currentUser.email}
+                id="collasible-nav-dropdown"
               >
-                <MenuItem onClick={() => history.push("/update-profile")}>
+                <NavDropdown.Item href="/update-profile">
                   Profile
-                </MenuItem>
-                <MenuItem onClick={() => history.push("/archive")}>
+                </NavDropdown.Item>
+                <NavDropdown.Item href="/archive">
                   Archive Team
-                </MenuItem>
-                <MenuItem onClick={handleLogout}>Logout</MenuItem>
-              </Menu>
-            </div>
-          </Toolbar>
-        </AppBar>
-        <Drawer open={open} anchor={"left"} onClose={handleDrawerClose}>
-          {list()}
-        </Drawer>
-      </Box>
-      {/* <Container className="mt-3">
-        <BreadCrumb />
-      </Container> */}
-    </>
+                </NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item onClick={handleLogout}>
+                  Logout
+                </NavDropdown.Item>
+              </NavDropdown>
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+      <Drawer open={open} anchor={"left"} onClose={handleDrawerClose}>
+        {list()}
+      </Drawer>
+    </Box>
   );
 }
 

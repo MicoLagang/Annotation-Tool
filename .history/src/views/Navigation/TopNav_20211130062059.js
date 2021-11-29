@@ -92,7 +92,7 @@ export default function TopNav() {
     },
     {
       text: "Annotation Tool",
-      icon: <BuildIcon />,
+      icon: <BuildIcon/>
       link: () => history.push("/tool"),
     },
   ];
@@ -236,9 +236,9 @@ export default function TopNav() {
           {list()}
         </Drawer>
       </Box>
-      {/* <Container className="mt-3">
+      <Container className="mt-3">
         <BreadCrumb />
-      </Container> */}
+      </Container>
     </>
   );
 }
