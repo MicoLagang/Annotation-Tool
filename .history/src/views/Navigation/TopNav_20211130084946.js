@@ -97,10 +97,10 @@ export default function TopNav() {
   };
 
   useEffect(() => {
-    if (currentUserRole == "admin") return setBgColor("#c92d39");
-    else if (currentUserRole == "validator") return setBgColor("#834187");
-    else if (currentUserRole == "annotator") return setBgColor("#fcc438");
-    else if (currentUserRole == "contributor") return setBgColor("#82bb53");
+    if (currentUserRole == "admin") setBgColor("#c92d39");
+    else if (currentUserRole == "validator") setBgColor("#834187");
+    else if (currentUserRole == "annotator") setBgColor("#fcc438");
+    else if (currentUserRole == "contributor") setBgColor("#82bb53");
   }, []);
 
   async function handleLogout() {
@@ -206,7 +206,11 @@ export default function TopNav() {
             Team Members
           </Button>
           <Box sx={{ flexGrow: 1 }} />
-          {currentUserRole && <Chip style={style} label={currentUserRole} />}
+          {currentUserRole && (
+            <div className="d-flex flex-row-reverse">
+              <Chip style={style} label={currentUserRole} />
+            </div>
+          )}
           <IconButton color="inherit" onClick={JoinTeam}>
             <SettingsIcon />
           </IconButton>

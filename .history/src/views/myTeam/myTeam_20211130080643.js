@@ -60,14 +60,12 @@ const FolderList = () => {
 
   function saveAs(post) {
     localStorage.setItem("currentTeamID", post.projectID);
-    localStorage.setItem("currentTeamName", post.TeamName);
     projectMembersService.getRole(uid, post.projectID);
     console.log(post.projectID);
   }
 
   localStorage.removeItem("currentUserRole");
   localStorage.removeItem("currentTeamID");
-  localStorage.removeItem("currentTeamName");
 
   return (
     <>

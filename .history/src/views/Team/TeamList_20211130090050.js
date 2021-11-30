@@ -62,9 +62,8 @@ const FolderList = () => {
   }
 
   function saveAs(post) {
-    console.log(post);
-    localStorage.setItem("currentTeamID", post.TeamCode);
-    localStorage.setItem("currentTeamName", post.name);
+    localStorage.setItem("currentTeamID", post.projectID);
+    localStorage.setItem("currentTeamName", post.TeamName);
     console.log(post.projectID);
   }
 
@@ -76,7 +75,7 @@ const FolderList = () => {
           posts.map((post) => (
             <Link
               to={`/myTeam/gallery`}
-              onClick={() => saveAs(post)}
+              onClick={() => saveAs(post.key)}
               key={post.key}
               style={cardLink}
               className="col-lg-3 col-md-4 col-sm-12 mb-3"

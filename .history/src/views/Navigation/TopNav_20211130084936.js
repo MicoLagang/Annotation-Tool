@@ -13,7 +13,6 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import Button from "@material-ui/core/Button";
 import { ListItemIcon } from "@material-ui/core";
-import Chip from "@material-ui/core/Chip";
 
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import MenuIcon from "@material-ui/icons/Menu";
@@ -97,10 +96,10 @@ export default function TopNav() {
   };
 
   useEffect(() => {
-    if (currentUserRole == "admin") return setBgColor("#c92d39");
-    else if (currentUserRole == "validator") return setBgColor("#834187");
-    else if (currentUserRole == "annotator") return setBgColor("#fcc438");
-    else if (currentUserRole == "contributor") return setBgColor("#82bb53");
+    if (currentUserRole == "admin") setBgColor("#c92d39");
+    else if (currentUserRole == "validator") setBgColor("#834187");
+    else if (currentUserRole == "annotator") setBgColor("#fcc438");
+    else if (currentUserRole == "contributor") setBgColor("#82bb53");
   }, []);
 
   async function handleLogout() {
@@ -206,7 +205,11 @@ export default function TopNav() {
             Team Members
           </Button>
           <Box sx={{ flexGrow: 1 }} />
-          {currentUserRole && <Chip style={style} label={currentUserRole} />}
+          {currentUserRole && (
+            <div className="d-flex flex-row-reverse">
+              <Chip style={style} label={currentUserRole} />
+            </div>
+          )}
           <IconButton color="inherit" onClick={JoinTeam}>
             <SettingsIcon />
           </IconButton>

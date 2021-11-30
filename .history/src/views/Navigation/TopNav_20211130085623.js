@@ -187,7 +187,7 @@ export default function TopNav() {
 
   const topNavChangeableLinks = () => (
     <>
-      {currentTeamName ? (
+      {currentTeamName && currentUserRole ? (
         <>
           <Typography
             variant="h6"

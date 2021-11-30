@@ -13,7 +13,6 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import Button from "@material-ui/core/Button";
 import { ListItemIcon } from "@material-ui/core";
-import Chip from "@material-ui/core/Chip";
 
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import MenuIcon from "@material-ui/icons/Menu";
@@ -30,6 +29,7 @@ import Swal from "sweetalert2";
 import projectMembersService from "../../services/projectMembers.service";
 import { projectFirestore } from "../../firebase";
 import BreadCrumb from "../components/BreadCrumb";
+import Role from "../components/Role";
 
 const drawerWidth = 240;
 
@@ -60,17 +60,9 @@ export default function TopNav() {
   const teamID = localStorage.getItem("currentTeamID");
   const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState([]);
-  const [anchorEl, setAnchorEl] = React.useState(null);
   localStorage.setItem("currentUserEmail", currentUser.email);
   let currentTeamName = localStorage.getItem("currentTeamName");
-  const currentUserRole = localStorage.getItem("currentUserRole");
-  const [bgcolor, setBgColor] = useState("");
-  const style = {
-    backgroundColor: `${bgcolor}`,
-    paddingBottom: "0px !important",
-    fontSize: "14px",
-    color: "white",
-  };
+  const [anchorEl, setAnchorEl] = React.useState(null);
 
   const createTeam = {
     backgroundColor: "#272343",
@@ -95,13 +87,6 @@ export default function TopNav() {
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
-
-  useEffect(() => {
-    if (currentUserRole == "admin") return setBgColor("#c92d39");
-    else if (currentUserRole == "validator") return setBgColor("#834187");
-    else if (currentUserRole == "annotator") return setBgColor("#fcc438");
-    else if (currentUserRole == "contributor") return setBgColor("#82bb53");
-  }, []);
 
   async function handleLogout() {
     try {
@@ -198,15 +183,15 @@ export default function TopNav() {
           >
             {currentTeamName}
           </Typography>
-          <Box sx={{ flexGrow: 1 }} />
+          {/* <Box sx={{ flexGrow: 1 }} />
           <Button color="inherit" href="/myTeam/gallery">
             Projects
           </Button>
           <Button color="inherit" href="/myTeam/gallery/teamMembers">
             Team Members
-          </Button>
+          </Button> */}
           <Box sx={{ flexGrow: 1 }} />
-          {currentUserRole && <Chip style={style} label={currentUserRole} />}
+          <Role />
           <IconButton color="inherit" onClick={JoinTeam}>
             <SettingsIcon />
           </IconButton>

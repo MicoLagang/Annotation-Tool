@@ -206,7 +206,7 @@ export default function TopNav() {
             Team Members
           </Button>
           <Box sx={{ flexGrow: 1 }} />
-          {currentUserRole && <Chip style={style} label={currentUserRole} />}
+          <Chip style={style} label={currentUserRole} />
           <IconButton color="inherit" onClick={JoinTeam}>
             <SettingsIcon />
           </IconButton>

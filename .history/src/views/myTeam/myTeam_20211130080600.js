@@ -60,14 +60,12 @@ const FolderList = () => {
 
   function saveAs(post) {
     localStorage.setItem("currentTeamID", post.projectID);
-    localStorage.setItem("currentTeamName", post.TeamName);
     projectMembersService.getRole(uid, post.projectID);
     console.log(post.projectID);
   }
 
   localStorage.removeItem("currentUserRole");
   localStorage.removeItem("currentTeamID");
-  localStorage.removeItem("currentTeamName");
 
   return (
     <>
@@ -100,7 +98,7 @@ const FolderList = () => {
                 to={`/myTeam/gallery`}
                 // to={`/gallery/${uid}`}
                 key={post.key}
-                onClick={() => saveAs(post)}
+                onClick={() => saveAs(post.projectID)}
                 style={cardLink}
                 className="col-lg-3 col-md-4 col-sm-12 mb-3"
               >
