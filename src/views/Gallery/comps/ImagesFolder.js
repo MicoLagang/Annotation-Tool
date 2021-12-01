@@ -100,8 +100,32 @@ export default function TestTeam() {
                     <Typography variant="h5" component="h2">
                       {post.name}
                     </Typography>
-                    {post.isSubmitted && userRole == "validator" ? (
+                    {post.isCompleted && userRole == "validator" ? (
                       <Typography color="textSecondary">pending</Typography>
+                    ) : (
+                      <Typography color="textSecondary"></Typography>
+                    )}
+                    {post.isAccepted && !post.isCompleted && !post.isRejected &&userRole == "validator" ? (
+                      <Typography color="textSecondary">Completed</Typography>
+                    ) : (
+                      <Typography color="textSecondary"></Typography>
+                    )}
+
+
+
+
+                     {post.isCompleted && userRole == "annotator" ? (
+                      <Typography color="textSecondary">sending</Typography>
+                    ) : (
+                      <Typography color="textSecondary"></Typography>
+                    )}
+                     {!post.isAccepted && !post.isCompleted && post.isRejected &&userRole == "annotator" ? (
+                      <Typography color="textSecondary">rejected</Typography>
+                    ) : (
+                      <Typography color="textSecondary"></Typography>
+                    )}
+                     {post.isAccepted && !post.isCompleted && !post.isRejected &&userRole == "annotator" ? (
+                      <Typography color="textSecondary">Completed</Typography>
                     ) : (
                       <Typography color="textSecondary"></Typography>
                     )}

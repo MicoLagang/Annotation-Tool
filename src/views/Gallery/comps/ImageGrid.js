@@ -25,9 +25,8 @@ function ImageGrid() {
   const name = localStorage.getItem("currentProjectID");
   const folderID = localStorage.getItem("currentImagesFolderID");
   let data = [];
-  let annotationData;
-  let imageFolderData;
-  const [imageFolder, setImageFolder] = useState(''); 
+  const [isSubmitted, setisSubmitted] = useState(); 
+  const [isAccepted, setisAccepted] = useState(); 
 
   const cardLink = {
     color: "#000000",
@@ -36,13 +35,47 @@ function ImageGrid() {
   };
 
   useEffect(() => {
+    var docRef =  projectFirestore
+    .collection("TEAM")
+    .doc(teamID)
+      .collection("FOLDERS")
+      .doc(name)
+      .collection("IMAGESFOLDER")
+      .doc(folderID)
+
+      docRef.get().then((doc) => {
+        if (doc.exists) {
+            setisSubmitted(doc.data().isSubmitted)
+            setisAccepted(doc.data().isAccepted)
+        } else {
+            console.log("No such document!");
+        }
+    }).catch((error) => {
+        console.log("Error getting document:", error);
+    });
     getAnnotationData();
   }, []);
 
+  console.log(isAccepted)
+
   function getImageFolderData() {
-    teamService.getImageFolderData(teamID, name, folderID).then((data) => {
-      // imageFolderData = data.data().isSubmitted;
-      return data.data().isSubmitted;
+    
+    var docRef =  projectFirestore
+    .collection("TEAM")
+    .doc(teamID)
+      .collection("FOLDERS")
+      .doc(name)
+      .collection("IMAGESFOLDER")
+      .doc(folderID)
+
+      docRef.get().then((doc) => {
+        if (doc.exists) {
+            // console.log("Document data:", doc.data().isSubmitted);
+        } else {
+            console.log("No such document!");
+        }
+    }).catch((error) => {
+        console.log("Error getting document:", error);
     });
   }
 
@@ -160,14 +193,17 @@ function ImageGrid() {
   function submitAnnotation() {
     Swal.fire({
       title: "Are you sure to submit annotation?",
+      timer: 5000,
       showDenyButton: true,
       confirmButtonText: "Submit",
       denyButtonText: `Cancel`,
     }).then((result) => {
-      /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
-        Swal.fire("Annotation Successfully Submitted!", "", "success");
         teamService.submitAnnotation(teamID, name, folderID);
+        Swal.fire("Annotation Successfully Submitted!", "","success").then( () => {
+          window.location.reload(false);
+      })
+
       } else if (result.isDenied) {
         Swal.fire("Submission Cancelled", "", "info");
       }
@@ -183,8 +219,10 @@ function ImageGrid() {
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
-        Swal.fire("Annotation Data Accepted Successfully!", "", "success");
         teamService.acceptAnnotaion(teamID, name, folderID);
+        Swal.fire("Annotation Data Accepted Successfully!","","success").then( () => {
+          window.location.reload(false);
+      })
       } else if (result.isDenied) {
         Swal.fire("Action is cancelled", "", "info");
       }
@@ -200,8 +238,10 @@ function ImageGrid() {
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
-        Swal.fire("Annotation is rejected!", "", "success");
         teamService.rejectAnnotation(teamID, name, folderID);
+        Swal.fire("Annotation is rejected!","","success").then( () => {
+          window.location.reload(false);
+      })
       } else if (result.isDenied) {
         Swal.fire("Action is cancelled", "", "info");
       }
@@ -249,13 +289,15 @@ function ImageGrid() {
                   >
                     Annotate This Folder
                   </Button>
-                  <Button
-                    className="m-2"
-                    variant="contained"
-                    onClick={() => submitAnnotation()}
-                  >
-                    Submit Annotation
-                  </Button>
+                  {isSubmitted === false &&(
+                                      <Button
+                                      className="m-2"
+                                      variant="contained"
+                                      onClick={() => submitAnnotation()}
+                                    >
+                                      Submit Annotation
+                                    </Button>
+                  )}
                 </>
               )}
 
@@ -273,20 +315,29 @@ function ImageGrid() {
                       View Annotation
                     </Button>
                   )}
-                       <Button
-                         className="m-2"
-                         variant="contained"
-                         onClick={() => acceptAnnotaion()}
-                       >
-                         Accept Annotation
-                       </Button>
-                       <Button
-                         className="m-2"
-                         variant="contained"
-                         onClick={() => rejectAnnotation()}
-                       >
-                         Reject Annotation
-                       </Button>
+               {isAccepted === false &&(
+                 <>
+                  {isSubmitted === true && (
+                    <>
+                    <Button
+                    className="m-2"
+                    variant="contained"
+                    onClick={() => acceptAnnotaion()}
+                  >
+                    Accept Annotation
+                  </Button>
+                  <Button
+                    className="m-2"
+                    variant="contained"
+                    onClick={() => rejectAnnotation()}
+                  >
+                    Reject Annotation
+                  </Button>
+                    </>
+                  )}
+                  </>
+               )}
+                 
                      </>
                 </>
               )}

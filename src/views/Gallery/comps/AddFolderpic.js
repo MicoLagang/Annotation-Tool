@@ -46,6 +46,8 @@ export default function TestTeam(post) {
           totalImages: 1,
           isAccepted: false,
           isSubmitted: false,
+          isCompleted: false,
+          isRejected: false,
         });
       toast.success("LOADING PLEASE WAIT");
       setTimeout(function() {

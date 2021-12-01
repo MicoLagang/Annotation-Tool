@@ -138,6 +138,8 @@ class TutorialDataService {
       .doc(folderID)
       .update({
         isSubmitted: true,
+        isCompleted: true,
+        isRejected:false
       });
   }
 
@@ -150,6 +152,8 @@ class TutorialDataService {
       .doc(folderID)
       .update({
         isAccepted: true,
+        isCompleted:false,
+        isRejected:false,
       });
   }
 
@@ -162,6 +166,8 @@ class TutorialDataService {
       .doc(folderID)
       .update({
         isSubmitted: false,
+        isCompleted:false,
+        isRejected:true,
       });
   }
   unArchiveTeam(key){
