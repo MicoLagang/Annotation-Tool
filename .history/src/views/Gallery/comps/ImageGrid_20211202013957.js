@@ -29,8 +29,7 @@ function ImageGrid() {
   let imageFolderData;
   const [imageFolderName, setImageFolderName] = useState("");
   const [totalImages, setTotalImages] = useState(0);
-  const [totalAnnotatedImages, setTotalAnnotatedImages] = useState(0);
-  let counter = 0;
+  let counter = 0
 
   const cardLink = {
     color: "#000000",
@@ -53,12 +52,12 @@ function ImageGrid() {
     });
     
 
-      return <Card className="bg-dark text-white my-4">
+      return <Card className="bg-dark text-white">
               <Card.Img src="https://gstatic.com/classroom/themes/Psychology.jpg" alt="Card image" />
               <Card.ImgOverlay>
                 <Card.Title>{imageFolderName}</Card.Title>
                 <Card.Text>{totalImages} images</Card.Text>
-          <Card.Text>{totalAnnotatedImages}/{totalImages} annotated images</Card.Text>
+          <Card.Text>{counter}/{totalImages} annotated images</Card.Text>
               </Card.ImgOverlay>
             </Card>
               };
@@ -159,15 +158,11 @@ function ImageGrid() {
             .split(".")
             .filter((item) => item);
           if (doc.name == SliceImageName[0]) {
-            counter = counter + 1;
-            console.log(counter)
+            counter++;
             return true;
           } else {
             continue;
           }
-        }
-        if (i == annotatedImagesArray.length) {
-          console.log("last")
         }
       }
     } else console.log("no records");

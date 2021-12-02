@@ -27,10 +27,7 @@ function ImageGrid() {
   let data = [];
   let annotationData;
   let imageFolderData;
-  const [imageFolderName, setImageFolderName] = useState("");
-  const [totalImages, setTotalImages] = useState(0);
-  const [totalAnnotatedImages, setTotalAnnotatedImages] = useState(0);
-  let counter = 0;
+  const [imageFolder, setImageFolder] = useState("");
 
   const cardLink = {
     color: "#000000",
@@ -43,25 +40,21 @@ function ImageGrid() {
     getImageFolderData();
   }, []);
 
-  const getImageFolderData = () => {
+  function getImageFolderData() {
     teamService.getImageFolderData(teamID, name, folderID).then((data) => {
-      console.log(data.data().name);
-      setImageFolderName(data.data().name)
-      setTotalImages(data.data().totalImages - 1)
+      console.log(data.data());
+      imageFolderData = data.data();
+
+      return (
+        <Card>
+          <p>Name: {imageFolderData.name}</p>
+          <p>Total Images: {imageFolderData.totalImages}</p>
+        </Card>
+      );
       // imageFolderData = data.data().isSubmitted;
       // return data.data().isSubmitted;
     });
-    
-
-      return <Card className="bg-dark text-white my-4">
-              <Card.Img src="https://gstatic.com/classroom/themes/Psychology.jpg" alt="Card image" />
-              <Card.ImgOverlay>
-                <Card.Title>{imageFolderName}</Card.Title>
-                <Card.Text>{totalImages} images</Card.Text>
-          <Card.Text>{totalAnnotatedImages}/{totalImages} annotated images</Card.Text>
-              </Card.ImgOverlay>
-            </Card>
-              };
+  }
 
   function getAnnotationData() {
     projectFirestore
@@ -159,15 +152,10 @@ function ImageGrid() {
             .split(".")
             .filter((item) => item);
           if (doc.name == SliceImageName[0]) {
-            counter = counter + 1;
-            console.log(counter)
             return true;
           } else {
             continue;
           }
-        }
-        if (i == annotatedImagesArray.length) {
-          console.log("last")
         }
       }
     } else console.log("no records");
@@ -232,7 +220,7 @@ function ImageGrid() {
   return (
     <>
       <ToastContainer />
-      {getImageFolderData()}
+      <getImageFolderData></getImageFolderData>
       {currentUserRole !== "contributor" && (
         <div>
           {imagesURL.length > 0 ? (

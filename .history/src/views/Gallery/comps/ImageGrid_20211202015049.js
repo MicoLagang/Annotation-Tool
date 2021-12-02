@@ -53,7 +53,7 @@ function ImageGrid() {
     });
     
 
-      return <Card className="bg-dark text-white my-4">
+      return <Card className="bg-dark text-white">
               <Card.Img src="https://gstatic.com/classroom/themes/Psychology.jpg" alt="Card image" />
               <Card.ImgOverlay>
                 <Card.Title>{imageFolderName}</Card.Title>
@@ -155,6 +155,8 @@ function ImageGrid() {
     if (annotatedImagesArray) {
       for (let i = 0; i < annotatedImagesArray.length; i++) {
         for (let index = 0; index < annotatedImagesArray[i].length; index++) {
+          console.log(index);
+          console.log(annotatedImagesArray[i].length)
           const SliceImageName = annotatedImagesArray[i][index].file_name
             .split(".")
             .filter((item) => item);

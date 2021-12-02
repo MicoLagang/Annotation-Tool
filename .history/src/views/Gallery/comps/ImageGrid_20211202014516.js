@@ -53,7 +53,7 @@ function ImageGrid() {
     });
     
 
-      return <Card className="bg-dark text-white my-4">
+      return <Card className="bg-dark text-white">
               <Card.Img src="https://gstatic.com/classroom/themes/Psychology.jpg" alt="Card image" />
               <Card.ImgOverlay>
                 <Card.Title>{imageFolderName}</Card.Title>
@@ -166,11 +166,9 @@ function ImageGrid() {
             continue;
           }
         }
-        if (i == annotatedImagesArray.length) {
-          console.log("last")
-        }
       }
     } else console.log("no records");
+    setTotalAnnotatedImages(counter)
   }
 
   function deleteFolder() {

@@ -53,7 +53,7 @@ function ImageGrid() {
     });
     
 
-      return <Card className="bg-dark text-white my-4">
+      return <Card className="bg-dark text-white">
               <Card.Img src="https://gstatic.com/classroom/themes/Psychology.jpg" alt="Card image" />
               <Card.ImgOverlay>
                 <Card.Title>{imageFolderName}</Card.Title>
@@ -381,6 +381,7 @@ function ImageGrid() {
 
                   <p className="text-center">{doc.name}</p>
                 </Link>
+                {setTotalAnnotatedImages(counter)}
               ))
             ) : (
               <p>No Image Uploaded Yet</p>

@@ -53,7 +53,7 @@ function ImageGrid() {
     });
     
 
-      return <Card className="bg-dark text-white my-4">
+      return <Card className="bg-dark text-white">
               <Card.Img src="https://gstatic.com/classroom/themes/Psychology.jpg" alt="Card image" />
               <Card.ImgOverlay>
                 <Card.Title>{imageFolderName}</Card.Title>
@@ -344,7 +344,7 @@ function ImageGrid() {
           )}
 
           <div className="row">
-            {docs.length > 0 ? (
+            {docs.length > 0 ? ( <>
               docs.map((doc) => (
                 <Link
                   // to="/tool"
@@ -382,6 +382,8 @@ function ImageGrid() {
                   <p className="text-center">{doc.name}</p>
                 </Link>
               ))
+                {setTotalAnnotatedImages(counter)}
+                </>
             ) : (
               <p>No Image Uploaded Yet</p>
             )}
