@@ -32,10 +32,9 @@ import Swal from "sweetalert2";
 import swal from '@sweetalert/with-react'
 import projectMembersService from "../../services/projectMembers.service";
 import { projectFirestore } from "../../firebase";
+import teamService from "../../../services/team.service";
 import BreadCrumb from "../components/BreadCrumb";
 import { toast, ToastContainer } from "react-toastify";
-// import teamMemberServices from "../../services/team.member.services";
-// import teamService from "../../../services/team.service";
 
 const drawerWidth = 240;
 
@@ -170,131 +169,131 @@ export default function TopNav() {
 
   
 
-  // const update = () => {
-  //   try {
-  //     teamService.editTeam(teamNameref.current.value, teamID);
-  //     projectMembersService.editTeamMembers(teamNameref.current.value, teamID);
-  //   } catch (e) {
-  //     toast.error("Something went wrong!");
-  //   } finally {
-  //     toast.success("EDIT SUCCESS");
-  //     setTimeout(function() {
-  //       history.push("/myTeam");
-  //     }, 5000);
-  //   }
-  // };
+  const update = () => {
+    try {
+      teamService.editTeam(teamNameref.current.value, teamID);
+      projectMembersService.editTeamMembers(teamNameref.current.value, teamID);
+    } catch (e) {
+      toast.error("Something went wrong!");
+    } finally {
+      toast.success("EDIT SUCCESS");
+      setTimeout(function() {
+        history.push("/myTeam");
+      }, 5000);
+    }
+  };
 
   
-  // function deleteTeam() {
-  //   // teamService.deleteTeam(teamID);
-  //   // projectMembersService.deleteTeam(teamID);
-  //   // history.push("/myTeam");
-  //   Swal.fire({
-  //     title: "Are you sure?",
-  //     text: "You won't be able to revert this!",
-  //     icon: "warning",
-  //     showCancelButton: true,
-  //     confirmButtonColor: "#3085d6",
-  //     cancelButtonColor: "#d33",
-  //     confirmButtonText: "Yes, delete it!",
-  //   }).then((result) => {
-  //     if (result.isConfirmed) {
-  //       Swal.fire("Deleted!", "Your file has been deleted.", "success");
-  //       setTimeout(function() {
-  //         teamService.deleteTeam(teamID);
-  //         projectMembersService.deleteTeam(teamID);
-  //         teamMemberServices.deleteproject(teamID);
-  //         history.push("/myTeam");
-  //       }, 1000);
-  //     }
-  //   });
-  // }
+  function deleteTeam() {
+    // teamService.deleteTeam(teamID);
+    // projectMembersService.deleteTeam(teamID);
+    // history.push("/myTeam");
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire("Deleted!", "Your file has been deleted.", "success");
+        setTimeout(function() {
+          teamService.deleteTeam(teamID);
+          projectMembersService.deleteTeam(teamID);
+          teamMemberServices.deleteproject(teamID);
+          history.push("/myTeam");
+        }, 1000);
+      }
+    });
+  }
   
-  // function showTeamMembers() {
-  //   history.push("/myTeam/gallery/teamMembers");
-  // }
+  function showTeamMembers() {
+    history.push("/myTeam/gallery/teamMembers");
+  }
 
-  // function archiveTeam() {
-  //   Swal.fire({
-  //     title: "Are you sure?",
-  //     text: "You won't be able to revert this!",
-  //     icon: "warning",
-  //     showCancelButton: true,
-  //     confirmButtonColor: "#3085d6",
-  //     cancelButtonColor: "#d33",
-  //     confirmButtonText: "Yes, Archive it!",
-  //   }).then((result) => {
-  //     if (result.isConfirmed) {
-  //       Swal.fire(
-  //         "Archived!",
-  //         "Your team has been move to Archive .",
-  //         "success"
-  //       );
-  //       teamService.ArchiveTeam(teamID);
-  //       projectMembersService.ArchiveTeam(teamID);
-  //       history.push("/");
-  //     }
-  //   });
-  // }
+  function archiveTeam() {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, Archive it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire(
+          "Archived!",
+          "Your team has been move to Archive .",
+          "success"
+        );
+        teamService.ArchiveTeam(teamID);
+        projectMembersService.ArchiveTeam(teamID);
+        history.push("/");
+      }
+    });
+  }
 
-  // function Settings() {
-  //   swal( <div>
-  //     { currentUserRole === "admin" && (
-  //           <>
-  //             <Card style={{ width: "19rem" }}>
-  //               <CardContent>
-  //                 <Typography gutterBottom variant="h5" component="div">
-  //                   EDIT TEAM NAME
-  //                 </Typography>
-  //                 <Form.Group className="mb-3" controlId="formBasicEmail">
-  //                   <Form.Control
-  //                     type="text"
-  //                     defaultValue={value}
-  //                     ref={teamNameref}
-  //                   />
-  //                   <Form.Text className="text-muted">
-  //                     Edit your team name
-  //                   </Form.Text>
-  //                 </Form.Group>
-  //                 <Button variant="contained" onClick={update}>
-  //                   UPDATE
-  //                 </Button>
-  //               </CardContent>
-  //             </Card>
-  //             <br></br>
-  //             <Card style={{ width: "19rem" }}>
-  //               <CardContent>
-  //                 <Typography gutterBottom variant="h5" component="div">
-  //                   DELETE THIS TEAM
-  //                 </Typography>
-  //                 <Typography variant="body2" color="text.secondary">
-  //                   Once you delete a team, there is no going back. Please be
-  //                   certain.
-  //                 </Typography>
-  //                 <Button variant="contained" onClick={deleteTeam}>
-  //                   DELETE
-  //                 </Button>
-  //               </CardContent>
-  //             </Card>
-  //             <br></br>
-  //             <Card style={{ width: "19rem" }}>
-  //               <CardContent>
-  //                 <Typography gutterBottom variant="h5" component="div">
-  //                   ARCHIVE THIS TEAM
-  //                 </Typography>
-  //                 <Typography variant="body2" color="text.secondary">
-  //                   Mark this team as archived
-  //                 </Typography>
-  //                 <Button variant="contained" onClick={archiveTeam}>
-  //                   ARCHIVE
-  //                 </Button>
-  //               </CardContent>
-  //             </Card>
-  //           </>
-  //     )}
-  //   </div>
-  //   )
-  // }
+  function Settings() {
+    swal( <div>
+      { currentUserRole === "admin" && (
+            <>
+              <Card style={{ width: "19rem" }}>
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                    EDIT TEAM NAME
+                  </Typography>
+                  <Form.Group className="mb-3" controlId="formBasicEmail">
+                    <Form.Control
+                      type="text"
+                      defaultValue={value}
+                      ref={teamNameref}
+                    />
+                    <Form.Text className="text-muted">
+                      Edit your team name
+                    </Form.Text>
+                  </Form.Group>
+                  <Button variant="contained" onClick={update}>
+                    UPDATE
+                  </Button>
+                </CardContent>
+              </Card>
+              <br></br>
+              <Card style={{ width: "19rem" }}>
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                    DELETE THIS TEAM
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Once you delete a team, there is no going back. Please be
+                    certain.
+                  </Typography>
+                  <Button variant="contained" onClick={deleteTeam}>
+                    DELETE
+                  </Button>
+                </CardContent>
+              </Card>
+              <br></br>
+              <Card style={{ width: "19rem" }}>
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                    ARCHIVE THIS TEAM
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Mark this team as archived
+                  </Typography>
+                  <Button variant="contained" onClick={archiveTeam}>
+                    ARCHIVE
+                  </Button>
+                </CardContent>
+              </Card>
+            </>
+      )}
+    </div>
+    )
+  }
 
   const itemList = [
     {
@@ -345,7 +344,7 @@ export default function TopNav() {
           </Button>
           <Box sx={{ flexGrow: 1 }} />
           {currentUserRole && <Chip style={style} label={currentUserRole} />}
-          <IconButton color="inherit" onClick={JoinTeam}>
+          <IconButton color="inherit" onClick={Settings}>
             <SettingsIcon />
           </IconButton>
         </>

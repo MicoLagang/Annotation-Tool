@@ -3,7 +3,6 @@ import { projectFirestore } from "../../../firebase";
 import { Link, useHistory } from "react-router-dom";
 import { Modal, Tabs, Tab, Form } from "react-bootstrap";
 import { TextField } from "@material-ui/core";
-import AddIcon from '@material-ui/icons/Add';
 import teamService from "../../../services/team.service";
 import { toast, ToastContainer } from "react-toastify";
 import projectMembersService from "../../../services/projectMembers.service";
@@ -253,42 +252,43 @@ function FolderList() {
   return (
     <>
       <ToastContainer />
-
       {currentUserRole === "admin" && (
-        <Link
-          to={`/Addfolder`}
-          style={cardLink}
-          className="col-lg-3 col-md-4 col-sm-12 mb-3"
-        >
-          <Button><AddIcon/> <b>Create Project</b></Button>
-        </Link>
-      )}
-      
-      <div className="row mt-3">
-        {posts.length > 0 ? (
-          posts.map((post) => (
-
             <Link
-              to={`/myTeam/gallery/folder`}
-              onClick={() => saveAs(post.key)}
-              key={post.key}
+              to={`/Addfolder`}
               style={cardLink}
               className="col-lg-3 col-md-4 col-sm-12 mb-3"
             >
-              <Card className="d-flex align-items-center justify-content-center h-100">
-                <CardContent>
-                  <Typography variant="h5" component="h2">
-                    {post.name}
-                  </Typography>
-                </CardContent>
-              </Card>
+              <Button variant="contained">Create Project</Button>
             </Link>
-
-          ))
-        ) : (
-          <h6>No Project yet</h6>
-        )}
-      </div>
+          )}
+          <div className="row mt-3">
+            {posts.length > 0 ? (
+              posts.map((post) => (
+                <Link
+                  to={`/myTeam/gallery/folder`}
+                  onClick={() => saveAs(post.key)}
+                  key={post.key}
+                  style={cardLink}
+                  className="col-lg-3 col-md-4 col-sm-12 mb-3"
+                >
+                  {/* <Card  className="h-100">
+                    <Card.Body className="d-flex align-items-center justify-content-center">
+                      <Card.Title>{post.name}</Card.Title>
+                    </Card.Body>
+                  </Card> */}
+                  <Card className="d-flex align-items-center justify-content-center h-100">
+                    <CardContent>
+                      <Typography variant="h5" component="h2">
+                        {post.name}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Link>
+              ))
+            ) : (
+              <h6>No Project yet</h6>
+            )}
+          </div>
       
 
       <MyVerticallyCenteredModal

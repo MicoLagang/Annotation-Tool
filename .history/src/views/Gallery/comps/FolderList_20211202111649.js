@@ -3,7 +3,6 @@ import { projectFirestore } from "../../../firebase";
 import { Link, useHistory } from "react-router-dom";
 import { Modal, Tabs, Tab, Form } from "react-bootstrap";
 import { TextField } from "@material-ui/core";
-import AddIcon from '@material-ui/icons/Add';
 import teamService from "../../../services/team.service";
 import { toast, ToastContainer } from "react-toastify";
 import projectMembersService from "../../../services/projectMembers.service";
@@ -260,7 +259,7 @@ function FolderList() {
           style={cardLink}
           className="col-lg-3 col-md-4 col-sm-12 mb-3"
         >
-          <Button><AddIcon/> <b>Create Project</b></Button>
+          <Button >Create Project</Button>
         </Link>
       )}
       

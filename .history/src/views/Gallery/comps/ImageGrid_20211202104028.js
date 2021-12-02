@@ -32,7 +32,7 @@ function ImageGrid() {
   const [totalAnnotatedImages, setTotalAnnotatedImages] = useState(0);
   let counter = 0;
   const [isSubmitted, setisSubmitted] = useState(); 
-  const [isAccepted, setisAccepted] = useState();
+  const [isAccepted, setisAccepted] = useState(); 
 
   const cardLink = {
     color: "#000000",
@@ -41,7 +41,7 @@ function ImageGrid() {
   };
 
   useEffect(() => {
-    var docRef = projectFirestore
+    var docRef =  projectFirestore
     .collection("TEAM")
     .doc(teamID)
       .collection("FOLDERS")
@@ -68,17 +68,39 @@ function ImageGrid() {
       console.log(data.data().name);
       setImageFolderName(data.data().name)
       setTotalImages(data.data().totalImages - 1)
+      // imageFolderData = data.data().isSubmitted;
+      // return data.data().isSubmitted;
+  console.log(isAccepted)
+
+  function getImageFolderData() {
+    
+    var docRef =  projectFirestore
+    .collection("TEAM")
+    .doc(teamID)
+      .collection("FOLDERS")
+      .doc(name)
+      .collection("IMAGESFOLDER")
+      .doc(folderID)
+
+      docRef.get().then((doc) => {
+        if (doc.exists) {
+            // console.log("Document data:", doc.data().isSubmitted);
+        } else {
+            console.log("No such document!");
+        }
+    }).catch((error) => {
+        console.log("Error getting document:", error);
     });
     
 
-      return <Card className="bg-dark text-white mb-4">
-                <Card.Img src="https://gstatic.com/classroom/themes/Psychology.jpg" alt="Card image" />
-                <Card.ImgOverlay>
-                  <Card.Title>{imageFolderName}</Card.Title>
-                  <Card.Text>{totalImages} images</Card.Text>
-                  <Card.Text>{totalAnnotatedImages}/{totalImages} annotated images</Card.Text>
-                </Card.ImgOverlay>
-              </Card>
+      return <Card className="bg-dark text-white my-4">
+              <Card.Img src="https://gstatic.com/classroom/themes/Psychology.jpg" alt="Card image" />
+              <Card.ImgOverlay>
+                <Card.Title>{imageFolderName}</Card.Title>
+                <Card.Text>{totalImages} images</Card.Text>
+          <Card.Text>{totalAnnotatedImages}/{totalImages} annotated images</Card.Text>
+              </Card.ImgOverlay>
+            </Card>
               };
 
   function getAnnotationData() {
@@ -202,7 +224,7 @@ function ImageGrid() {
       timer: 5000,
       showDenyButton: true,
       confirmButtonText: "Submit",
-      denyButtonText: "Cancel",
+      denyButtonText: `Cancel`,
     }).then((result) => {
       if (result.isConfirmed) {
         teamService.submitAnnotation(teamID, name, folderID);
@@ -221,7 +243,7 @@ function ImageGrid() {
       title: "Are you sure to accept the submitted annotation?",
       showDenyButton: true,
       confirmButtonText: "Accept",
-      denyButtonText: "Cancel",
+      denyButtonText: `Cancel`,
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
@@ -240,14 +262,14 @@ function ImageGrid() {
       title: "Are you sure to reject the submitted annotation?",
       showDenyButton: true,
       confirmButtonText: "Reject",
-      denyButtonText: "Cancel",
+      denyButtonText: `Cancel`,
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
         teamService.rejectAnnotation(teamID, name, folderID);
         Swal.fire("Annotation is rejected!","","success").then( () => {
           window.location.reload(false);
-       })
+      })
       } else if (result.isDenied) {
         Swal.fire("Action is cancelled", "", "info");
       }
@@ -308,9 +330,7 @@ function ImageGrid() {
                 </>
               )}
 
-              {currentUserRole === "validator" && (
-                <>                            
-                       <>
+                {currentUserRole === "validator" && (<>
                   {docs.length > 0 && (
                     <Button
                       className="m-2"
@@ -319,34 +339,44 @@ function ImageGrid() {
                     >
                       View Annotation
                     </Button>
-                  )}
+                  )
+                  }
                   
-               {isAccepted === false &&(
-                 <>
-                  {isSubmitted === true && (
-                    <>
-                    <Button
+                  <Button
                     className="m-2"
                     variant="contained"
                     onClick={() => acceptAnnotaion()}
                   >
                     Accept Annotation
                   </Button>
-                  <Button
-                    className="m-2"
-                    variant="contained"
-                    onClick={() => rejectAnnotation()}
-                  >
-                    Reject Annotation
-                  </Button>
+                  )
+
+                  {isAccepted === false &&(
+                    <>
+                      {isSubmitted === true && (
+                        <>
+                        <Button
+                        className="m-2"
+                        variant="contained"
+                        onClick={() => acceptAnnotaion()}
+                      >
+                        Accept Annotation
+                      </Button>
+                      <Button
+                        className="m-2"
+                        variant="contained"
+                        onClick={() => rejectAnnotation()}
+                      >
+                        Reject Annotation
+                      </Button>
+                        </>
+                      )}
                     </>
                   )}
-                  </>
-               )}
-                 
-                     </>
                 </>
-              )}
+                
+                  
+                )}
 
               {currentUserRole === "admin" && (
                 <>

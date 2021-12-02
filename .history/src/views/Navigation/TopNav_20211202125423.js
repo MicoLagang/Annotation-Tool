@@ -170,72 +170,72 @@ export default function TopNav() {
 
   
 
-  // const update = () => {
-  //   try {
-  //     teamService.editTeam(teamNameref.current.value, teamID);
-  //     projectMembersService.editTeamMembers(teamNameref.current.value, teamID);
-  //   } catch (e) {
-  //     toast.error("Something went wrong!");
-  //   } finally {
-  //     toast.success("EDIT SUCCESS");
-  //     setTimeout(function() {
-  //       history.push("/myTeam");
-  //     }, 5000);
-  //   }
-  // };
+  const update = () => {
+    try {
+      teamService.editTeam(teamNameref.current.value, teamID);
+      projectMembersService.editTeamMembers(teamNameref.current.value, teamID);
+    } catch (e) {
+      toast.error("Something went wrong!");
+    } finally {
+      toast.success("EDIT SUCCESS");
+      setTimeout(function() {
+        history.push("/myTeam");
+      }, 5000);
+    }
+  };
 
   
-  // function deleteTeam() {
-  //   // teamService.deleteTeam(teamID);
-  //   // projectMembersService.deleteTeam(teamID);
-  //   // history.push("/myTeam");
-  //   Swal.fire({
-  //     title: "Are you sure?",
-  //     text: "You won't be able to revert this!",
-  //     icon: "warning",
-  //     showCancelButton: true,
-  //     confirmButtonColor: "#3085d6",
-  //     cancelButtonColor: "#d33",
-  //     confirmButtonText: "Yes, delete it!",
-  //   }).then((result) => {
-  //     if (result.isConfirmed) {
-  //       Swal.fire("Deleted!", "Your file has been deleted.", "success");
-  //       setTimeout(function() {
-  //         teamService.deleteTeam(teamID);
-  //         projectMembersService.deleteTeam(teamID);
-  //         teamMemberServices.deleteproject(teamID);
-  //         history.push("/myTeam");
-  //       }, 1000);
-  //     }
-  //   });
-  // }
+  function deleteTeam() {
+    // teamService.deleteTeam(teamID);
+    // projectMembersService.deleteTeam(teamID);
+    // history.push("/myTeam");
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire("Deleted!", "Your file has been deleted.", "success");
+        setTimeout(function() {
+          teamService.deleteTeam(teamID);
+          projectMembersService.deleteTeam(teamID);
+          teamMemberServices.deleteproject(teamID);
+          history.push("/myTeam");
+        }, 1000);
+      }
+    });
+  }
   
-  // function showTeamMembers() {
-  //   history.push("/myTeam/gallery/teamMembers");
-  // }
+  function showTeamMembers() {
+    history.push("/myTeam/gallery/teamMembers");
+  }
 
-  // function archiveTeam() {
-  //   Swal.fire({
-  //     title: "Are you sure?",
-  //     text: "You won't be able to revert this!",
-  //     icon: "warning",
-  //     showCancelButton: true,
-  //     confirmButtonColor: "#3085d6",
-  //     cancelButtonColor: "#d33",
-  //     confirmButtonText: "Yes, Archive it!",
-  //   }).then((result) => {
-  //     if (result.isConfirmed) {
-  //       Swal.fire(
-  //         "Archived!",
-  //         "Your team has been move to Archive .",
-  //         "success"
-  //       );
-  //       teamService.ArchiveTeam(teamID);
-  //       projectMembersService.ArchiveTeam(teamID);
-  //       history.push("/");
-  //     }
-  //   });
-  // }
+  function archiveTeam() {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, Archive it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire(
+          "Archived!",
+          "Your team has been move to Archive .",
+          "success"
+        );
+        teamService.ArchiveTeam(teamID);
+        projectMembersService.ArchiveTeam(teamID);
+        history.push("/");
+      }
+    });
+  }
 
   // function Settings() {
   //   swal( <div>
@@ -345,7 +345,7 @@ export default function TopNav() {
           </Button>
           <Box sx={{ flexGrow: 1 }} />
           {currentUserRole && <Chip style={style} label={currentUserRole} />}
-          <IconButton color="inherit" onClick={JoinTeam}>
+          <IconButton color="inherit" onClick={Settings}>
             <SettingsIcon />
           </IconButton>
         </>

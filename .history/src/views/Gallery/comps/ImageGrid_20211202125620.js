@@ -31,8 +31,6 @@ function ImageGrid() {
   const [totalImages, setTotalImages] = useState(0);
   const [totalAnnotatedImages, setTotalAnnotatedImages] = useState(0);
   let counter = 0;
-  const [isSubmitted, setisSubmitted] = useState(); 
-  const [isAccepted, setisAccepted] = useState();
 
   const cardLink = {
     color: "#000000",
@@ -202,7 +200,7 @@ function ImageGrid() {
       timer: 5000,
       showDenyButton: true,
       confirmButtonText: "Submit",
-      denyButtonText: "Cancel",
+      denyButtonText: Cancel,
     }).then((result) => {
       if (result.isConfirmed) {
         teamService.submitAnnotation(teamID, name, folderID);
@@ -240,7 +238,7 @@ function ImageGrid() {
       title: "Are you sure to reject the submitted annotation?",
       showDenyButton: true,
       confirmButtonText: "Reject",
-      denyButtonText: "Cancel",
+      denyButtonText: Cancel,
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
@@ -296,55 +294,43 @@ function ImageGrid() {
                   >
                     Annotate This Folder
                   </Button>
-                  {isSubmitted === false &&(
-                                      <Button
-                                      className="m-2"
-                                      variant="contained"
-                                      onClick={() => submitAnnotation()}
-                                    >
-                                      Submit Annotation
-                                    </Button>
-                  )}
+                  <Button
+                    className="m-2"
+                    variant="contained"
+                    onClick={() => submitAnnotation()}
+                  >
+                    Submit Annotation
+                  </Button>
                 </>
               )}
 
               {currentUserRole === "validator" && (
-                <>                            
-                       <>
-                  {docs.length > 0 && (
+                <>
+                  <>
+                    {docs.length > 0 && (
+                      <Button
+                        className="m-2"
+                        variant="contained"
+                        onClick={() => annotateFolder()}
+                      >
+                        View Annotation
+                      </Button>
+                    )}
                     <Button
                       className="m-2"
                       variant="contained"
-                      onClick={() => annotateFolder()}
+                      onClick={() => acceptAnnotaion()}
                     >
-                      View Annotation
+                      Accept Annotation
                     </Button>
-                  )}
-                  
-               {isAccepted === false &&(
-                 <>
-                  {isSubmitted === true && (
-                    <>
                     <Button
-                    className="m-2"
-                    variant="contained"
-                    onClick={() => acceptAnnotaion()}
-                  >
-                    Accept Annotation
-                  </Button>
-                  <Button
-                    className="m-2"
-                    variant="contained"
-                    onClick={() => rejectAnnotation()}
-                  >
-                    Reject Annotation
-                  </Button>
-                    </>
-                  )}
+                      className="m-2"
+                      variant="contained"
+                      onClick={() => rejectAnnotation()}
+                    >
+                      Reject Annotation
+                    </Button>
                   </>
-               )}
-                 
-                     </>
                 </>
               )}
 

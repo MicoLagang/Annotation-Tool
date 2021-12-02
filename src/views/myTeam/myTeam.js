@@ -59,6 +59,7 @@ const FolderList = () => {
   }
 
   function saveAs(post) {
+    console.log(post)
     localStorage.setItem("currentTeamID", post.projectID);
     localStorage.setItem("currentTeamName", post.TeamName);
     projectMembersService.getRole(uid, post.projectID);
