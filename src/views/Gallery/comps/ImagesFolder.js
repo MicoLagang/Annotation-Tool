@@ -96,11 +96,35 @@ export default function TestTeam() {
                 style={cardLink}
                 className="col-lg-3 col-md-4 col-sm-12 mb-3"
               >
+
                 <Card className="d-flex align-items-center justify-content-center h-100">
                   <CardContent>
                     <Typography variant="h5" component="h2">
                       {post.name}
                     </Typography>
+
+                    {post.isCompleted && userRole == "admin" ? (
+                      <Typography color="textSecondary">pending</Typography>
+                    ) : (
+                      <Typography color="textSecondary"></Typography>
+                    )}
+                    {post.isAccepted && !post.isCompleted && !post.isRejected &&userRole == "admin" ? (
+                      <Typography color="textSecondary">Completed</Typography>
+                    ) : (
+                      <Typography color="textSecondary"></Typography>
+                    )}
+
+                    {post.isCompleted && userRole == "contributor" ? (
+                      <Typography color="textSecondary">pending</Typography>
+                    ) : (
+                      <Typography color="textSecondary"></Typography>
+                    )}
+                    {post.isAccepted && !post.isCompleted && !post.isRejected &&userRole == "contributor" ? (
+                      <Typography color="textSecondary">Completed</Typography>
+                    ) : (
+                      <Typography color="textSecondary"></Typography>
+                    )}
+
                     {post.isCompleted && userRole == "validator" ? (
                       <Typography color="textSecondary">pending</Typography>
                     ) : (

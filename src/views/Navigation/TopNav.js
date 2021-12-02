@@ -29,7 +29,6 @@ import { Form } from "react-bootstrap";
 import { useAuth } from "../../logic/context/AuthContext";
 import { useHistory } from "react-router-dom";
 import Swal from "sweetalert2";
-import swal from '@sweetalert/with-react'
 import projectMembersService from "../../services/projectMembers.service";
 import { projectFirestore } from "../../firebase";
 import BreadCrumb from "../components/BreadCrumb";

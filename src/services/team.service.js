@@ -111,6 +111,24 @@ class TutorialDataService {
     });
   }
 
+  isValidated(teamID, name, folderID,imageID,userEmail){
+
+   return db
+    .doc(teamID)
+    .collection("FOLDERS")
+    .doc(name)
+    .collection("IMAGESFOLDER")
+    .doc(folderID)
+    .collection("IMAGES")
+    .doc(imageID).update({
+      validated: userEmail,
+    })
+
+
+ 
+  
+  }
+
   update(key, value) {
     return db.child(key).update(value);
   }
@@ -156,6 +174,7 @@ class TutorialDataService {
         isRejected:false,
       });
   }
+
 
   rejectAnnotation(teamID, name, folderID) {
     return db
