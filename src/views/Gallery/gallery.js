@@ -17,10 +17,10 @@ function App() {
   // window.location.reload(false);
   return (
     <>
-      <TopNav />
-      <Container>
+      {/* <TopNav /> */}
+
         <FolderList />
-      </Container>
+
     </>
   );
 }

@@ -24,6 +24,7 @@ function ImageGrid() {
   const teamID = localStorage.getItem("currentTeamID");
   const name = localStorage.getItem("currentProjectID");
   const folderID = localStorage.getItem("currentImagesFolderID");
+  const userEmail = localStorage.getItem("currentUserEmail");
   let data = [];
   let annotationData;
   let imageFolderData;
@@ -216,7 +217,7 @@ function ImageGrid() {
     });
   }
 
-  function acceptAnnotaion() {
+  async function acceptAnnotaion(doc) {
     Swal.fire({
       title: "Are you sure to accept the submitted annotation?",
       showDenyButton: true,
@@ -226,6 +227,9 @@ function ImageGrid() {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
         teamService.acceptAnnotaion(teamID, name, folderID);
+        for (let index = 0; index < doc.length; index++) {
+          teamService.isValidated(teamID, name, folderID,doc[index].id,userEmail)
+        }
         Swal.fire("Annotation Data Accepted Successfully!","","success").then( () => {
           window.location.reload(false);
       })
@@ -312,6 +316,8 @@ function ImageGrid() {
                 <>                            
                        <>
                   {docs.length > 0 && (
+
+                    <>
                     <Button
                       className="m-2"
                       variant="contained"
@@ -319,31 +325,31 @@ function ImageGrid() {
                     >
                       View Annotation
                     </Button>
-                  )}
-                  
-               {isAccepted === false &&(
-                 <>
-                  {isSubmitted === true && (
-                    <>
-                    <Button
-                    className="m-2"
-                    variant="contained"
-                    onClick={() => acceptAnnotaion()}
-                  >
-                    Accept Annotation
-                  </Button>
-                  <Button
-                    className="m-2"
-                    variant="contained"
-                    onClick={() => rejectAnnotation()}
-                  >
-                    Reject Annotation
-                  </Button>
-                    </>
-                  )}
-                  </>
-               )}
-                 
+
+                      {isAccepted === false &&(
+                        <>
+                        {isSubmitted === true && (
+                          <>
+                          <Button
+                          className="m-2"
+                          variant="contained"
+                          onClick={() => acceptAnnotaion(docs)}
+                        >
+                          Accept Annotation
+                        </Button>
+                        <Button
+                          className="m-2"
+                          variant="contained"
+                          onClick={() => rejectAnnotation()}
+                        >
+                          Reject Annotation
+                        </Button>
+                          </>
+                        )}
+                        </>
+                      )}
+            </>
+                  )}                              
                      </>
                 </>
               )}
@@ -375,6 +381,7 @@ function ImageGrid() {
                   >
                     Delete This Folder
                   </Button>
+
                 </>
               )}
             </>
@@ -407,6 +414,7 @@ function ImageGrid() {
                       <div class="flip-box-back p-3">
                         <p>Description: {doc.description}</p>
                         <p>Uploaded by: {doc.email}</p>
+                        <p>Validated by: {doc.validated}</p>
                         {isAnnotated(doc) ? (
                           <p className="text-center">Annotated</p>
                         ) : (

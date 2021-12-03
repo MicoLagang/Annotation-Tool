@@ -83,10 +83,9 @@ const TeamMembers = () => {
           role: role,
         })
         .then(() => {
-          Swal.fire(`User role update to ${role}`);
-          setTimeout(function() {
-            window.location.reload();
-          }, 3000);
+          Swal.fire(`User role update to ${role}`).then( () => {
+            window.location.reload(false);
+        })
         })
         .catch(() => {});
     }

@@ -2,12 +2,18 @@ import React, { useEffect, useRef, useState } from "react";
 import { projectFirestore } from "../../../firebase";
 import { Link, useHistory } from "react-router-dom";
 import { Container } from 'react-bootstrap'
+import { TextField } from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
-import { ToastContainer } from "react-toastify";
+import teamService from "../../../services/team.service";
+import { toast, ToastContainer } from "react-toastify";
+import projectMembersService from "../../../services/projectMembers.service";
+import Swal from "sweetalert2";
+import TeamMembers from "../../Team/TeamMembers";
 import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
+import teamMemberServices from "../../../services/team.member.services";
 import TopNav from "../../Navigation/TopNav";
 
 function FolderList() {
