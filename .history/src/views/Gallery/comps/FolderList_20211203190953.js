@@ -35,25 +35,17 @@ function FolderList() {
   const styles = {
    media: {
       height: 0,
-      paddingTop: '250px' // 16:9
+      paddingTop: '56.25%' // 16:9
    },
    card: {
-     position: 'relative',
-     marginBottom: '30px'
+      position: 'relative',
    },
    overlay: {
       position: 'absolute',
-      bottom: '20px',
+      top: '20px',
       left: '20px',
-      color: 'white',
-    },
-    title: {
-      fontSize: '2rem',
-      fontWeight: "500",
-      lineHeight: '2.75rem',
-   },
-    text: {
-     fontSize: '1rem'
+      color: 'black',
+      backgroundColor: 'white'
    }
 }
 
@@ -101,14 +93,9 @@ function FolderList() {
 
   const card = () => {
     return <Card style={styles.card}>
-              <CardMedia image={'https://gstatic.com/classroom/themes/Psychology.jpg'} style={styles.media}/>
+              <CardMedia image={this.props.preview} style={styles.media}/>
               <div style={styles.overlay}>
-                  <Typography style={styles.title}>
-                    {updata.name}
-                  </Typography>
-                  <Typography style={styles.text}>
-                    {updata.TeamCode}
-                  </Typography>
+                  this text should overlay the image
               </div>
             </Card>
   }
@@ -120,7 +107,9 @@ function FolderList() {
       .get()
       .then((doc) => {
         if (doc.exists) {
+          console.log("Document data:", doc.data());
           setUpdata(doc.data());
+          console.log(updata)
           setValue(doc.data().name);
         } else {
           // doc.data() will be undefined in this case
@@ -174,7 +163,7 @@ function FolderList() {
           ))
         ) : (
             <>
-              <Container className="d-flex justify-content-center mb-5">
+              <Container className="mt-5 d-flex justify-content-center">
                 <div className="w-100" style={{ maxWidth: '400px' }}>
                   <img className="w-100" src="/images/empty.png" alt="image" />
                   <h4 className="text-center">No project yet</h4>

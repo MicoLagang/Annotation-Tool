@@ -7,7 +7,6 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import projectMembersService from "../../services/projectMembers.service";
-import Button from '@material-ui/core/Button';
 
 const FolderList = () => {
   const [loading, setLoading] = useState(true);
@@ -24,12 +23,6 @@ const FolderList = () => {
     color: "#000000",
     textDecoration: "none",
     height: "130px",
-  };
-
-  const addButton = {
-    color: "#000000",
-    textDecoration: "none",
-    height: "50px",
   };
 
   var rand = require("random-key");
@@ -86,7 +79,7 @@ const FolderList = () => {
         <br></br>
         <div className="row">
 
-          {posts.length > 0 ? (<>
+          {posts.length > 0 ? (
           <Link
             to="/new"
             style={cardLink}
@@ -103,7 +96,7 @@ const FolderList = () => {
               </CardContent>
             </Card>
           </Link>
-            {posts.map((post) => (
+            posts.map((post) => (
               <Link
                 to={`/myTeam/gallery`}
                 // to={`/gallery/${uid}`}
@@ -123,18 +116,9 @@ const FolderList = () => {
                   </CardContent>
                 </Card>
               </Link>
-            ))}
-            </>
+            ))
           ) : (
-            <Container className="d-flex justify-content-center">
-                <div className="w-100" style={{ maxWidth: '400px' }}>
-                  <img className="w-100" src="/images/empty.png" alt="image" />
-                  <h4 className="text-center">No team created</h4>
-                  <Button className="w-100 text-capitalize" style={addButton} href="/new" color="primary">
-                    Create yours now
-                  </Button>
-                </div>
-              </Container>
+            <h6>No Team yet</h6>
           )}
         </div>
       </Container>

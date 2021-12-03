@@ -23,13 +23,7 @@ const FolderList = () => {
   const cardLink = {
     color: "#000000",
     textDecoration: "none",
-    height: "130px",
-  };
-
-  const addButton = {
-    color: "#000000",
-    textDecoration: "none",
-    height: "50px",
+    height: "20px",
   };
 
   var rand = require("random-key");
@@ -130,7 +124,7 @@ const FolderList = () => {
                 <div className="w-100" style={{ maxWidth: '400px' }}>
                   <img className="w-100" src="/images/empty.png" alt="image" />
                   <h4 className="text-center">No team created</h4>
-                  <Button className="w-100 text-capitalize" style={addButton} href="/new" color="primary">
+                  <Button className="w-100 text-capitalize" style={cardLink} href="/new" color="primary">
                     Create yours now
                   </Button>
                 </div>

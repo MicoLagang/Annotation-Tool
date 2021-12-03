@@ -5,6 +5,7 @@ import { Container } from "react-bootstrap";
 import TopNav from "../Navigation/TopNav";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
+import AddIcon from '@material-ui/icons/Add';
 import Typography from "@material-ui/core/Typography";
 import projectMembersService from "../../services/projectMembers.service";
 import Button from '@material-ui/core/Button';
@@ -24,12 +25,6 @@ const FolderList = () => {
     color: "#000000",
     textDecoration: "none",
     height: "130px",
-  };
-
-  const addButton = {
-    color: "#000000",
-    textDecoration: "none",
-    height: "50px",
   };
 
   var rand = require("random-key");
@@ -129,10 +124,14 @@ const FolderList = () => {
             <Container className="d-flex justify-content-center">
                 <div className="w-100" style={{ maxWidth: '400px' }}>
                   <img className="w-100" src="/images/empty.png" alt="image" />
-                  <h4 className="text-center">No team created</h4>
-                  <Button className="w-100 text-capitalize" style={addButton} href="/new" color="primary">
-                    Create yours now
-                  </Button>
+                  <h4 className="text-center">No team yet</h4>
+                  <Link
+                    to={`/new`}
+                    style={cardLink}
+                    className="col-lg-3 col-md-4 col-sm-12 mb-3"
+                  >
+                    <Button><AddIcon/> <b>Create yours now</b></Button>
+                  </Link>
                 </div>
               </Container>
           )}

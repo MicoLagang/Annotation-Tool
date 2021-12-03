@@ -5,11 +5,14 @@ import { Container } from 'react-bootstrap'
 import AddIcon from '@material-ui/icons/Add';
 import { ToastContainer } from "react-toastify";
 import Button from "@material-ui/core/Button";
-import Card from "@material-ui/core/Card";
+// import Card from "@material-ui/core/Card";
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import TopNav from "../../Navigation/TopNav";
+
+
+import { Card } from "react-bootstrap";
 
 function FolderList() {
   const [loading, setLoading] = useState(true);
@@ -35,25 +38,17 @@ function FolderList() {
   const styles = {
    media: {
       height: 0,
-      paddingTop: '250px' // 16:9
+      paddingTop: '56.25%' // 16:9
    },
    card: {
-     position: 'relative',
-     marginBottom: '30px'
+      position: 'relative',
    },
    overlay: {
       position: 'absolute',
-      bottom: '20px',
+      top: '20px',
       left: '20px',
-      color: 'white',
-    },
-    title: {
-      fontSize: '2rem',
-      fontWeight: "500",
-      lineHeight: '2.75rem',
-   },
-    text: {
-     fontSize: '1rem'
+      color: 'black',
+      backgroundColor: 'white'
    }
 }
 
@@ -100,17 +95,14 @@ function FolderList() {
   }
 
   const card = () => {
-    return <Card style={styles.card}>
-              <CardMedia image={'https://gstatic.com/classroom/themes/Psychology.jpg'} style={styles.media}/>
-              <div style={styles.overlay}>
-                  <Typography style={styles.title}>
-                    {updata.name}
-                  </Typography>
-                  <Typography style={styles.text}>
-                    {updata.TeamCode}
-                  </Typography>
-              </div>
-            </Card>
+    return <Card className="bg-dark text-white mb-4">
+                <Card.Img src="https://gstatic.com/classroom/themes/Psychology.jpg" alt="Card image" />
+                <Card.ImgOverlay>
+                  <Card.Title>{imageFolderName}</Card.Title>
+                  <Card.Text>{totalImages} images</Card.Text>
+                  <Card.Text>{totalAnnotatedImages}/{totalImages} annotated images</Card.Text>
+                </Card.ImgOverlay>
+              </Card>
   }
 
   function getValue() {
@@ -120,7 +112,9 @@ function FolderList() {
       .get()
       .then((doc) => {
         if (doc.exists) {
+          console.log("Document data:", doc.data());
           setUpdata(doc.data());
+          console.log(updata)
           setValue(doc.data().name);
         } else {
           // doc.data() will be undefined in this case
@@ -174,7 +168,7 @@ function FolderList() {
           ))
         ) : (
             <>
-              <Container className="d-flex justify-content-center mb-5">
+              <Container className="mt-5 d-flex justify-content-center">
                 <div className="w-100" style={{ maxWidth: '400px' }}>
                   <img className="w-100" src="/images/empty.png" alt="image" />
                   <h4 className="text-center">No project yet</h4>

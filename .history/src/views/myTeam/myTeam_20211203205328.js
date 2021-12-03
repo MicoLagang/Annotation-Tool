@@ -26,12 +26,6 @@ const FolderList = () => {
     height: "130px",
   };
 
-  const addButton = {
-    color: "#000000",
-    textDecoration: "none",
-    height: "50px",
-  };
-
   var rand = require("random-key");
   rand.generate(7);
 
@@ -130,7 +124,7 @@ const FolderList = () => {
                 <div className="w-100" style={{ maxWidth: '400px' }}>
                   <img className="w-100" src="/images/empty.png" alt="image" />
                   <h4 className="text-center">No team created</h4>
-                  <Button className="w-100 text-capitalize" style={addButton} href="/new" color="primary">
+                  <Button className="w-100" href="/new" color="primary">
                     Create yours now
                   </Button>
                 </div>

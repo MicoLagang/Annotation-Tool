@@ -51,9 +51,7 @@ function FolderList() {
       fontSize: '2rem',
       fontWeight: "500",
       lineHeight: '2.75rem',
-   },
-    text: {
-     fontSize: '1rem'
+      color: 'white'
    }
 }
 
@@ -106,7 +104,7 @@ function FolderList() {
                   <Typography style={styles.title}>
                     {updata.name}
                   </Typography>
-                  <Typography style={styles.text}>
+                  <Typography style={styles.title}>
                     {updata.TeamCode}
                   </Typography>
               </div>
@@ -174,7 +172,7 @@ function FolderList() {
           ))
         ) : (
             <>
-              <Container className="d-flex justify-content-center mb-5">
+              <Container className="mt-5 d-flex justify-content-center">
                 <div className="w-100" style={{ maxWidth: '400px' }}>
                   <img className="w-100" src="/images/empty.png" alt="image" />
                   <h4 className="text-center">No project yet</h4>

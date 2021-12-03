@@ -26,12 +26,6 @@ const FolderList = () => {
     height: "130px",
   };
 
-  const addButton = {
-    color: "#000000",
-    textDecoration: "none",
-    height: "50px",
-  };
-
   var rand = require("random-key");
   rand.generate(7);
 
@@ -129,9 +123,10 @@ const FolderList = () => {
             <Container className="d-flex justify-content-center">
                 <div className="w-100" style={{ maxWidth: '400px' }}>
                   <img className="w-100" src="/images/empty.png" alt="image" />
-                  <h4 className="text-center">No team created</h4>
-                  <Button className="w-100 text-capitalize" style={addButton} href="/new" color="primary">
-                    Create yours now
+                  <h4 className="text-center">No project yet</h4>
+                  <p className="text-center">Create one now</p>
+                  <Button className="text-center" href="/new" color="primary">
+                    Create one now
                   </Button>
                 </div>
               </Container>
