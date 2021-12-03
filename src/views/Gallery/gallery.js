@@ -17,10 +17,8 @@ function App() {
   // window.location.reload(false);
   return (
     <>
-      {/* <TopNav /> */}
 
         <FolderList />
-
     </>
   );
 }

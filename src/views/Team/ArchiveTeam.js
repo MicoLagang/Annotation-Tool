@@ -86,7 +86,9 @@ const ArchiveTeam = () => {
          if (result.isConfirmed) {
             teamService.unArchiveTeam(key);
             projectMembersService.unArchiveTeam(key);
-          Swal.fire("Restored!", "Your team has been Restored.", "success");
+          Swal.fire("Restored!", "Your team has been Restored.", "success").then( () => {
+            window.location.reload(false);
+        })
         }
       });
     
