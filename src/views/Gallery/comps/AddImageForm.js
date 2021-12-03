@@ -83,7 +83,8 @@ export default function AddImageForm(post) {
   async function handleUpload() {
     await fetchTotalImages();
     const promises = [];
-    images.map(async (image) => {
+    const length = images.length;
+    images.map(async(image, index) => {
       const increment = firebase.firestore.FieldValue.increment(1);
       const uploadTask = projectStorage.ref(
         `${new Date().getTime()}_${image.name}`
@@ -120,29 +121,35 @@ export default function AddImageForm(post) {
           console.log(error);
         },
 
+        
+
         async () => {
-          const url = await uploadTask.getDownloadURL();
-          const createdAt = timestamp();
-          const name = `${folderName}_${totalImages}`;
-          const description = ImagesDescription.current.value;
-          const email = currentUser.email;
-          console.log(name);
-          console.log(currentUser);
 
-          const batch = projectFirestore.batch();
-          batch.set(collectionRef, {
-            url,
-            createdAt,
-            name,
-            description,
-            email,
-          });
-          batch.set(counterRef, { totalImages: increment }, { merge: true });
+            const url = await uploadTask.getDownloadURL();
+            const createdAt = timestamp();
+            const name = `${folderName}_${totalImages}`;
+            const description = ImagesDescription.current.value;
+            const email = currentUser.email;
+            console.log(name);
+            console.log(currentUser);
+  
+            const batch = projectFirestore.batch();
+            batch.set(collectionRef, {
+              url,
+              createdAt,
+              name,
+              description,
+              email,
+            });
+            batch.set(counterRef, { totalImages: increment }, { merge: true });
+  
+            batch.commit();
+            totalImages = totalImages + 1;
+            // collectionRef.add({ url, createdAt, name });
+            setUrl((prevState) => [...prevState, url]);
+            console.log(index)
+            console.log(images.length)
 
-          batch.commit();
-          totalImages = totalImages + 1;
-          // collectionRef.add({ url, createdAt, name });
-          setUrl((prevState) => [...prevState, url]);
         }
       );
     });

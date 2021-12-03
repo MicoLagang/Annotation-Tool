@@ -39,6 +39,29 @@ class TutorialDataService {
     console.log(member);
   }
 
+  async getRole(UID, projectID) {
+    console.log(UID);
+    console.log(projectID);
+
+    // const response = projectFirestore
+    //   .collection("TEAMMEMBERS")
+    //   .where("uid", "==", UID)
+    //   .where("projectID", "==", projectID);
+
+    // await response.get().then(function(snapshot) {
+    //   if (snapshot.docs.length > 0) {
+    //     snapshot.docs.forEach((doc) => {
+    //       // doc is a DocumentSnapshot with actual data
+    //       const data = doc.data();
+    //       console.log(data.role);
+    //       localStorage.setItem("currentUserRole", data.role);
+    //     });
+    //   } else {
+    //     console.log("No data found");
+    //   }
+    // });
+  }
+
   deleteTeam(teamID) {
     // console.log(teamID)
     // return db.doc(teamID).delete()

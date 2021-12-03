@@ -8,6 +8,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
+import teamService from "../../services/team.service";
 
 const useStyles = makeStyles({
   root: {
@@ -65,6 +66,8 @@ const FolderList = () => {
 
     localStorage.setItem("currentTeamID", post.key);
     localStorage.setItem("currentTeamName", post.name);
+    projectMembersService.getRole(uid, post.key);
+    console.log(post)
     console.log(post.projectID);
   }
 

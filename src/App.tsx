@@ -41,6 +41,7 @@ import AddMember from './views/Team/AddMember';
 import { ImageProvider } from './logic/context/imageContext';
 import AddImageForm from './views/Gallery/comps/AddImageForm';
 import ArchiveTeam from './views/Team/ArchiveTeam';
+import TeamSettings from './views/Gallery/comps/TeamSettings';
 
 interface IProps {
     projectType: ProjectType;
@@ -71,8 +72,9 @@ const App: React.FC<IProps> = ({ projectType, windowSize, ObjectDetectorLoaded, 
                         <PrivateRoute exact path="/myTeam/gallery/teamMembers" component={TeamMembers} />
                         <PrivateRoute exact path="/myTeam/gallery/folder" component={FolderImages}/> 
                         <PrivateRoute exact path="/myTeam/gallery/folder/teamMembers" component={TeamMembers} />
+                        <PrivateRoute exact path="/myTeam/gallery/settings" component={TeamSettings} />
                         <PrivateRoute exact path="/myTeam/gallery/folder/imagesfolder" component={UploadImagesGallery}/> 
-                        <PrivateRoute exact path="/myTeam/gallery/folder/imagesfolder/galleryimagesfolder" component={UploadImagesGallery}/> 
+                        <PrivateRoute exact path="/myTeam/gallery/folder/imagesfolder/galleryimagesfolder" component={UploadImagesGallery}/>  
                         <PrivateRoute exact path="/team/:name" component={Team} />
                                 
                         <Container className="mt-5 d-flex justify-content-center" style={{ minHeight: "100vh" }}>
