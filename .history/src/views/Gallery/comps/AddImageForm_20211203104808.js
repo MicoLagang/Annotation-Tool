@@ -83,9 +83,9 @@ export default function AddImageForm(post) {
   async function handleUpload() {
     await fetchTotalImages();
     const promises = [];
-    Promise.all(
+    await Promise.all(
       images.map(
-        image => new Promise((resolve, reject) => {
+        (image) => {
           const increment = firebase.firestore.FieldValue.increment(1);
           const uploadTask = projectStorage.ref(
             `${new Date().getTime()}_${image.name}`
@@ -147,12 +147,9 @@ export default function AddImageForm(post) {
               setUrl((prevState) => [...prevState, url]);
             }
           );
-          resolve();
         }
-        )
-        
       )
-    ).then(() => { history.push('/myTeam/gallery/folder/imagesfolder') });
+    ).then(() => history.push('/myTeam/gallery/folder/imagesfolder'));
   }
 
   return (

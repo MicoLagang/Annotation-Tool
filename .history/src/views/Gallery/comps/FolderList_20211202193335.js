@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { projectFirestore } from "../../../firebase";
 import { Link, useHistory } from "react-router-dom";
-import { Container } from 'react-bootstrap'
+import { Modal, Tabs, Tab, Form } from "react-bootstrap";
 import { TextField } from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
 import teamService from "../../../services/team.service";
@@ -98,6 +98,72 @@ function FolderList() {
       });
   }
 
+  function deleteTeam() {
+    // teamService.deleteTeam(teamID);
+    // projectMembersService.deleteTeam(teamID);
+    // history.push("/myTeam");
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire("Deleted!", "Your file has been deleted.", "success");
+        setTimeout(function() {
+          teamService.deleteTeam(teamID);
+          projectMembersService.deleteTeam(teamID);
+          teamMemberServices.deleteproject(teamID);
+          history.push("/myTeam");
+        }, 1000);
+      }
+    });
+  }
+
+  const update = () => {
+    try {
+      teamService.editTeam(teamNameref.current.value, teamID);
+      projectMembersService.editTeamMembers(teamNameref.current.value, teamID);
+    } catch (e) {
+      toast.error("Something went wrong!");
+    } finally {
+      toast.success("EDIT SUCCESS");
+      setTimeout(function() {
+        history.push("/myTeam");
+      }, 5000);
+    }
+  };
+
+  function showTeamMembers() {
+    history.push("/myTeam/gallery/teamMembers");
+  }
+  
+  function archiveTeam() {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, Archive it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire(
+          "Archived!",
+          "Your team has been move to Archive .",
+          "success"
+        );
+        teamService.ArchiveTeam(teamID);
+        projectMembersService.ArchiveTeam(teamID);
+        history.push("/");
+      }
+    });
+  }
+
   console.log(value);
   return (
     <>
@@ -135,15 +201,7 @@ function FolderList() {
 
           ))
         ) : (
-            <>
-              <Container className="mt-5 d-flex justify-content-center">
-                <div className="w-100" style={{ maxWidth: '400px' }}>
-                  <img className="w-100" src="/images/empty.png" alt="image" />
-                  <h4 className="text-center">No project yet</h4>
-                  <p className="text-center">Create one now</p>
-                </div>
-              </Container>
-            </>
+          <h6>No Project yet</h6>
         )}
       </div>
     </>

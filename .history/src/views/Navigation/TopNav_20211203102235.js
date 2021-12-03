@@ -15,7 +15,6 @@ import Button from "@material-ui/core/Button";
 import { ListItemIcon } from "@material-ui/core";
 import Chip from "@material-ui/core/Chip";
 import LinearProgress from '@material-ui/core/LinearProgress';
-import Divider from '@material-ui/core/Divider';
 
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import MenuIcon from "@material-ui/icons/Menu";
@@ -51,7 +50,7 @@ const AppBar = styled(MuiAppBar, {
 
 export default function TopNav() {
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [bgcolor, setBgColor] = useState("");
 
@@ -269,10 +268,6 @@ export default function TopNav() {
               open={Boolean(anchorEl)}
               onClose={handleClose}
             >
-              <MenuItem >
-                {currentUser.email}
-              </MenuItem>
-              <Divider />
               <MenuItem onClick={() => history.push("/update-profile")}>
                 Profile
               </MenuItem>

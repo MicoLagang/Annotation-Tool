@@ -83,76 +83,69 @@ export default function AddImageForm(post) {
   async function handleUpload() {
     await fetchTotalImages();
     const promises = [];
-    Promise.all(
-      images.map(
-        image => new Promise((resolve, reject) => {
-          const increment = firebase.firestore.FieldValue.increment(1);
-          const uploadTask = projectStorage.ref(
-            `${new Date().getTime()}_${image.name}`
+    await Promise.all(images.map(async (image) => {
+      const increment = firebase.firestore.FieldValue.increment(1);
+      const uploadTask = projectStorage.ref(
+        `${new Date().getTime()}_${image.name}`
+      );
+      const collectionRef = projectFirestore
+        .collection("TEAM")
+        .doc(teamID)
+        .collection("FOLDERS")
+        .doc(name)
+        .collection("IMAGESFOLDER")
+        .doc(folderID)
+        .collection("IMAGES")
+        .doc();
+
+      const counterRef = projectFirestore
+        .collection("TEAM")
+        .doc(teamID)
+        .collection("FOLDERS")
+        .doc(name)
+        .collection("IMAGESFOLDER")
+        .doc(folderID);
+
+      promises.push(uploadTask);
+
+      uploadTask.put(image).on(
+        "state_changed",
+        (snapshot) => {
+          const progress = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
           );
-          const collectionRef = projectFirestore
-            .collection("TEAM")
-            .doc(teamID)
-            .collection("FOLDERS")
-            .doc(name)
-            .collection("IMAGESFOLDER")
-            .doc(folderID)
-            .collection("IMAGES")
-            .doc();
+          setProgress(progress);
+        },
+        (error) => {
+          console.log(error);
+        },
 
-          const counterRef = projectFirestore
-            .collection("TEAM")
-            .doc(teamID)
-            .collection("FOLDERS")
-            .doc(name)
-            .collection("IMAGESFOLDER")
-            .doc(folderID);
+        async () => {
+          const url = await uploadTask.getDownloadURL();
+          const createdAt = timestamp();
+          const name = `${folderName}_${totalImages}`;
+          const description = ImagesDescription.current.value;
+          const email = currentUser.email;
+          console.log(name);
+          console.log(currentUser);
 
-          promises.push(uploadTask);
+          const batch = projectFirestore.batch();
+          batch.set(collectionRef, {
+            url,
+            createdAt,
+            name,
+            description,
+            email,
+          });
+          batch.set(counterRef, { totalImages: increment }, { merge: true });
 
-          uploadTask.put(image).on(
-            "state_changed",
-            (snapshot) => {
-              const progress = Math.round(
-                (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-              );
-              setProgress(progress);
-            },
-            (error) => {
-              console.log(error);
-            },
-
-            async () => {
-              const url = await uploadTask.getDownloadURL();
-              const createdAt = timestamp();
-              const name = `${folderName}_${totalImages}`;
-              const description = ImagesDescription.current.value;
-              const email = currentUser.email;
-              console.log(name);
-              console.log(currentUser);
-
-              const batch = projectFirestore.batch();
-              batch.set(collectionRef, {
-                url,
-                createdAt,
-                name,
-                description,
-                email,
-              });
-              batch.set(counterRef, { totalImages: increment }, { merge: true });
-
-              batch.commit();
-              totalImages = totalImages + 1;
-              // collectionRef.add({ url, createdAt, name });
-              setUrl((prevState) => [...prevState, url]);
-            }
-          );
-          resolve();
+          batch.commit();
+          totalImages = totalImages + 1;
+          // collectionRef.add({ url, createdAt, name });
+          setUrl((prevState) => [...prevState, url]);
         }
-        )
-        
-      )
-    ).then(() => { history.push('/myTeam/gallery/folder/imagesfolder') });
+      );
+    }))
   }
 
   return (

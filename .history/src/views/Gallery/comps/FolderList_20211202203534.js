@@ -136,11 +136,10 @@ function FolderList() {
           ))
         ) : (
             <>
-              <Container className="mt-5 d-flex justify-content-center">
+              <Container className="mt-5 d-flex justify-content-center" style={{ minHeight: "100vh" }}>
                 <div className="w-100" style={{ maxWidth: '400px' }}>
+                  <h6>No Project yet</h6>
                   <img className="w-100" src="/images/empty.png" alt="image" />
-                  <h4 className="text-center">No project yet</h4>
-                  <p className="text-center">Create one now</p>
                 </div>
               </Container>
             </>

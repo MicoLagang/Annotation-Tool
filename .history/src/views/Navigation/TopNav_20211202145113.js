@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { styled } from "@material-ui/core/styles";
+import { styled, useTheme } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 import Drawer from "@material-ui/core/Drawer";
 import MuiAppBar from "@material-ui/core/AppBar";
@@ -14,8 +14,6 @@ import Menu from "@material-ui/core/Menu";
 import Button from "@material-ui/core/Button";
 import { ListItemIcon } from "@material-ui/core";
 import Chip from "@material-ui/core/Chip";
-import LinearProgress from '@material-ui/core/LinearProgress';
-import Divider from '@material-ui/core/Divider';
 
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import MenuIcon from "@material-ui/icons/Menu";
@@ -27,8 +25,10 @@ import SettingsIcon from "@material-ui/icons/Settings";
 import { useAuth } from "../../logic/context/AuthContext";
 import { useHistory } from "react-router-dom";
 import Swal from "sweetalert2";
+import swal from '@sweetalert/with-react'
 import projectMembersService from "../../services/projectMembers.service";
 import { projectFirestore } from "../../firebase";
+import FolderList from "../Gallery/comps/FolderList"
 
 const drawerWidth = 240;
 
@@ -50,24 +50,33 @@ const AppBar = styled(MuiAppBar, {
 }));
 
 export default function TopNav() {
+  const theme = useTheme();
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [bgcolor, setBgColor] = useState("");
-
+  const [error, setError] = useState("");
   const { currentUser, logout } = useAuth();
   const history = useHistory();
-
+  var [currentId, setCurrentId] = useState("");
+  const teamID = localStorage.getItem("currentTeamID");
+  const [loading, setLoading] = useState(true);
+  const [posts, setPosts] = useState([]);
+  const [anchorEl, setAnchorEl] = React.useState(null);
   localStorage.setItem("currentUserEmail", currentUser.email);
   let currentTeamName = localStorage.getItem("currentTeamName");
   const currentUserRole = localStorage.getItem("currentUserRole");
-
-
+  const [bgcolor, setBgColor] = useState("");
   const style = {
     backgroundColor: `${bgcolor}`,
     paddingBottom: "0px !important",
     fontSize: "14px",
     color: "white",
+  };
+
+  const createTeam = {
+    backgroundColor: "#272343",
+  };
+
+  const alert = {
+    color: "red",
   };
 
   const handleDrawerOpen = () => {
@@ -148,6 +157,10 @@ export default function TopNav() {
     });
   }
 
+  function DisplaySettings() {
+    swal( <FolderList.settings()/> )
+  }
+
   const itemList = [
     {
       text: "My Team",
@@ -197,9 +210,9 @@ export default function TopNav() {
           </Button>
           <Box sx={{ flexGrow: 1 }} />
           {currentUserRole && <Chip style={style} label={currentUserRole} />}
-          {currentUserRole === "admin" && <IconButton color="inherit" href="/myTeam/gallery/settings">
+          <IconButton color="inherit" onClick={DisplaySettings}>
             <SettingsIcon />
-          </IconButton>}
+          </IconButton>
         </>
       ) : (
         <>
@@ -226,7 +239,6 @@ export default function TopNav() {
   return (
     <>
       <Box sx={{ flexGrow: 1 }} className="mb-4">
-
         <AppBar position="static" open={open}>
           <Toolbar>
             <IconButton
@@ -269,10 +281,6 @@ export default function TopNav() {
               open={Boolean(anchorEl)}
               onClose={handleClose}
             >
-              <MenuItem >
-                {currentUser.email}
-              </MenuItem>
-              <Divider />
               <MenuItem onClick={() => history.push("/update-profile")}>
                 Profile
               </MenuItem>
@@ -283,14 +291,13 @@ export default function TopNav() {
             </Menu>
           </Toolbar>
         </AppBar>
-
-        {loading && <LinearProgress color="secondary" />}
-
         <Drawer open={open} anchor={"left"} onClose={handleDrawerClose}>
           {list()}
         </Drawer>
-
       </Box>
+      {/* <Container className="mt-3">
+        <BreadCrumb />
+      </Container> */}
     </>
   );
 }

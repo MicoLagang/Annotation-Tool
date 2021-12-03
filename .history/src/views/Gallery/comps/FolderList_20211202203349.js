@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { projectFirestore } from "../../../firebase";
 import { Link, useHistory } from "react-router-dom";
-import { Container } from 'react-bootstrap'
+import { Modal, Tabs, Tab, Form } from "react-bootstrap";
 import { TextField } from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
 import teamService from "../../../services/team.service";
@@ -136,13 +136,11 @@ function FolderList() {
           ))
         ) : (
             <>
-              <Container className="mt-5 d-flex justify-content-center">
-                <div className="w-100" style={{ maxWidth: '400px' }}>
-                  <img className="w-100" src="/images/empty.png" alt="image" />
-                  <h4 className="text-center">No project yet</h4>
-                  <p className="text-center">Create one now</p>
-                </div>
-              </Container>
+              <Container className="mt-5 d-flex justify-content-center" style={{ minHeight: "100vh" }}>
+                                    <div className="w-100" style={{ maxWidth: '400px' }}></div>
+            <h6>No Project yet</h6>
+                <img src="/images/empty.png" alt="image" />
+              </div></Container>
             </>
         )}
       </div>

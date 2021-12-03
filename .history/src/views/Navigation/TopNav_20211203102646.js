@@ -51,7 +51,7 @@ const AppBar = styled(MuiAppBar, {
 
 export default function TopNav() {
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [bgcolor, setBgColor] = useState("");
 
