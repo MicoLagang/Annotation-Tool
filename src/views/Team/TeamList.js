@@ -59,7 +59,7 @@ const FolderList = () => {
   }, [loading]); // empty dependencies array => useEffect only called once
 
   if (loading) {
-    return <h1>loading firebase data...</h1>;
+    return <h1>ltest...</h1>;
   }
 
   function saveAs(post) {

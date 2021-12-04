@@ -332,6 +332,21 @@ function Login(props) {
                 </Typography>
               </Fade>
               <TextField
+                id="name"
+                InputProps={{
+                  classes: {
+                    underline: classes.textFieldUnderline,
+                    input: classes.textField,
+                  },
+                }}
+                value={loginValue1}
+                onChange={(e) => setLoginValue1(e.target.value)}
+                margin="normal"
+                placeholder="Name"
+                type="text"
+                fullWidth
+              />
+              <TextField
                 id="email"
                 InputProps={{
                   classes: {
