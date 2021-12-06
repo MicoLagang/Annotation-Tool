@@ -258,6 +258,7 @@ export default class CreateTeam extends Component {
                   </Button>
 
                   <Button
+                    onClick={this.saveTeam}
                     color="primary"
                     className="w-100 text-capitalize"
                     href="/myTeam"

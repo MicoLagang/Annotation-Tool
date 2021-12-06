@@ -50,7 +50,7 @@ export default function TestTeam(post) {
           isCompleted: false,
           isRejected: false,
         });
-      toast.success("Folder Created Successfully");
+      toast.success("LOADING PLEASE WAIT");
       setTimeout(function() {
         history.push("/myTeam/gallery/folder");
       }, 5000);

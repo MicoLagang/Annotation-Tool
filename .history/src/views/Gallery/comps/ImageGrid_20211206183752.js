@@ -64,8 +64,6 @@ function ImageGrid() {
 
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [imageInfo, setImageInfo] = useState();
-  // let imageInfo;
 
   const cardLink = {
     color: "#000000",
@@ -103,10 +101,11 @@ function ImageGrid() {
       });
     getAnnotationData();
     getImageFolderData();
-  }, [imageInfo]);
+  }, []);
 
   const getImageFolderData = () => {
     teamService.getImageFolderData(teamID, name, folderID).then((data) => {
+      console.log(data.data().name);
       setImageFolderName(data.data().name);
       setTotalImages(data.data().totalImages - 1);
     });
@@ -202,6 +201,7 @@ function ImageGrid() {
   }
 
   function isAnnotated(doc) {
+    console.log("--------------------");
     if (annotatedImagesArray) {
       for (let i = 0; i < annotatedImagesArray.length; i++) {
         for (let index = 0; index < annotatedImagesArray[i].length; index++) {
@@ -298,16 +298,21 @@ function ImageGrid() {
     });
   }
 
-  const handlePopoverOpen = (event, doc) => {
-    setImageInfo(doc);
+  const handlePopoverOpen = (event) => {
+    console.log("open");
     setAnchorEl(event.currentTarget);
   };
 
   const handlePopoverClose = () => {
+    console.log("close");
     setAnchorEl(null);
   };
 
   const open = Boolean(anchorEl);
+
+  function popOverContainer(doc) {
+    console.log(doc);
+  }
 
   return (
     <>
@@ -482,7 +487,7 @@ function ImageGrid() {
                   >
                     <Card
                       key={doc.id}
-                      border={`${isAnnotated(doc) ? "success" : "danger"}`}
+                      border="primary"
                       className="h-100"
                       style={{
                         backgroundImage: `url(${doc.url})`,
@@ -492,45 +497,18 @@ function ImageGrid() {
                         border: isActive(doc) ? "4px solid" : "",
                       }}
                     >
-                      <InfoOutlinedIcon
-                        style={{ color: "white", border: "1px black" }}
-                        aria-owns={open ? "mouse-over-popover" : undefined}
-                        aria-haspopup="true"
-                        onMouseEnter={(event) => handlePopoverOpen(event, doc)}
-                        onMouseLeave={handlePopoverClose}
-                        className="m-3"
-                      />
-
-                      <Popover
-                        id="mouse-over-popover"
-                        className={classes.popover}
-                        classes={{
-                          paper: classes.paper,
-                        }}
-                        open={open}
-                        anchorEl={anchorEl}
-                        anchorOrigin={{
-                          vertical: "bottom",
-                          horizontal: "right",
-                        }}
-                        transformOrigin={{
-                          vertical: "top",
-                          horizontal: "left",
-                        }}
-                        onClose={handlePopoverClose}
-                        disableRestoreFocus
-                      >
-                        {imageInfo && (
-                          <>
-                            <p>Name: {imageInfo.name}</p>
-                            <p>Description: {imageInfo.description}</p>
-                            <p>Uploaded by: {imageInfo.email}</p>
-                            <p>Validated by: {imageInfo.validated}</p>
-                          </>
-                        )}
-                      </Popover>
+                      <Card.Footer>
+                        <InfoOutlinedIcon
+                          aria-owns={open ? "mouse-over-popover" : undefined}
+                          aria-haspopup="true"
+                          onMouseEnter={handlePopoverOpen}
+                          onMouseLeave={handlePopoverClose}
+                          className="mx-3"
+                        />
+                      </Card.Footer>
                     </Card>
                   </div>
+                  {popOverContainer(doc)}
                 </>
               ))
             ) : (
