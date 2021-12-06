@@ -29,8 +29,6 @@ import Themes from "./themes";
 import { UserProvider } from "./context/UserContext";
 
 import AddFolder from './views/Gallery/comps/AddFolder';
-
-import ImagesFolder from "./views/Gallery/comps/ImagesFolder"
 import AddFolderpic from "./views/Gallery/comps/AddFolderpic"
 import UploadImagesGallery from './views/Gallery/UploadImagesGallery'
 
@@ -63,11 +61,16 @@ const App: React.FC<IProps> = ({ projectType, windowSize, ObjectDetectorLoaded, 
                             <Switch>
 
                                 <PrivateRoute exact path="/" component={Dashboard} />
+                                <PrivateRoute exact path="/new" component={CreateTeam} />
                                 <PrivateRoute exact path="/tool" component={Tool} />
                                 <PrivateRoute exact path="/archive" component={ArchiveTeam} />
+                                <PrivateRoute exact path="/createimagesfolder" component={AddFolderpic} />
                                 <PrivateRoute exact path="/project" component={Project} />
+                                <PrivateRoute exact path="/update-profile" component={UpdateProfile} />
+                                <PrivateRoute exact path="/UploadImage" component={AddImageForm} />
                                 <PrivateRoute exact path="/myProject" component={myProject} />
                                 <PrivateRoute exact path="/myTeam" component={myTeam} />
+                                <PrivateRoute exact path="/Addfolder" component={AddFolder} />
                                 <PrivateRoute exact path="/myTeam/gallery" component={Gallery} />
                                 <PrivateRoute exact path="/myTeam/gallery/teamMembers" component={TeamMembers} />
                                 <PrivateRoute exact path="/myTeam/gallery/folder" component={FolderImages} />
@@ -79,12 +82,8 @@ const App: React.FC<IProps> = ({ projectType, windowSize, ObjectDetectorLoaded, 
 
                                 <Container className="mt-5 d-flex justify-content-center" style={{ minHeight: "100vh" }}>
                                     <div className="w-100" style={{ maxWidth: '400px' }}>
-                                        <PrivateRoute exact path="/new" component={CreateTeam} />
-                                        <PrivateRoute path="/update-profile" component={UpdateProfile} />
-                                        <PrivateRoute path="/UploadImage" component={AddImageForm} />
                                         <PrivateRoute path="/addMember/:UserID" component={AddMember} />
-                                        <PrivateRoute exact path="/createimagesfolder" component={AddFolderpic} />
-                                        <PrivateRoute exact path="/Addfolder" component={AddFolder} />
+                                        
 
                                         <Route path="/signup" component={SignUp} />
                                         <Route path="/login" component={LogIn} />

@@ -1,17 +1,14 @@
 import React, { Component, useState } from "react";
-import { Form } from "react-bootstrap";
+import { Form, Container } from "react-bootstrap";
 import { Button } from "@material-ui/core";
 import teamService from "../../../src/services/team.service";
 import projectMembersService from "../../../src/services/projectMembers.service";
 import { Link } from "react-router-dom";
-import DropdownButton from "react-bootstrap/DropdownButton";
-import Dropdown from "react-bootstrap/Dropdown";
-import { useAuth } from "../../logic/context/AuthContext";
-import { useParams } from "react-router-dom";
 import axios from "axios";
-import { projectFirestore, timestamp } from "../../firebase";
+import { timestamp } from "../../firebase";
+import TopNav from "../Navigation/TopNav";
 
-export default class CreateTeam extends Component {
+export default class  CreateTeam extends Component {
   constructor(props) {
     super(props);
     this.onChangeName = this.onChangeName.bind(this);
@@ -24,6 +21,10 @@ export default class CreateTeam extends Component {
 
     this.teamID = this.setTeamID.bind(this);
 
+    this.state = {
+      isButtonDisabled: false
+    }
+
     var randomstring = require("random-key");
     this.state = {
       name: "",
@@ -35,6 +36,8 @@ export default class CreateTeam extends Component {
       teamID: "",
     };
   }
+
+  
 
   componentDidMount(props) {
     const id = props.UserID;
@@ -91,10 +94,9 @@ export default class CreateTeam extends Component {
   }
 
   saveTeam() {
-    // const { currentUser, logout } = useAuth();
-
+   
     const createdAt = timestamp();
-    const currentUserEmail  = localStorage.getItem("currentUserEmail");
+    const currentUserEmail = localStorage.getItem("currentUserEmail");
 
     const data = {
       name: this.state.name,
@@ -103,7 +105,7 @@ export default class CreateTeam extends Component {
       status: this.state.status,
       TeamCode: this.state.key,
       createdAt: createdAt,
-      userEmail:currentUserEmail,
+      userEmail: currentUserEmail,
       updatedAt: "",
       isArchive: false,
     };
@@ -119,26 +121,36 @@ export default class CreateTeam extends Component {
       createdAt: createdAt,
       updatedAt: "",
       email: currentUserEmail,
-      isArchive:false,
+      isArchive: false,
     };
 
+
+   if(this.state.name && this.state.contactEmail && this.state.owner && this.state.key&& this.state.status){
+    this.setState({
+      isButtonDisabled: true
+    });
     teamService
-      .create(data)
-      .then((res) => {
-        member.projectID = res.id;
+    .create(data)
+    .then((res) => {
+      member.projectID = res.id;
 
-        console.log("Created new item successfully!");
+      console.log("Created new item successfully!");
 
-        projectMembersService.create(member);
-        console.log(member);
-        this.setState({
-          submitted: true,
-        });
-      })
-      .catch((e) => {
-        console.log(e);
+      projectMembersService.create(member);
+      console.log(member);
+      this.setState({
+        submitted: true,
       });
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+   }
+
+ 
   }
+
+
 
   createTeam() {
     this.setState({
@@ -151,95 +163,119 @@ export default class CreateTeam extends Component {
 
   render() {
     return (
-      <div className="submit-form">
-        {this.state.submitted ? (
-          <div className="text-center">
-            <h4 className="text-center mb-4">Team Created Successfully!</h4>
-            {/* <button className="btn btn-success w-100" href="/" onClick={this.createTeam}>
-                      Back
-                    </button> */}
-            <Link to="/myTeam">Back</Link>
-          </div>
-        ) : (
-          <div>
-            <h2 className="text-center mb-4">Create your team</h2>
-            <Form>
-              <Form.Group className="mb-3">
-                <Form.Control
-                  type="text"
-                  className="form-control"
-                  id="name"
-                  required
-                  onChange={this.onChangeName}
-                  value={this.state.name}
-                  placeholder="Team account name"
-                  name="name"
-                />
-              </Form.Group>
+      <>
+        <TopNav></TopNav>
 
-              <Form.Group className="mb-3">
-                <Form.Control
-                  type="email"
-                  className="form-control"
-                  id="contactEmail"
-                  required
-                  onChange={this.onChangeContactEmail}
-                  value={this.state.contactEmail}
-                  placeholder="Contact Email"
-                  name="contactEmail"
-                />
-              </Form.Group>
+        <Container
+          className="mt-5 d-flex justify-content-center"
+          style={{ minHeight: "100vh" }}
+        >
+          <div className="submit-form w-100" style={{ maxWidth: "350px" }}>
+            {this.state.submitted ? (
+              <div className="text-center">
+                <h4 className="text-center mb-4">Team Created Successfully!</h4>
 
-              <Form.Group className="mb-3">
-                <Form.Control
-                  type="text"
-                  className="form-control"
-                  id="owner"
-                  required
-                  onChange={this.onChangeOwner}
-                  value={this.state.owner}
-                  placeholder="Organization or Owner"
-                  name="owner"
-                />
-              </Form.Group>
-
-              <Form.Group className="mb-3">
-                <Form.Control
-                  type="hidden"
-                  className="form-control"
-                  id="owner"
-                  required
-                  onChange={this.keyChange}
-                  value={this.state.key}
-                  placeholder="Organization or Owner"
-                  name="owner"
-                />
-              </Form.Group>
-
-              <div className="form-row">
-                <div className="form-group col-md">
-                  <select className="form-control" onChange={this.status}>
-                    {/* <option selected>Status</option> */}
-                    <option value="Private">Private</option>
-                    <option value="Public">Public</option>
-                  </select>
-                </div>
+                <Button
+                  onClick={this.saveTeam}
+                  color="primary"
+                  className="w-100"
+                  href="/myTeam"
+                >
+                  Back
+                </Button>
               </div>
+            ) : (
+              <div>
+                <h2 className="text-center mb-4">Create your team</h2>
+                <Form>
+                  <Form.Group className="mb-3">
+                    <Form.Control
+                      type="text"
+                      className="form-control"
+                      id="name"
+                      required
+                      onChange={this.onChangeName}
+                      value={this.state.name}
+                      placeholder="Team account name"
+                      name="name"
+                    />
+                  </Form.Group>
 
-              <br></br>
+                  <Form.Group className="mb-3">
+                    <Form.Control
+                      type="email"
+                      className="form-control"
+                      id="contactEmail"
+                      required
+                      onChange={this.onChangeContactEmail}
+                      value={this.state.contactEmail}
+                      placeholder="Contact Email"
+                      name="contactEmail"
+                    />
+                  </Form.Group>
 
-              <Button
-                onClick={this.saveTeam}
-                variant="contained"
-                color="primary"
-                className="w-100"
-              >
-                Create
-              </Button>
-            </Form>
+                  <Form.Group className="mb-3">
+                    <Form.Control
+                      type="text"
+                      className="form-control"
+                      id="owner"
+                      required
+                      onChange={this.onChangeOwner}
+                      value={this.state.owner}
+                      placeholder="Organization or Owner"
+                      name="owner"
+                    />
+                  </Form.Group>
+
+                  <Form.Group className="mb-3">
+                    <Form.Control
+                      type="hidden"
+                      className="form-control"
+                      id="owner"
+                      required
+                      onChange={this.keyChange}
+                      value={this.state.key}
+                      placeholder="Organization or Owner"
+                      name="owner"
+                    />
+                  </Form.Group>
+
+                  <div className="form-row">
+                    <div className="form-group col-md">
+                      <select className="form-control" onChange={this.status}>
+                        <option value="Private">Private</option>
+                        <option value="Public">Public</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <br></br>
+
+                  <Button
+                    onClick={this.saveTeam}
+                    disabled={this.state.isButtonDisabled}
+                    variant="contained"
+                    color="primary"
+                    className="w-100 mb-2"
+                  >
+                    Create
+                  </Button>
+
+                  <Button
+                    onClick={this.saveTeam}
+                    
+                    color="primary"
+                    className="w-100 text-capitalize"
+                    href="/myTeam"
+                  >
+                    Cancel
+                  </Button>
+                </Form>
+              </div>
+            )}
           </div>
-        )}
-      </div>
+        </Container>
+      </>
     );
   }
 }

@@ -21,6 +21,7 @@ export default function TestTeam(post) {
   const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState([]);
   const history = useHistory();
+  const [double, setDouble] = useState(false);
 
   const foldername = useRef();
   const createTeam = {
@@ -35,6 +36,7 @@ export default function TestTeam(post) {
 
   function saveData() {
     if (foldername.current.value) {
+      setDouble(true);
       projectFirestore
         .collection("TEAM")
         .doc(teamID)
@@ -70,7 +72,9 @@ export default function TestTeam(post) {
     //     </div>
 
     <>
-      {/* <TopNav/> */}
+      <TopNav/>
+      <Container className="mt-5 d-flex justify-content-center"
+        style={{ minHeight: "100vh" }}>
       <ToastContainer />
       <div className="submit-form">
         <h2 className="text-center mb-4">Create Images Folder</h2>
@@ -90,7 +94,11 @@ export default function TestTeam(post) {
           </Form.Group>
 
           <Button
-            onClick={saveData}
+            
+            disabled={double}
+            onClick={() => {
+              saveData()
+            }}
             variant="contained"
             color="primary"
             className="w-100"
@@ -99,6 +107,7 @@ export default function TestTeam(post) {
           </Button>
         </Form>
       </div>
+      </Container>
     </>
   );
 }
