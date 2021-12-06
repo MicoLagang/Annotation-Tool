@@ -86,21 +86,16 @@ const FolderList = () => {
       <Container>
         <br></br>
         <br></br>
+        <Button
+          className="text-capitalize"
+          href="/new"
+          color="primary"
+          startIcon={<AddIcon />}
+        >
+          Create Team
+        </Button>
 
-        {posts.length > 0 && (
-          <>
-            <Button
-              className="text-capitalize"
-              href="/new"
-              color="primary"
-              startIcon={<AddIcon />}
-            >
-              Create Team
-            </Button>
-
-            <Divider variant="middle" className="my-3" />
-          </>
-        )}
+        <Divider variant="middle" />
 
         <div className="row">
           {posts.length > 0 ? (

@@ -8,7 +8,6 @@ import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import projectMembersService from "../../services/projectMembers.service";
 import Button from "@material-ui/core/Button";
-import Divider from "@material-ui/core/Divider";
 import AddIcon from "@material-ui/icons/Add";
 
 const FolderList = () => {
@@ -86,22 +85,14 @@ const FolderList = () => {
       <Container>
         <br></br>
         <br></br>
-
-        {posts.length > 0 && (
-          <>
-            <Button
-              className="text-capitalize"
-              href="/new"
-              color="primary"
-              startIcon={<AddIcon />}
-            >
-              Create Team
-            </Button>
-
-            <Divider variant="middle" className="my-3" />
-          </>
-        )}
-
+        <Button
+          className="text-capitalize"
+          href="/new"
+          color="primary"
+          startIcon={<AddIcon />}
+        >
+          Create Team
+        </Button>
         <div className="row">
           {posts.length > 0 ? (
             <>

@@ -36,7 +36,6 @@ export default function TestTeam(post) {
 
   function saveData() {
     if (foldername.current.value) {
-      setDouble(true);
       projectFirestore
         .collection("TEAM")
         .doc(teamID)
@@ -73,9 +72,7 @@ export default function TestTeam(post) {
     //     </div>
 
     <>
-      <TopNav/>
-      <Container className="mt-5 d-flex justify-content-center"
-        style={{ minHeight: "100vh" }}>
+      {/* <TopNav/> */}
       <ToastContainer />
       <div className="submit-form">
         <h2 className="text-center mb-4">Create Images Folder</h2>
@@ -107,7 +104,6 @@ export default function TestTeam(post) {
           </Button>
         </Form>
       </div>
-      </Container>
     </>
   );
 }

@@ -9,9 +9,6 @@ import Swal from "sweetalert2/dist/sweetalert2.js";
 
 import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
-import Popover from "@material-ui/core/Popover";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
 
 import Button from "@material-ui/core/Button";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -22,19 +19,8 @@ import PageviewIcon from "@material-ui/icons/Pageview";
 import CheckIcon from "@material-ui/icons/Check";
 import FilterIcon from "@material-ui/icons/Filter";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 
 import { Card, Row, Col, Container } from "react-bootstrap";
-
-const useStyles = makeStyles((theme) => ({
-  popover: {
-    pointerEvents: "none",
-    maxWidth: "100%",
-  },
-  paper: {
-    padding: theme.spacing(1),
-  },
-}));
 
 function ImageGrid() {
   const { docs } = useFirestore("TEAM");
@@ -61,11 +47,6 @@ function ImageGrid() {
   let counter = 0;
   const [isSubmitted, setisSubmitted] = useState();
   const [isAccepted, setisAccepted] = useState();
-
-  const classes = useStyles();
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [imageInfo, setImageInfo] = useState();
-  // let imageInfo;
 
   const cardLink = {
     color: "#000000",
@@ -103,10 +84,11 @@ function ImageGrid() {
       });
     getAnnotationData();
     getImageFolderData();
-  }, [imageInfo]);
+  }, []);
 
   const getImageFolderData = () => {
     teamService.getImageFolderData(teamID, name, folderID).then((data) => {
+      console.log(data.data().name);
       setImageFolderName(data.data().name);
       setTotalImages(data.data().totalImages - 1);
     });
@@ -202,6 +184,7 @@ function ImageGrid() {
   }
 
   function isAnnotated(doc) {
+    console.log("--------------------");
     if (annotatedImagesArray) {
       for (let i = 0; i < annotatedImagesArray.length; i++) {
         for (let index = 0; index < annotatedImagesArray[i].length; index++) {
@@ -298,30 +281,18 @@ function ImageGrid() {
     });
   }
 
-  const handlePopoverOpen = (event, doc) => {
-    setImageInfo(doc);
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handlePopoverClose = () => {
-    setAnchorEl(null);
-  };
-
-  const open = Boolean(anchorEl);
   return (
     <>
       <ToastContainer />
 
-      <div>
-        <Button
-          className="text-capitalize"
-          href="/myTeam/gallery/folder"
-          color="primary"
-          startIcon={<ArrowBackIcon />}
-        >
-          Back to folders
-        </Button>
-      </div>
+      <Button
+        className="text-capitalize"
+        href="/myTeam/gallery/folder"
+        color="primary"
+        startIcon={<ArrowBackIcon />}
+      >
+        Back to folders
+      </Button>
 
       {getImageFolderData()}
 
@@ -473,64 +444,59 @@ function ImageGrid() {
           <div className="row mt-3">
             {docs.length > 0 ? (
               docs.map((doc) => (
-                <>
-                  <div
-                    style={cardLink}
-                    className="col-lg-3 col-md-4 col-sm-12 mb-3"
-                    onClick={() => addImage(doc)}
-                  >
-                    <Card
-                      key={doc.id}
-                      border={`${isAnnotated(doc) ? "success" : "danger"}`}
-                      className="h-100"
-                      style={{
-                        backgroundImage: `url(${doc.url})`,
-                        backgroundRepeat: "no-repeat",
-                        backgroundPosition: "center",
-                        backgroundSize: "cover",
-                        border: isActive(doc) ? "4px solid" : "",
-                      }}
-                    >
-                      <InfoOutlinedIcon
-                        style={{ color: "white", border: "1px black" }}
-                        aria-owns={open ? "mouse-over-popover" : undefined}
-                        aria-haspopup="true"
-                        onMouseEnter={(event) => handlePopoverOpen(event, doc)}
-                        onMouseLeave={handlePopoverClose}
-                        className="m-3"
-                      />
+                <div
+                  style={cardLink}
+                  className="col-lg-3 col-md-4 col-sm-12 mb-3"
+                  onClick={() => addImage(doc)}
+                >
+                  <Card
+                    key={doc.id}
+                    border="primary"
+                    className="h-100"
+                    style={{
+                      backgroundImage: `url(${doc.url})`,
+                      backgroundRepeat: "no-repeat",
+                      backgroundPosition: "center",
+                      backgroundSize: "cover",
+                      border: isActive(doc) ? "4px solid" : "",
+                    }}
+                  ></Card>
+                </div>
+                // <Link
+                //   style={cardLink}
+                //   className="col-lg-3 col-md-4 col-sm-12 mb-3"
+                // >
+                //   <div class="flip-box" onClick={() => addImage(doc)}>
+                //     <div class="flip-box-inner">
+                //       <div class="flip-box-front">
+                //         <Card
+                //           key={doc.id}
+                //           border="primary"
+                //           className="h-100"
+                //           style={{
+                //             backgroundImage: `url(${doc.url})`,
+                //             backgroundRepeat: "no-repeat",
+                //             backgroundPosition: "center",
+                //             backgroundSize: "cover",
+                //             border: isActive(doc) ? "4px solid" : "",
+                //           }}
+                //         ></Card>
+                //       </div>
+                //       <div class="flip-box-back p-3">
+                //         <p>Description: {doc.description}</p>
+                //         <p>Uploaded by: {doc.email}</p>
+                //         <p>Validated by: {doc.validated}</p>
+                //         {isAnnotated(doc) ? (
+                //           <p className="text-center">Annotated</p>
+                //         ) : (
+                //           <p className="text-center">Not Annotated</p>
+                //         )}
+                //       </div>
+                //     </div>
+                //   </div>
 
-                      <Popover
-                        id="mouse-over-popover"
-                        className={classes.popover}
-                        classes={{
-                          paper: classes.paper,
-                        }}
-                        open={open}
-                        anchorEl={anchorEl}
-                        anchorOrigin={{
-                          vertical: "bottom",
-                          horizontal: "right",
-                        }}
-                        transformOrigin={{
-                          vertical: "top",
-                          horizontal: "left",
-                        }}
-                        onClose={handlePopoverClose}
-                        disableRestoreFocus
-                      >
-                        {imageInfo && (
-                          <>
-                            <p>Name: {imageInfo.name}</p>
-                            <p>Description: {imageInfo.description}</p>
-                            <p>Uploaded by: {imageInfo.email}</p>
-                            <p>Validated by: {imageInfo.validated}</p>
-                          </>
-                        )}
-                      </Popover>
-                    </Card>
-                  </div>
-                </>
+                //   <p className="text-center">{doc.name}</p>
+                // </Link>
               ))
             ) : (
               <Container className="d-flex justify-content-center mb-5">
@@ -577,65 +543,41 @@ function ImageGrid() {
           <div className="row mt-3">
             {docs.length > 0 ? (
               docs.map((doc) => (
-                <>
-                  <div
-                    style={cardLink}
-                    className="col-lg-3 col-md-4 col-sm-12 mb-3"
-                    onClick={() => addImage(doc)}
-                  >
-                    <Card
-                      key={doc.id}
-                      border="primary"
-                      className="h-100"
-                      style={{
-                        backgroundImage: `url(${doc.url})`,
-                        backgroundRepeat: "no-repeat",
-                        backgroundPosition: "center",
-                        backgroundSize: "cover",
-                        border: isActive(doc) ? "4px solid" : "",
-                      }}
-                    >
-                      <Card.Footer>
-                        <InfoOutlinedIcon
-                          aria-owns={open ? "mouse-over-popover" : undefined}
-                          aria-haspopup="true"
-                          onMouseEnter={handlePopoverOpen}
-                          onMouseLeave={handlePopoverClose}
-                          className="mx-3"
-                        />
-                      </Card.Footer>
-                    </Card>
+                <Link
+                  // to="/tool"
+                  style={cardLink}
+                  className="col-lg-3 col-md-4 col-sm-12 mb-3"
+                >
+                  <div class="flip-box" onClick={() => addImage(doc)}>
+                    <div class="flip-box-inner">
+                      <div class="flip-box-front">
+                        <Card
+                          key={doc.id}
+                          border="primary"
+                          className="h-100"
+                          style={{
+                            backgroundImage: `url(${doc.url})`,
+                            backgroundRepeat: "no-repeat",
+                            backgroundPosition: "center",
+                            backgroundSize: "cover",
+                            border: isActive(doc) ? "4px solid" : "",
+                          }}
+                        ></Card>
+                      </div>
+                      <div class="flip-box-back p-3">
+                        <p>Description: {doc.description}</p>
+                        <p>Uploaded by: {doc.email}</p>
+                        {isAnnotated(doc) ? (
+                          <p className="text-center">Annotated</p>
+                        ) : (
+                          <p className="text-center">Not Annotated</p>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                  <Popover
-                    id="mouse-over-popover"
-                    className={classes.popover}
-                    classes={{
-                      paper: classes.paper,
-                    }}
-                    open={open}
-                    anchorEl={anchorEl}
-                    anchorOrigin={{
-                      vertical: "bottom",
-                      horizontal: "right",
-                    }}
-                    transformOrigin={{
-                      vertical: "top",
-                      horizontal: "left",
-                    }}
-                    onClose={handlePopoverClose}
-                    disableRestoreFocus
-                  >
-                    <p>Name: {doc.name}</p>
-                    <p>Description: {doc.description}</p>
-                    <p>Uploaded by: {doc.email}</p>
-                    <p>Validated by: {doc.validated}</p>
-                    {isAnnotated(doc) ? (
-                      <p className="text-center">Annotated</p>
-                    ) : (
-                      <p className="text-center">Not Annotated</p>
-                    )}
-                  </Popover>
-                </>
+
+                  <p className="text-center">{doc.name}</p>
+                </Link>
               ))
             ) : (
               <Container className="d-flex justify-content-center mb-5">

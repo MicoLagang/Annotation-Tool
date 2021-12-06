@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { Container, Form } from "react-bootstrap";
 import { Button } from "@material-ui/core";
 import { projectFirestore } from "../../../firebase";
@@ -19,7 +19,6 @@ export default function AddFolder() {
     };
 
     if (foldername.current.value) {
-      setDouble(true);
       projectFirestore
         .collection("TEAM")
         .doc(teamID)
@@ -59,6 +58,7 @@ export default function AddFolder() {
               </Form.Group>
 
               <Button
+                onClick={saveData}
                 disabled={double}
                 onClick={() => {
                   saveData();

@@ -22,7 +22,7 @@ import PageviewIcon from "@material-ui/icons/Pageview";
 import CheckIcon from "@material-ui/icons/Check";
 import FilterIcon from "@material-ui/icons/Filter";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
+import InfoIcon from "@material-ui/icons/Info";
 
 import { Card, Row, Col, Container } from "react-bootstrap";
 
@@ -64,8 +64,6 @@ function ImageGrid() {
 
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [imageInfo, setImageInfo] = useState();
-  // let imageInfo;
 
   const cardLink = {
     color: "#000000",
@@ -103,10 +101,11 @@ function ImageGrid() {
       });
     getAnnotationData();
     getImageFolderData();
-  }, [imageInfo]);
+  }, []);
 
   const getImageFolderData = () => {
     teamService.getImageFolderData(teamID, name, folderID).then((data) => {
+      console.log(data.data().name);
       setImageFolderName(data.data().name);
       setTotalImages(data.data().totalImages - 1);
     });
@@ -202,6 +201,7 @@ function ImageGrid() {
   }
 
   function isAnnotated(doc) {
+    console.log("--------------------");
     if (annotatedImagesArray) {
       for (let i = 0; i < annotatedImagesArray.length; i++) {
         for (let index = 0; index < annotatedImagesArray[i].length; index++) {
@@ -298,16 +298,18 @@ function ImageGrid() {
     });
   }
 
-  const handlePopoverOpen = (event, doc) => {
-    setImageInfo(doc);
+  const handlePopoverOpen = (event) => {
+    console.log("open");
     setAnchorEl(event.currentTarget);
   };
 
   const handlePopoverClose = () => {
+    console.log("close");
     setAnchorEl(null);
   };
 
   const open = Boolean(anchorEl);
+
   return (
     <>
       <ToastContainer />
@@ -481,7 +483,7 @@ function ImageGrid() {
                   >
                     <Card
                       key={doc.id}
-                      border={`${isAnnotated(doc) ? "success" : "danger"}`}
+                      border="primary"
                       className="h-100"
                       style={{
                         backgroundImage: `url(${doc.url})`,
@@ -490,46 +492,43 @@ function ImageGrid() {
                         backgroundSize: "cover",
                         border: isActive(doc) ? "4px solid" : "",
                       }}
+                      aria-owns={open ? "mouse-over-popover" : undefined}
+                      aria-haspopup="true"
+                      onMouseEnter={handlePopoverOpen}
+                      onMouseLeave={handlePopoverClose}
                     >
-                      <InfoOutlinedIcon
-                        style={{ color: "white", border: "1px black" }}
-                        aria-owns={open ? "mouse-over-popover" : undefined}
-                        aria-haspopup="true"
-                        onMouseEnter={(event) => handlePopoverOpen(event, doc)}
-                        onMouseLeave={handlePopoverClose}
-                        className="m-3"
-                      />
-
-                      <Popover
-                        id="mouse-over-popover"
-                        className={classes.popover}
-                        classes={{
-                          paper: classes.paper,
-                        }}
-                        open={open}
-                        anchorEl={anchorEl}
-                        anchorOrigin={{
-                          vertical: "bottom",
-                          horizontal: "right",
-                        }}
-                        transformOrigin={{
-                          vertical: "top",
-                          horizontal: "left",
-                        }}
-                        onClose={handlePopoverClose}
-                        disableRestoreFocus
-                      >
-                        {imageInfo && (
-                          <>
-                            <p>Name: {imageInfo.name}</p>
-                            <p>Description: {imageInfo.description}</p>
-                            <p>Uploaded by: {imageInfo.email}</p>
-                            <p>Validated by: {imageInfo.validated}</p>
-                          </>
-                        )}
-                      </Popover>
+                      <InfoIcon />
                     </Card>
                   </div>
+                  <Popover
+                    id="mouse-over-popover"
+                    className={classes.popover}
+                    classes={{
+                      paper: classes.paper,
+                    }}
+                    open={open}
+                    anchorEl={anchorEl}
+                    anchorOrigin={{
+                      vertical: "center",
+                      horizontal: "center",
+                    }}
+                    transformOrigin={{
+                      vertical: "center",
+                      horizontal: "center",
+                    }}
+                    onClose={handlePopoverClose}
+                    disableRestoreFocus
+                  >
+                    <p>Name: {doc.name}</p>
+                    <p>Description: {doc.description}</p>
+                    <p>Uploaded by: {doc.email}</p>
+                    <p>Validated by: {doc.validated}</p>
+                    {isAnnotated(doc) ? (
+                      <p className="text-center">Annotated</p>
+                    ) : (
+                      <p className="text-center">Not Annotated</p>
+                    )}
+                  </Popover>
                 </>
               ))
             ) : (
@@ -577,65 +576,23 @@ function ImageGrid() {
           <div className="row mt-3">
             {docs.length > 0 ? (
               docs.map((doc) => (
-                <>
-                  <div
-                    style={cardLink}
-                    className="col-lg-3 col-md-4 col-sm-12 mb-3"
-                    onClick={() => addImage(doc)}
-                  >
-                    <Card
-                      key={doc.id}
-                      border="primary"
-                      className="h-100"
-                      style={{
-                        backgroundImage: `url(${doc.url})`,
-                        backgroundRepeat: "no-repeat",
-                        backgroundPosition: "center",
-                        backgroundSize: "cover",
-                        border: isActive(doc) ? "4px solid" : "",
-                      }}
-                    >
-                      <Card.Footer>
-                        <InfoOutlinedIcon
-                          aria-owns={open ? "mouse-over-popover" : undefined}
-                          aria-haspopup="true"
-                          onMouseEnter={handlePopoverOpen}
-                          onMouseLeave={handlePopoverClose}
-                          className="mx-3"
-                        />
-                      </Card.Footer>
-                    </Card>
-                  </div>
-                  <Popover
-                    id="mouse-over-popover"
-                    className={classes.popover}
-                    classes={{
-                      paper: classes.paper,
+                <div
+                  style={cardLink}
+                  className="col-lg-3 col-md-4 col-sm-12 mb-3"
+                >
+                  <Card
+                    key={doc.id}
+                    border="primary"
+                    className="h-100"
+                    style={{
+                      backgroundImage: `url(${doc.url})`,
+                      backgroundRepeat: "no-repeat",
+                      backgroundPosition: "center",
+                      backgroundSize: "cover",
+                      border: isActive(doc) ? "4px solid" : "",
                     }}
-                    open={open}
-                    anchorEl={anchorEl}
-                    anchorOrigin={{
-                      vertical: "bottom",
-                      horizontal: "right",
-                    }}
-                    transformOrigin={{
-                      vertical: "top",
-                      horizontal: "left",
-                    }}
-                    onClose={handlePopoverClose}
-                    disableRestoreFocus
-                  >
-                    <p>Name: {doc.name}</p>
-                    <p>Description: {doc.description}</p>
-                    <p>Uploaded by: {doc.email}</p>
-                    <p>Validated by: {doc.validated}</p>
-                    {isAnnotated(doc) ? (
-                      <p className="text-center">Annotated</p>
-                    ) : (
-                      <p className="text-center">Not Annotated</p>
-                    )}
-                  </Popover>
-                </>
+                  ></Card>
+                </div>
               ))
             ) : (
               <Container className="d-flex justify-content-center mb-5">

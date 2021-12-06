@@ -308,6 +308,7 @@ function ImageGrid() {
   };
 
   const open = Boolean(anchorEl);
+
   return (
     <>
       <ToastContainer />
@@ -492,7 +493,7 @@ function ImageGrid() {
                       }}
                     >
                       <InfoOutlinedIcon
-                        style={{ color: "white", border: "1px black" }}
+                        style={{ color: "blue" }}
                         aria-owns={open ? "mouse-over-popover" : undefined}
                         aria-haspopup="true"
                         onMouseEnter={(event) => handlePopoverOpen(event, doc)}

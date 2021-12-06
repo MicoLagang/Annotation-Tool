@@ -308,6 +308,7 @@ function ImageGrid() {
   };
 
   const open = Boolean(anchorEl);
+
   return (
     <>
       <ToastContainer />

@@ -308,6 +308,7 @@ function ImageGrid() {
   };
 
   const open = Boolean(anchorEl);
+
   return (
     <>
       <ToastContainer />
@@ -491,14 +492,17 @@ function ImageGrid() {
                         border: isActive(doc) ? "4px solid" : "",
                       }}
                     >
-                      <InfoOutlinedIcon
-                        style={{ color: "white", border: "1px black" }}
-                        aria-owns={open ? "mouse-over-popover" : undefined}
-                        aria-haspopup="true"
-                        onMouseEnter={(event) => handlePopoverOpen(event, doc)}
-                        onMouseLeave={handlePopoverClose}
-                        className="m-3"
-                      />
+                      <Card.Footer>
+                        <InfoOutlinedIcon
+                          aria-owns={open ? "mouse-over-popover" : undefined}
+                          aria-haspopup="true"
+                          onMouseEnter={(event) =>
+                            handlePopoverOpen(event, doc)
+                          }
+                          onMouseLeave={handlePopoverClose}
+                          className="mx-3"
+                        />
+                      </Card.Footer>
 
                       <Popover
                         id="mouse-over-popover"

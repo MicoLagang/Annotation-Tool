@@ -64,8 +64,6 @@ function ImageGrid() {
 
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [imageInfo, setImageInfo] = useState();
-  // let imageInfo;
 
   const cardLink = {
     color: "#000000",
@@ -103,10 +101,11 @@ function ImageGrid() {
       });
     getAnnotationData();
     getImageFolderData();
-  }, [imageInfo]);
+  }, []);
 
   const getImageFolderData = () => {
     teamService.getImageFolderData(teamID, name, folderID).then((data) => {
+      console.log(data.data().name);
       setImageFolderName(data.data().name);
       setTotalImages(data.data().totalImages - 1);
     });
@@ -202,6 +201,7 @@ function ImageGrid() {
   }
 
   function isAnnotated(doc) {
+    console.log("--------------------");
     if (annotatedImagesArray) {
       for (let i = 0; i < annotatedImagesArray.length; i++) {
         for (let index = 0; index < annotatedImagesArray[i].length; index++) {
@@ -298,16 +298,18 @@ function ImageGrid() {
     });
   }
 
-  const handlePopoverOpen = (event, doc) => {
-    setImageInfo(doc);
+  const handlePopoverOpen = (event) => {
+    console.log("open");
     setAnchorEl(event.currentTarget);
   };
 
   const handlePopoverClose = () => {
+    console.log("close");
     setAnchorEl(null);
   };
 
   const open = Boolean(anchorEl);
+
   return (
     <>
       <ToastContainer />
@@ -481,110 +483,6 @@ function ImageGrid() {
                   >
                     <Card
                       key={doc.id}
-                      border={`${isAnnotated(doc) ? "success" : "danger"}`}
-                      className="h-100"
-                      style={{
-                        backgroundImage: `url(${doc.url})`,
-                        backgroundRepeat: "no-repeat",
-                        backgroundPosition: "center",
-                        backgroundSize: "cover",
-                        border: isActive(doc) ? "4px solid" : "",
-                      }}
-                    >
-                      <InfoOutlinedIcon
-                        style={{ color: "white", border: "1px black" }}
-                        aria-owns={open ? "mouse-over-popover" : undefined}
-                        aria-haspopup="true"
-                        onMouseEnter={(event) => handlePopoverOpen(event, doc)}
-                        onMouseLeave={handlePopoverClose}
-                        className="m-3"
-                      />
-
-                      <Popover
-                        id="mouse-over-popover"
-                        className={classes.popover}
-                        classes={{
-                          paper: classes.paper,
-                        }}
-                        open={open}
-                        anchorEl={anchorEl}
-                        anchorOrigin={{
-                          vertical: "bottom",
-                          horizontal: "right",
-                        }}
-                        transformOrigin={{
-                          vertical: "top",
-                          horizontal: "left",
-                        }}
-                        onClose={handlePopoverClose}
-                        disableRestoreFocus
-                      >
-                        {imageInfo && (
-                          <>
-                            <p>Name: {imageInfo.name}</p>
-                            <p>Description: {imageInfo.description}</p>
-                            <p>Uploaded by: {imageInfo.email}</p>
-                            <p>Validated by: {imageInfo.validated}</p>
-                          </>
-                        )}
-                      </Popover>
-                    </Card>
-                  </div>
-                </>
-              ))
-            ) : (
-              <Container className="d-flex justify-content-center mb-5">
-                <div className="w-100" style={{ maxWidth: "400px" }}>
-                  <img
-                    className="w-100"
-                    src="/images/no-image.png"
-                    alt="image"
-                  />
-                  <h4 className="text-center">No image uploaded yet</h4>
-
-                  {currentUserRole === "admin" && (
-                    <Button
-                      className="w-100 text-capitalize"
-                      style={addButton}
-                      href="/UploadImage"
-                      color="primary"
-                    >
-                      Upload image now
-                    </Button>
-                  )}
-                </div>
-              </Container>
-            )}
-          </div>
-        </div>
-      )}
-
-      {currentUserRole === "contributor" && (
-        <>
-          {docs.length > 0 && (
-            <Button
-              className="text-capitalize"
-              href="/UploadImage"
-              color="primary"
-              startIcon={<AddIcon />}
-            >
-              Add Image
-            </Button>
-          )}
-
-          <Divider variant="middle" />
-
-          <div className="row mt-3">
-            {docs.length > 0 ? (
-              docs.map((doc) => (
-                <>
-                  <div
-                    style={cardLink}
-                    className="col-lg-3 col-md-4 col-sm-12 mb-3"
-                    onClick={() => addImage(doc)}
-                  >
-                    <Card
-                      key={doc.id}
                       border="primary"
                       className="h-100"
                       style={{
@@ -636,6 +534,69 @@ function ImageGrid() {
                     )}
                   </Popover>
                 </>
+              ))
+            ) : (
+              <Container className="d-flex justify-content-center mb-5">
+                <div className="w-100" style={{ maxWidth: "400px" }}>
+                  <img
+                    className="w-100"
+                    src="/images/no-image.png"
+                    alt="image"
+                  />
+                  <h4 className="text-center">No image uploaded yet</h4>
+
+                  {currentUserRole === "admin" && (
+                    <Button
+                      className="w-100 text-capitalize"
+                      style={addButton}
+                      href="/UploadImage"
+                      color="primary"
+                    >
+                      Upload image now
+                    </Button>
+                  )}
+                </div>
+              </Container>
+            )}
+          </div>
+        </div>
+      )}
+
+      {currentUserRole === "contributor" && (
+        <>
+          {docs.length > 0 && (
+            <Button
+              className="text-capitalize"
+              href="/UploadImage"
+              color="primary"
+              startIcon={<AddIcon />}
+            >
+              Add Image
+            </Button>
+          )}
+
+          <Divider variant="middle" />
+
+          <div className="row mt-3">
+            {docs.length > 0 ? (
+              docs.map((doc) => (
+                <div
+                  style={cardLink}
+                  className="col-lg-3 col-md-4 col-sm-12 mb-3"
+                >
+                  <Card
+                    key={doc.id}
+                    border="primary"
+                    className="h-100"
+                    style={{
+                      backgroundImage: `url(${doc.url})`,
+                      backgroundRepeat: "no-repeat",
+                      backgroundPosition: "center",
+                      backgroundSize: "cover",
+                      border: isActive(doc) ? "4px solid" : "",
+                    }}
+                  ></Card>
+                </div>
               ))
             ) : (
               <Container className="d-flex justify-content-center mb-5">

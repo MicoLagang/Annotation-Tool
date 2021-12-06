@@ -64,8 +64,8 @@ function ImageGrid() {
 
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [imageInfo, setImageInfo] = useState();
-  // let imageInfo;
+  // const [imageInfo, setImageInfo] = useState();
+  let imageInfo;
 
   const cardLink = {
     color: "#000000",
@@ -103,7 +103,7 @@ function ImageGrid() {
       });
     getAnnotationData();
     getImageFolderData();
-  }, [imageInfo]);
+  }, []);
 
   const getImageFolderData = () => {
     teamService.getImageFolderData(teamID, name, folderID).then((data) => {
@@ -154,7 +154,6 @@ function ImageGrid() {
   }
 
   function addImage(doc) {
-    console.log(doc);
     if (imagesURL.length == 0) {
       setImagesURL([...imagesURL, doc.url]);
       setImagesID([...imagesID, doc.id]);
@@ -298,8 +297,7 @@ function ImageGrid() {
     });
   }
 
-  const handlePopoverOpen = (event, doc) => {
-    setImageInfo(doc);
+  const handlePopoverOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -308,6 +306,12 @@ function ImageGrid() {
   };
 
   const open = Boolean(anchorEl);
+
+  function popOverContainer() {
+    return (
+    );
+  }
+
   return (
     <>
       <ToastContainer />
@@ -481,7 +485,7 @@ function ImageGrid() {
                   >
                     <Card
                       key={doc.id}
-                      border={`${isAnnotated(doc) ? "success" : "danger"}`}
+                      border="primary"
                       className="h-100"
                       style={{
                         backgroundImage: `url(${doc.url})`,
@@ -492,42 +496,43 @@ function ImageGrid() {
                       }}
                     >
                       <InfoOutlinedIcon
-                        style={{ color: "white", border: "1px black" }}
                         aria-owns={open ? "mouse-over-popover" : undefined}
                         aria-haspopup="true"
-                        onMouseEnter={(event) => handlePopoverOpen(event, doc)}
+                        onMouseEnter={() => handlePopoverOpen()}
                         onMouseLeave={handlePopoverClose}
-                        className="m-3"
+                        className="mx-3"
                       />
-
-                      <Popover
-                        id="mouse-over-popover"
-                        className={classes.popover}
-                        classes={{
-                          paper: classes.paper,
-                        }}
-                        open={open}
-                        anchorEl={anchorEl}
-                        anchorOrigin={{
-                          vertical: "bottom",
-                          horizontal: "right",
-                        }}
-                        transformOrigin={{
-                          vertical: "top",
-                          horizontal: "left",
-                        }}
-                        onClose={handlePopoverClose}
-                        disableRestoreFocus
-                      >
-                        {imageInfo && (
-                          <>
-                            <p>Name: {imageInfo.name}</p>
-                            <p>Description: {imageInfo.description}</p>
-                            <p>Uploaded by: {imageInfo.email}</p>
-                            <p>Validated by: {imageInfo.validated}</p>
-                          </>
-                        )}
-                      </Popover>
+                      
+      <Popover
+        id="mouse-over-popover"
+        className={classes.popover}
+        classes={{
+          paper: classes.paper,
+        }}
+        open={open}
+        anchorEl={anchorEl}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "left",
+        }}
+        onClose={handlePopoverClose}
+        disableRestoreFocus
+      >
+        <p>Pop up</p>
+        {/* <p>Name: {doc.name}</p>
+        <p>Description: {doc.description}</p>
+        <p>Uploaded by: {doc.email}</p>
+        <p>Validated by: {doc.validated}</p>
+        {isAnnotated(doc) ? (
+          <p className="text-center">Annotated</p>
+        ) : (
+          <p className="text-center">Not Annotated</p>
+        )} */}
+      </Popover>
                     </Card>
                   </div>
                 </>

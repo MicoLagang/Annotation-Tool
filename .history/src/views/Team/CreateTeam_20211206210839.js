@@ -8,7 +8,7 @@ import axios from "axios";
 import { timestamp } from "../../firebase";
 import TopNav from "../Navigation/TopNav";
 
-export default class  CreateTeam extends Component {
+export default class CreateTeam extends Component {
   constructor(props) {
     super(props);
     this.onChangeName = this.onChangeName.bind(this);
@@ -34,8 +34,6 @@ export default class  CreateTeam extends Component {
       teamID: "",
     };
   }
-
-  
 
   componentDidMount(props) {
     const id = props.UserID;
@@ -92,7 +90,6 @@ export default class  CreateTeam extends Component {
   }
 
   saveTeam() {
-   
     const createdAt = timestamp();
     const currentUserEmail = localStorage.getItem("currentUserEmail");
 
@@ -150,8 +147,6 @@ export default class  CreateTeam extends Component {
         });
     }
   }
-
-
 
   createTeam() {
     this.setState({
@@ -263,6 +258,7 @@ export default class  CreateTeam extends Component {
                   </Button>
 
                   <Button
+                    onClick={this.saveTeam}
                     color="primary"
                     className="w-100 text-capitalize"
                     href="/myTeam"

@@ -154,7 +154,6 @@ function ImageGrid() {
   }
 
   function addImage(doc) {
-    console.log(doc);
     if (imagesURL.length == 0) {
       setImagesURL([...imagesURL, doc.url]);
       setImagesID([...imagesID, doc.id]);
@@ -300,6 +299,8 @@ function ImageGrid() {
 
   const handlePopoverOpen = (event, doc) => {
     setImageInfo(doc);
+    // imageInfo = doc;
+    // console.log(imageInfo);
     setAnchorEl(event.currentTarget);
   };
 
@@ -308,6 +309,7 @@ function ImageGrid() {
   };
 
   const open = Boolean(anchorEl);
+
   return (
     <>
       <ToastContainer />
@@ -481,7 +483,7 @@ function ImageGrid() {
                   >
                     <Card
                       key={doc.id}
-                      border={`${isAnnotated(doc) ? "success" : "danger"}`}
+                      border="primary"
                       className="h-100"
                       style={{
                         backgroundImage: `url(${doc.url})`,
@@ -491,14 +493,17 @@ function ImageGrid() {
                         border: isActive(doc) ? "4px solid" : "",
                       }}
                     >
-                      <InfoOutlinedIcon
-                        style={{ color: "white", border: "1px black" }}
-                        aria-owns={open ? "mouse-over-popover" : undefined}
-                        aria-haspopup="true"
-                        onMouseEnter={(event) => handlePopoverOpen(event, doc)}
-                        onMouseLeave={handlePopoverClose}
-                        className="m-3"
-                      />
+                      <Card.Footer>
+                        <InfoOutlinedIcon
+                          aria-owns={open ? "mouse-over-popover" : undefined}
+                          aria-haspopup="true"
+                          onMouseEnter={(event) =>
+                            handlePopoverOpen(event, doc)
+                          }
+                          onMouseLeave={handlePopoverClose}
+                          className="mx-3"
+                        />
+                      </Card.Footer>
 
                       <Popover
                         id="mouse-over-popover"
