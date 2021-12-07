@@ -8,7 +8,7 @@ import axios from "axios";
 import { timestamp } from "../../firebase";
 import TopNav from "../Navigation/TopNav";
 
-export default class CreateTeam extends Component {
+export default class  CreateTeam extends Component {
   constructor(props) {
     super(props);
     this.onChangeName = this.onChangeName.bind(this);
@@ -34,6 +34,8 @@ export default class CreateTeam extends Component {
       teamID: "",
     };
   }
+
+  
 
   componentDidMount(props) {
     const id = props.UserID;
@@ -90,6 +92,7 @@ export default class CreateTeam extends Component {
   }
 
   saveTeam() {
+   
     const createdAt = timestamp();
     const currentUserEmail = localStorage.getItem("currentUserEmail");
 
@@ -119,34 +122,30 @@ export default class CreateTeam extends Component {
       isArchive: false,
     };
 
-    if (
-      this.state.name &&
-      this.state.contactEmail &&
-      this.state.owner &&
-      this.state.key &&
-      this.state.status
-    ) {
+    if(this.state.name && this.state.contactEmail && this.state.owner && this.state.key&& this.state.status){
       this.setState({
-        isButtonDisabled: true,
+        isButtonDisabled: true
       });
       teamService
-        .create(data)
-        .then((res) => {
-          member.projectID = res.id;
-
-          console.log("Created new item successfully!");
-
-          projectMembersService.create(member);
-          console.log(member);
-          this.setState({
-            submitted: true,
-          });
-        })
-        .catch((e) => {
-          console.log(e);
+      .create(data)
+      .then((res) => {
+        member.projectID = res.id;
+  
+        console.log("Created new item successfully!");
+  
+        projectMembersService.create(member);
+        console.log(member);
+        this.setState({
+          submitted: true,
         });
-    }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+     }
   }
+
+
 
   createTeam() {
     this.setState({
@@ -172,7 +171,6 @@ export default class CreateTeam extends Component {
                 <h4 className="text-center mb-4">Team Created Successfully!</h4>
 
                 <Button
-                  onClick={this.saveTeam}
                   color="primary"
                   className="w-100"
                   href="/myTeam"

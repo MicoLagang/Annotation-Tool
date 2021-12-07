@@ -58,7 +58,7 @@ const UploadForm = () => {
   function handleUpload() {
     fetchTotalImages();
     const promises = [];
-    images.map(async (image) => {
+    images.map(async (image, index) => {
       const uploadTask = projectStorage.ref(image.name);
       const increment = firebase.firestore.FieldValue.increment(1);
       const collectionRef = projectFirestore
@@ -78,9 +78,9 @@ const UploadForm = () => {
         .doc(name)
         .collection("IMAGESFOLDER")
         .doc(folderID);
+        
 
       promises.push(uploadTask);
-
       uploadTask.put(image).on(
         "state_changed",
         (snapshot) => {
@@ -92,6 +92,8 @@ const UploadForm = () => {
         (error) => {
           console.log(error);
         },
+
+       
 
         async () => {
           const url = await uploadTask.getDownloadURL();
@@ -106,7 +108,9 @@ const UploadForm = () => {
           totalImages = totalImages + 1;
           // collectionRef.add({ url, createdAt, name });
           setUrl((prevState) => [...prevState, url]);
+          console.log(index)
         }
+  
       );
     });
   }

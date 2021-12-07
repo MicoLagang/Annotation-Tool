@@ -494,7 +494,7 @@ function ImageGrid() {
                           <>
                             <div
                               style={cardLink}
-                              className="col-lg-3 col-md-4 col-sm-6 mb-3"
+                              className="col-lg-3 col-md-4 col-sm-12 mb-3"
                               onClick={() => addImage(doc)}
                             >
                               <Card
@@ -566,7 +566,7 @@ function ImageGrid() {
                       <>
                         <div
                           style={cardLink}
-                          className="col-lg-3 col-md-4 col-sm-6 mb-3"
+                          className="col-lg-3 col-md-4 col-sm-12 mb-3"
                           onClick={() => addImage(doc)}
                         >
                           <Card
@@ -677,7 +677,7 @@ function ImageGrid() {
                 <>
                   <div
                     style={cardLink}
-                    className="col-lg-3 col-md-4 col-sm-6 mb-3"
+                    className="col-lg-3 col-md-4 col-sm-12 mb-3"
                     onClick={() => addImage(doc)}
                   >
                     <Card

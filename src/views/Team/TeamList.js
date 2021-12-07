@@ -9,6 +9,7 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import teamService from "../../services/team.service";
+import userServices from "../../services/user.services";
 
 const useStyles = makeStyles({
   root: {
@@ -21,6 +22,7 @@ const FolderList = () => {
   const [posts, setPosts] = useState([]);
   const { currentUser, logout } = useAuth();
   const uid = localStorage.getItem("currentUserUID");
+  const email = localStorage.getItem("currentUserEmail");
 
   const classes = useStyles();
 
@@ -67,11 +69,13 @@ const FolderList = () => {
     localStorage.setItem("currentTeamID", post.key);
     localStorage.setItem("currentTeamName", post.name);
     projectMembersService.getRole(uid, post.key);
+    
     console.log(post)
     console.log(post.projectID);
   }
 
   localStorage.setItem("currentUserUID", currentUser.uid);
+  userServices.getName(email);
   return (
     <>
       <div className="row">

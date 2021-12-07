@@ -188,17 +188,12 @@ function ImageGrid() {
   function annotateFolder() {
     let arr = [];
     docs.map((doc) => {
-      arr.push(doc);
-
-
-      // Checks if the images is annotated and only loads what is not annotated
-      // if (isRejected && currentUserRole === "annotator") {
-      //   if (!isAnnotated(doc)) {
-      //     console.log(doc);
-      //     arr.push(doc);
-      //   }
-      // } else {arr.push(doc);}
-
+      if (isRejected && currentUserRole === "annotator") {
+        if (!isAnnotated(doc)) {
+          console.log(doc);
+          arr.push(doc);
+        }
+      } else {arr.push(doc);}
     });
     console.log(arr);
     setImagesData(arr);
@@ -379,7 +374,7 @@ function ImageGrid() {
                         startIcon={<EditIcon />}
                         onClick={() => annotateFolder()}
                       >
-                        Annotate Folder
+                        Annotate This Folder
                       </Button>
                       {isSubmitted === false && (
                         <Button
@@ -464,7 +459,7 @@ function ImageGrid() {
                         startIcon={<EditIcon />}
                         onClick={() => annotateFolder()}
                       >
-                        Annotate Folder
+                        Annotate This Folder
                       </Button>
                     )}
 
@@ -494,7 +489,7 @@ function ImageGrid() {
                           <>
                             <div
                               style={cardLink}
-                              className="col-lg-3 col-md-4 col-sm-6 mb-3"
+                              className="col-lg-3 col-md-4 col-sm-12 mb-3"
                               onClick={() => addImage(doc)}
                             >
                               <Card
@@ -566,7 +561,7 @@ function ImageGrid() {
                       <>
                         <div
                           style={cardLink}
-                          className="col-lg-3 col-md-4 col-sm-6 mb-3"
+                          className="col-lg-3 col-md-4 col-sm-12 mb-3"
                           onClick={() => addImage(doc)}
                         >
                           <Card
@@ -677,7 +672,7 @@ function ImageGrid() {
                 <>
                   <div
                     style={cardLink}
-                    className="col-lg-3 col-md-4 col-sm-6 mb-3"
+                    className="col-lg-3 col-md-4 col-sm-12 mb-3"
                     onClick={() => addImage(doc)}
                   >
                     <Card

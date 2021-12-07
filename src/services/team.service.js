@@ -134,7 +134,7 @@ class TutorialDataService {
     });
   }
 
-  isValidated(teamID, name, folderID,imageID,userEmail){
+  isValidated(teamID, name, folderID,imageID,currentUserName){
 
    return db
     .doc(teamID)
@@ -144,7 +144,7 @@ class TutorialDataService {
     .doc(folderID)
     .collection("IMAGES")
     .doc(imageID).update({
-      validated: userEmail,
+      validated: currentUserName,
     })
 
 

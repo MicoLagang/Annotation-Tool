@@ -148,6 +148,7 @@ function Login(props) {
   var [passwordValue, setPasswordValue] = useState("");
 
   var [loginValue1, setLoginValue1] = useState("");
+  var [userName, setuserName] = useState("");
   var [passwordValue1, setPasswordValue1] = useState("");
   var [passwordValueS, setPasswordValueS] = useState("");
 
@@ -185,33 +186,32 @@ function Login(props) {
 
     if (passwordValue1 !== passwordValueS) {
       return setError("Passwords do not match");
+    }else if(passwordValue1.length <6){
+      return setError("Password is too short");
     }
+    
 
     try {
       setError("");
       setLoading(true);
       await signup(loginValue1, passwordValue1);
+
+      const data = {
+        email: loginValue1,
+        username: userName,
+      };
+
+
+      userServices
+      .create(data)
       history.push("/");
     } catch (error) {
       setError(error.message);
     }
 
-    const data = {
-      email: loginValue,
-      role: role,
-    };
 
-    userServices
-      .create(data)
-      .then(() => {
-        console.log("Created new item successfully!");
-        this.setState({
-          submitted: true,
-        });
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+
+
 
     setLoading(false);
   }
@@ -257,7 +257,8 @@ function Login(props) {
               </div> */}
               <Fade in={error}>
                 <Typography color="secondary" className={classes.errorMessage}>
-                  Something is wrong with your login or password :(
+                  {/* Something is wrong with your login or password :( */}
+                    {error}
                 </Typography>
               </Fade>
               <TextField
@@ -318,7 +319,9 @@ function Login(props) {
               </div>
             </React.Fragment>
           )}
+    
           {activeTabId === 1 && (
+            
             <React.Fragment>
               <Typography variant="h1" className={classes.greeting}>
                 Welcome!
@@ -328,9 +331,27 @@ function Login(props) {
               </Typography>
               <Fade in={error}>
                 <Typography color="secondary" className={classes.errorMessage}>
-                  {/* Something is wrong with your login or password :( */}
+                  {error}
                 </Typography>
               </Fade>
+            
+
+              <TextField
+                id="username"
+                InputProps={{
+                  classes: {
+                    underline: classes.textFieldUnderline,
+                    input: classes.textField,
+                  },
+                }}
+                value={userName}
+                onChange={(e) => setuserName(e.target.value)}
+                margin="normal"
+                placeholder="Name"
+                type="text"
+                fullWidth
+              />
+
               <TextField
                 id="email"
                 InputProps={{
