@@ -64,36 +64,40 @@ export default function TestTeam(post) {
         style={{ minHeight: "100vh" }}
       >
         <div className="w-100" style={{ maxWidth: "350px" }}>
-          <div className="submit-form" style={{ width: "100%" }}>
-            <h2 className="text-center mb-4">Create Images Folder</h2>
-            <Form>
-              {/* <div>{teamID}</div> */}
-              <Form.Group className="mb-3">
-                <Form.Control
-                  type="text"
-                  className="form-control"
-                  id="folderName"
-                  required
-                  //   onChange={foldername}
-                  ref={foldername}
-                  placeholder="Name"
-                  name="owner"
-                />
-              </Form.Group>
+          <Card style={{ width: "100%" }}>
+            <CardContent>
+              <div className="submit-form">
+                <h2 className="text-center mb-4">Create Images Folder</h2>
+                <Form>
+                  {/* <div>{teamID}</div> */}
+                  <Form.Group className="mb-3">
+                    <Form.Control
+                      type="text"
+                      className="form-control"
+                      id="folderName"
+                      required
+                      //   onChange={foldername}
+                      ref={foldername}
+                      placeholder="Name"
+                      name="owner"
+                    />
+                  </Form.Group>
 
-              <Button
-                disabled={double}
-                onClick={() => {
-                  saveData();
-                }}
-                variant="contained"
-                color="primary"
-                className="w-100"
-              >
-                Create
-              </Button>
-            </Form>
-          </div>
+                  <Button
+                    disabled={double}
+                    onClick={() => {
+                      saveData();
+                    }}
+                    variant="contained"
+                    color="primary"
+                    className="w-100"
+                  >
+                    Create
+                  </Button>
+                </Form>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </Container>
     </>

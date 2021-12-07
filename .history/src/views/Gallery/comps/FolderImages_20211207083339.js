@@ -1,24 +1,19 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import TopNav from "../../Navigation/TopNav";
 import { projectFirestore } from "../../../firebase";
 import projectMembersService from "../../../services/projectMembers.service";
-import { ToastContainer } from "react-toastify";
 import ImagesFolder from "../comps/ImagesFolder";
 
 import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
-
-import SettingsIcon from "@material-ui/icons/Settings";
 
 export default function TestTeam(post) {
   const teamID = localStorage.getItem("currentTeamID");
   const name = localStorage.getItem("currentProjectID");
   const [loading, setLoading] = useState(true);
   const currentTeamName = localStorage.getItem("currentTeamName");
-  const currentUserRole = localStorage.getItem("currentUserRole");
   const uid = localStorage.getItem("currentUserUID");
 
   projectMembersService.getRole(uid, teamID);
@@ -36,12 +31,6 @@ export default function TestTeam(post) {
       position: "absolute",
       bottom: "20px",
       left: "20px",
-      color: "white",
-    },
-    buttons: {
-      position: "absolute",
-      bottom: "0px",
-      right: "0px",
       color: "white",
     },
     title: {
@@ -79,6 +68,7 @@ export default function TestTeam(post) {
         if (doc.exists) {
           console.log("Document data:", doc.data());
           setUpdata(doc.data());
+          setValue(doc.data().name);
         } else {
           console.log("No such document!");
         }
@@ -98,18 +88,6 @@ export default function TestTeam(post) {
         <div style={styles.overlay}>
           <Typography style={styles.title}>{updata.name}</Typography>
           <Typography style={styles.text}>{currentTeamName}</Typography>
-        </div>
-        <div style={styles.buttons}>
-          <>
-            {currentUserRole === "admin" && (
-              <IconButton
-                color="inherit"
-                href="/myTeam/gallery/folder/settings"
-              >
-                <SettingsIcon />
-              </IconButton>
-            )}
-          </>
         </div>
       </Card>
     );

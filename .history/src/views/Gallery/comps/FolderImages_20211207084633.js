@@ -37,12 +37,7 @@ export default function TestTeam(post) {
       bottom: "20px",
       left: "20px",
       color: "white",
-    },
-    buttons: {
-      position: "absolute",
-      bottom: "0px",
-      right: "0px",
-      color: "white",
+      width: "90%",
     },
     title: {
       fontSize: "2rem",
@@ -96,20 +91,22 @@ export default function TestTeam(post) {
           style={styles.media}
         />
         <div style={styles.overlay}>
-          <Typography style={styles.title}>{updata.name}</Typography>
-          <Typography style={styles.text}>{currentTeamName}</Typography>
-        </div>
-        <div style={styles.buttons}>
-          <>
-            {currentUserRole === "admin" && (
-              <IconButton
-                color="inherit"
-                href="/myTeam/gallery/folder/settings"
-              >
-                <SettingsIcon />
-              </IconButton>
-            )}
-          </>
+          <Row>
+            <Col>
+              <Typography style={styles.title}>{updata.name}</Typography>
+              <Typography style={styles.text}>{currentTeamName}</Typography>
+            </Col>
+            <Col md="auto">
+              {currentUserRole === "admin" && (
+                <IconButton
+                  color="inherit"
+                  href="/myTeam/gallery/folder/settings"
+                >
+                  <SettingsIcon />
+                </IconButton>
+              )}
+            </Col>
+          </Row>
         </div>
       </Card>
     );

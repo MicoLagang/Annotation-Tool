@@ -1,27 +1,46 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Modal, Tabs, Tab, Form } from "react-bootstrap";
+import { TextField } from "@material-ui/core";
+import { Link, useHistory } from "react-router-dom";
 import TopNav from "../../Navigation/TopNav";
 import { projectFirestore } from "../../../firebase";
 import projectMembersService from "../../../services/projectMembers.service";
-import { ToastContainer } from "react-toastify";
+import teamService from "../../../services/team.service";
+import { toast, ToastContainer } from "react-toastify";
 import ImagesFolder from "../comps/ImagesFolder";
+import Swal from "sweetalert2";
 
 import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
+import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
-
-import SettingsIcon from "@material-ui/icons/Settings";
+import Button from "@material-ui/core/Button";
 
 export default function TestTeam(post) {
   const teamID = localStorage.getItem("currentTeamID");
   const name = localStorage.getItem("currentProjectID");
+  const [selectedImg, setSelectedImg] = useState(null);
   const [loading, setLoading] = useState(true);
-  const currentTeamName = localStorage.getItem("currentTeamName");
+  const [posts, setPosts] = useState([]);
   const currentUserRole = localStorage.getItem("currentUserRole");
+  const currentTeamName = localStorage.getItem("currentTeamName");
   const uid = localStorage.getItem("currentUserUID");
+  const history = useHistory();
+  const [modalShow, setModalShow] = React.useState(false);
+  const [value, setValue] = useState();
+  const projectNameref = useRef();
 
   projectMembersService.getRole(uid, teamID);
+
+  const createTeam = {
+    backgroundColor: "#FFD803",
+  };
+
+  const cardLink = {
+    color: "#000000",
+    textDecoration: "none",
+    height: "130px",
+  };
 
   const styles = {
     media: {
@@ -36,12 +55,6 @@ export default function TestTeam(post) {
       position: "absolute",
       bottom: "20px",
       left: "20px",
-      color: "white",
-    },
-    buttons: {
-      position: "absolute",
-      bottom: "0px",
-      right: "0px",
       color: "white",
     },
     title: {
@@ -79,6 +92,7 @@ export default function TestTeam(post) {
         if (doc.exists) {
           console.log("Document data:", doc.data());
           setUpdata(doc.data());
+          setValue(doc.data().name);
         } else {
           console.log("No such document!");
         }
@@ -87,6 +101,46 @@ export default function TestTeam(post) {
         console.log("Error getting document:", error);
       });
   }
+
+  function deleteProject() {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire("Deleted!", "Your file has been deleted.", "success");
+        setTimeout(function() {
+          teamService.deleteProject(teamID, name);
+          history.push("/myTeam/gallery");
+        }, 2000);
+      }
+    });
+  }
+
+  const update = () => {
+    projectFirestore
+      .collection("TEAM")
+      .doc(teamID)
+      .collection("FOLDERS")
+      .doc(name)
+      .update({
+        name: projectNameref.current.value,
+      })
+      .then(() => {
+        toast.success("EDIT SUCCESS");
+        setTimeout(function() {
+          history.push("/myTeam/gallery");
+        }, 5000);
+      })
+      .catch(() => {
+        toast.error("Something went wrong!");
+      });
+  };
 
   const card = () => {
     return (
@@ -98,18 +152,6 @@ export default function TestTeam(post) {
         <div style={styles.overlay}>
           <Typography style={styles.title}>{updata.name}</Typography>
           <Typography style={styles.text}>{currentTeamName}</Typography>
-        </div>
-        <div style={styles.buttons}>
-          <>
-            {currentUserRole === "admin" && (
-              <IconButton
-                color="inherit"
-                href="/myTeam/gallery/folder/settings"
-              >
-                <SettingsIcon />
-              </IconButton>
-            )}
-          </>
         </div>
       </Card>
     );

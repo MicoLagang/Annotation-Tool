@@ -40,8 +40,8 @@ export default function TestTeam(post) {
     },
     buttons: {
       position: "absolute",
-      bottom: "0px",
-      right: "0px",
+      bottom: "20px",
+      right: "20px",
       color: "white",
     },
     title: {
