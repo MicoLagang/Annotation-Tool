@@ -1,6 +1,6 @@
 import { projectStorage, projectFirestore, timestamp } from '../firebase';
 
-const db = projectFirestore.collection("Users");
+const db = projectFirestore.collection("USERS");
 
 class userServices {
   getAll() {
@@ -13,7 +13,7 @@ class userServices {
 
   create(tutorial) {
     return db.add(tutorial);
-    // return db.collection("teams").doc(tutorial).collection('folderimages');
+    console.log(tutorial)
   }
 
   update(key, value) {
@@ -26,6 +26,19 @@ class userServices {
 
   deleteAll() {
     return db.remove();
+  }
+
+  getName(value){
+    const response = projectFirestore.collection("USERS").where("email", "==",value)
+
+    response.get().then(function(snapshot) {
+
+        snapshot.docs.forEach((doc) => {
+          // doc is a DocumentSnapshot with actual data
+          const data = doc.data().username;
+          localStorage.setItem("currentUserName",data );
+        });
+    });
   }
 }
 

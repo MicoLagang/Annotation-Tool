@@ -52,6 +52,7 @@ function ImageGrid() {
   const name = localStorage.getItem("currentProjectID");
   const folderID = localStorage.getItem("currentImagesFolderID");
   const userEmail = localStorage.getItem("currentUserEmail");
+  const currentUserName = localStorage.getItem("currentUserName")
   let data = [];
   let annotationData;
   let imageFolderData;
@@ -265,7 +266,7 @@ function ImageGrid() {
             name,
             folderID,
             doc[index].id,
-            userEmail
+            currentUserName
           );
         }
         Swal.fire("Annotation Data Accepted Successfully!", "", "success").then(
@@ -523,7 +524,7 @@ function ImageGrid() {
                           <>
                             <p>Name: {imageInfo.name}</p>
                             <p>Description: {imageInfo.description}</p>
-                            <p>Uploaded by: {imageInfo.email}</p>
+                            <p>Uploaded by: {imageInfo.uploader}</p>
                             <p>Validated by: {imageInfo.validated}</p>
                           </>
                         )}
@@ -576,7 +577,7 @@ function ImageGrid() {
 
           <div className="row mt-3">
             {docs.length > 0 ? (
-              docs.map((doc) => (
+               docs.map((doc) => (
                 <>
                   <div
                     style={cardLink}
@@ -585,7 +586,7 @@ function ImageGrid() {
                   >
                     <Card
                       key={doc.id}
-                      border="primary"
+                      border={`${isAnnotated(doc) ? "success" : "danger"}`}
                       className="h-100"
                       style={{
                         backgroundImage: `url(${doc.url})`,
@@ -595,46 +596,45 @@ function ImageGrid() {
                         border: isActive(doc) ? "4px solid" : "",
                       }}
                     >
-                      <Card.Footer>
-                        <InfoOutlinedIcon
-                          aria-owns={open ? "mouse-over-popover" : undefined}
-                          aria-haspopup="true"
-                          onMouseEnter={handlePopoverOpen}
-                          onMouseLeave={handlePopoverClose}
-                          className="mx-3"
-                        />
-                      </Card.Footer>
+                      <InfoOutlinedIcon
+                        style={{ color: "white", border: "1px black" }}
+                        aria-owns={open ? "mouse-over-popover" : undefined}
+                        aria-haspopup="true"
+                        onMouseEnter={(event) => handlePopoverOpen(event, doc)}
+                        onMouseLeave={handlePopoverClose}
+                        className="m-3"
+                      />
+
+                      <Popover
+                        id="mouse-over-popover"
+                        className={classes.popover}
+                        classes={{
+                          paper: classes.paper,
+                        }}
+                        open={open}
+                        anchorEl={anchorEl}
+                        anchorOrigin={{
+                          vertical: "bottom",
+                          horizontal: "right",
+                        }}
+                        transformOrigin={{
+                          vertical: "top",
+                          horizontal: "left",
+                        }}
+                        onClose={handlePopoverClose}
+                        disableRestoreFocus
+                      >
+                        {imageInfo && (
+                          <>
+                            <p>Name: {imageInfo.name}</p>
+                            <p>Description: {imageInfo.description}</p>
+                            <p>Uploaded by: {imageInfo.uploader}</p>
+                            <p>Validated by: {imageInfo.validated}</p>
+                          </>
+                        )}
+                      </Popover>
                     </Card>
                   </div>
-                  <Popover
-                    id="mouse-over-popover"
-                    className={classes.popover}
-                    classes={{
-                      paper: classes.paper,
-                    }}
-                    open={open}
-                    anchorEl={anchorEl}
-                    anchorOrigin={{
-                      vertical: "bottom",
-                      horizontal: "right",
-                    }}
-                    transformOrigin={{
-                      vertical: "top",
-                      horizontal: "left",
-                    }}
-                    onClose={handlePopoverClose}
-                    disableRestoreFocus
-                  >
-                    <p>Name: {doc.name}</p>
-                    <p>Description: {doc.description}</p>
-                    <p>Uploaded by: {doc.email}</p>
-                    <p>Validated by: {doc.validated}</p>
-                    {isAnnotated(doc) ? (
-                      <p className="text-center">Annotated</p>
-                    ) : (
-                      <p className="text-center">Not Annotated</p>
-                    )}
-                  </Popover>
                 </>
               ))
             ) : (

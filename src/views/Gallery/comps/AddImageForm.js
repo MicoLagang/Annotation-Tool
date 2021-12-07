@@ -39,6 +39,7 @@ export default function AddImageForm(post) {
   const folderID = localStorage.getItem("currentImagesFolderID");
   const folderName = localStorage.getItem("currentImagesFolderName");
   const currentUserRole = localStorage.getItem("currentUserRole");
+  const currentUserName = localStorage.getItem("currentUserName")
 
   const types = ["image/png", "image/jpeg"];
   const { currentUser, logout } = useAuth();
@@ -127,6 +128,7 @@ export default function AddImageForm(post) {
           const name = `${folderName}_${totalImages}`;
           const description = ImagesDescription.current.value;
           const email = currentUser.email;
+          const uploader = currentUserName;
           console.log(name);
           console.log(currentUser);
 
@@ -137,6 +139,7 @@ export default function AddImageForm(post) {
             name,
             description,
             email,
+            uploader,
           });
           batch.set(counterRef, { totalImages: increment }, { merge: true });
 
