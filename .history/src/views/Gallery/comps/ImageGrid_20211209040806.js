@@ -271,17 +271,18 @@ function ImageGrid() {
       denyButtonText: "no",
     }).then((result) => {
       if (result.isConfirmed) {
-        teamService.deleteFolder(teamID, name, folderID);
+        teamService.submitAnnotation(teamID, name, folderID);
         Swal.fire("Annotation Successfully Submitted!", "", "success").then(
           () => {
-            history.push("/myTeam/gallery/folder");
+            window.location.reload(false);
           }
         );
       } else if (result.isDenied) {
         Swal.fire("Submission Cancelled", "", "info");
       }
     });
-   
+    teamService.deleteFolder(teamID, name, folderID);
+    history.push("/myTeam/gallery/folder");
   }
 
   function submitAnnotation() {
