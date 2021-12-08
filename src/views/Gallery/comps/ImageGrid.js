@@ -23,8 +23,10 @@ import CheckIcon from "@material-ui/icons/Check";
 import FilterIcon from "@material-ui/icons/Filter";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
+import PersonIcon from '@material-ui/icons/Person';
 
 import { Card, Row, Col, Container } from "react-bootstrap";
+import projectMembersService from "../../../services/projectMembers.service";
 
 const useStyles = makeStyles((theme) => ({
   popover: {
@@ -66,6 +68,7 @@ function ImageGrid() {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [imageInfo, setImageInfo] = useState();
+  const [AnnotatorEmail,setAnnotatorEmail] = useState([]);
   // let imageInfo;
 
   const cardLink = {
@@ -81,6 +84,7 @@ function ImageGrid() {
   };
 
   useEffect(() => {
+    const getPostsFromFirebase = [];
     var docRef = projectFirestore
       .collection("TEAM")
       .doc(teamID)
@@ -102,6 +106,22 @@ function ImageGrid() {
       .catch((error) => {
         console.log("Error getting document:", error);
       });
+
+      projectFirestore.collection("TEAMMEMBERS")
+      .where("projectID", "==", teamID)  
+      .where("role", "==", "annotator")  
+      .onSnapshot((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          getPostsFromFirebase.push({
+            ...doc.data(), //spread operator
+            key: doc.id, // `id` given to us by Firebase
+            
+          });
+          // console.log(doc.data().uid)
+          // console.log(doc.data().email)
+        });
+        setAnnotatorEmail(getPostsFromFirebase);
+      });
     getAnnotationData();
     getImageFolderData();
   }, [imageInfo]);
@@ -114,6 +134,11 @@ function ImageGrid() {
 
     return;
   };
+
+  console.log(AnnotatorEmail)
+
+
+  console.log(imageFolderName)
 
   function getAnnotationData() {
     projectFirestore
@@ -299,6 +324,56 @@ function ImageGrid() {
     });
   }
 
+  async function openModal(){
+
+    var options = {};
+    AnnotatorEmail.map((post) => (
+        options[post.email]=post.email
+      ))
+
+
+      const { value: role } =await Swal.fire({
+      title: "Assign Annotator",
+      input: "select",
+      inputOptions: options,
+      inputPlaceholder: "Select Annotator",
+      showCancelButton: true,
+      inputValidator: (value) => {
+        return new Promise((resolve) => {
+          if (value) {
+            console.log("if");
+            console.log(value)
+            resolve();
+          } else {
+            console.log("else");
+            resolve("You need to select role");
+          }
+          // resolve();
+        });
+      },
+    });
+
+    if (role) {
+
+      projectFirestore.collection("TEAM")
+      .doc(teamID)
+      .collection("FOLDERS")
+      .doc(name)
+      .collection("IMAGESFOLDER")
+      .doc(folderID)
+      .update({
+        AssignAnnotator: role,
+      }).then(() => {
+        Swal.fire(`This Folder is now assigned to ${role}`).then( () => {
+          window.location.reload(false);
+      })
+      })
+      .catch(() => {});
+    }
+
+
+  }
+
   const handlePopoverOpen = (event, doc) => {
     setImageInfo(doc);
     setAnchorEl(event.currentTarget);
@@ -446,6 +521,15 @@ function ImageGrid() {
                   <Col md="auto">
                     <Box sx={{ flexGrow: 1 }} />
                     {docs.length > 0 && (
+                      <>
+                      <Button
+                         className="text-capitalize"
+                         startIcon={<PersonIcon />}
+                         onClick={() => openModal()}
+                       >
+                         Assign Annotator
+                       </Button>
+
                       <Button
                         className="text-capitalize"
                         startIcon={<EditIcon />}
@@ -453,6 +537,7 @@ function ImageGrid() {
                       >
                         Annotate This Folder
                       </Button>
+                      </>
                     )}
 
                     <Button

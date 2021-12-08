@@ -13,6 +13,9 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import AddIcon from "@material-ui/icons/Add";
+import IconButton from "@material-ui/core/IconButton";
+import SettingsIcon from "@material-ui/icons/Settings";
+import { assign } from "lodash";
 
 export default function TestTeam() {
   // const { name } = useParams()
@@ -23,6 +26,7 @@ export default function TestTeam() {
   const [posts, setPosts] = useState([]);
   const [selectedImg, setSelectedImg] = useState(null);
   const userRole = localStorage.getItem("currentUserRole");
+    const email = localStorage.getItem("currentUserEmail")
   const createTeam = {
     backgroundColor: "#FFD803",
   };
@@ -41,7 +45,26 @@ export default function TestTeam() {
 
   useEffect(() => {
     const getPostsFromFirebase = [];
-    const subscriber = projectFirestore
+    if(userRole=="annotator"){
+      const subscriber = projectFirestore
+        .doc(`TEAM/${teamID}`)
+        .collection("FOLDERS")
+        .doc(name)
+        .collection("IMAGESFOLDER")
+        .where("AssignAnnotator", "==",email )
+        .onSnapshot((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            getPostsFromFirebase.push({
+              ...doc.data(), //spread operator
+              key: doc.id, // `id` given to us by Firebase
+            });
+          });
+          setPosts(getPostsFromFirebase);
+          setLoading(false);
+          return () => subscriber();
+        });
+    }else{
+      const subscriber = projectFirestore
       .doc(`TEAM/${teamID}`)
       .collection("FOLDERS")
       .doc(name)
@@ -55,11 +78,16 @@ export default function TestTeam() {
         });
         setPosts(getPostsFromFirebase);
         setLoading(false);
+        return () => subscriber();
       });
+    }
+ 
 
     // return cleanup function
-    return () => subscriber();
-  }, [loading]); // empty dependencies array => useEffect only called once
+  
+  }
+  
+  , [loading]); // empty dependencies array => useEffect only called once
 
   if (loading) {
     return <h1>loading firebase data...</h1>;
@@ -68,6 +96,10 @@ export default function TestTeam() {
   function saveAs(ID) {
     localStorage.setItem("currentImagesFolderID", ID.key);
     localStorage.setItem("currentImagesFolderName", ID.name);
+  }
+
+  function assign(){
+    console.log("sample")
   }
 
   return (
@@ -100,6 +132,7 @@ export default function TestTeam() {
           {posts.length > 0 ? (
             posts.map((post) => (
               <Link
+                // diri i add
                 to={`/myTeam/gallery/folder/imagesfolder`}
                 onClick={() => saveAs(post)}
                 key={post.key}
@@ -112,16 +145,38 @@ export default function TestTeam() {
                       {post.name}
                     </Typography>
 
-                    {post.isCompleted && userRole == "admin" ? (
-                      <Typography color="textSecondary">pending</Typography>
+                    {!post.isCompleted && 
+                    !post.isAccepted &&
+                    !post.isRejected &&
+                    userRole == "admin" ? (
+                      <>
+                      <Typography color="textSecondary">{post.AssignAnnotator}</Typography>
+                      </>
                     ) : (
                       <Typography color="textSecondary"></Typography>
                     )}
+
+                    {post.isCompleted && 
+                    !post.isAccepted &&
+                    !post.isRejected &&
+                    userRole == "admin" ? (
+                      <>
+                      <Typography color="textSecondary">{post.AssignAnnotator}</Typography>
+                      <Typography color="textSecondary">pending</Typography>
+                      </>
+                    ) : (
+                      <Typography color="textSecondary"></Typography>
+                    )}
+
+
                     {post.isAccepted &&
                     !post.isCompleted &&
                     !post.isRejected &&
                     userRole == "admin" ? (
+                      <>
+                      <Typography color="textSecondary">{post.AssignAnnotator}</Typography>
                       <Typography color="textSecondary">Completed</Typography>
+                      </>
                     ) : (
                       <Typography color="textSecondary"></Typography>
                     )}
@@ -154,6 +209,8 @@ export default function TestTeam() {
                       <Typography color="textSecondary"></Typography>
                     )}
 
+
+
                     {post.isCompleted && userRole == "annotator" ? (
                       <Typography color="textSecondary">sending</Typography>
                     ) : (
@@ -175,6 +232,8 @@ export default function TestTeam() {
                     ) : (
                       <Typography color="textSecondary"></Typography>
                     )}
+
+
                   </CardContent>
                 </Card>
               </Link>

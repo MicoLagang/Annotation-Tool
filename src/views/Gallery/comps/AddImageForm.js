@@ -196,7 +196,26 @@ export default function AddImageForm(post) {
               </Button>
             </Form>
           </div>
+          {url.map((url, i) => (
+        <div
+        style={cardLink}
+        className="col-lg-3 col-md-4 col-sm-12 mb-3"
+      >
+        <Card
+          key={i}
+          className="h-100"
+          style={{
+            backgroundImage: `url(${url})`,
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
+            backgroundSize: "cover",
+          }}
+        >
+        </Card>
+      </div>
+      ))}
         </div>
+
       </Container>
     </>
   );

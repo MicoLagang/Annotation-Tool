@@ -19,6 +19,12 @@ class TutorialDataService {
     return db.child(key).update(value);
   }
 
+  getAnnotator(teamID){
+    console.log(teamID)
+     return projectFirestore.collection("TEAMMEMBERS").where("projectID", "==", teamID).get()
+
+  }
+
   deleteTeam(teamID){
    const response =projectFirestore.collection("TEAMMEMBERS").where("projectID", "==", teamID);
 
