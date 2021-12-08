@@ -40,8 +40,8 @@ export default function TestTeam(post) {
     },
     buttons: {
       position: "absolute",
-      top: "5px",
-      right: "5px",
+      top: "0px",
+      right: "0px",
       color: "white",
     },
     title: {
@@ -117,7 +117,7 @@ export default function TestTeam(post) {
 
   return (
     <>
-      {/* <ToastContainer /> */}
+      <ToastContainer />
       <TopNav />
 
       <Container>

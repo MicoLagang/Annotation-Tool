@@ -65,19 +65,17 @@ const App: React.FC<IProps> = ({ projectType, windowSize, ObjectDetectorLoaded, 
                                 <PrivateRoute exact path="/new" component={CreateTeam} />
                                 <PrivateRoute exact path="/tool" component={Tool} />
                                 <PrivateRoute exact path="/archive" component={ArchiveTeam} />
-                                <PrivateRoute exact path="/createimagesfolder" component={AddFolderpic} />
                                 <PrivateRoute exact path="/project" component={Project} />
                                 <PrivateRoute exact path="/update-profile" component={UpdateProfile} />
                                 <PrivateRoute exact path="/UploadImage" component={AddImageForm} />
                                 <PrivateRoute exact path="/myProject" component={myProject} />
                                 <PrivateRoute exact path="/myTeam" component={myTeam} />
                                 <PrivateRoute exact path="/Addfolder" component={AddFolder} />
-                                <PrivateRoute exact path="/createimagesfolder" component={AddFolderpic} />
+                                        <PrivateRoute exact path="/createimagesfolder" component={AddFolderpic} />
                                 <PrivateRoute exact path="/myTeam/gallery" component={Gallery} />
                                 <PrivateRoute exact path="/myTeam/gallery/teamMembers" component={TeamMembers} />
                                 <PrivateRoute exact path="/myTeam/gallery/folder" component={FolderImages} />
                                 <PrivateRoute exact path="/myTeam/gallery/folder/settings" component={ProjectSettings} />
-                                <PrivateRoute exact path="/myTeam/gallery/folder/teamMembers" component={TeamMembers} />
                                 <PrivateRoute exact path="/myTeam/gallery/settings" component={TeamSettings} />
                                 <PrivateRoute exact path="/myTeam/gallery/folder/imagesfolder" component={UploadImagesGallery} />
                                 <PrivateRoute exact path="/myTeam/gallery/folder/imagesfolder/galleryimagesfolder" component={UploadImagesGallery} />
@@ -86,7 +84,6 @@ const App: React.FC<IProps> = ({ projectType, windowSize, ObjectDetectorLoaded, 
                                 <Container className="mt-5 d-flex justify-content-center" style={{ minHeight: "100vh" }}>
                                     <div className="w-100" style={{ maxWidth: '400px' }}>
                                         <PrivateRoute path="/addMember/:UserID" component={AddMember} />
-                                        
 
                                         <Route path="/signup" component={SignUp} />
                                         <Route path="/login" component={LogIn} />

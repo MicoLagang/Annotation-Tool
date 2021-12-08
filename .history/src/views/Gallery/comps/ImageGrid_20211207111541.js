@@ -23,10 +23,8 @@ import CheckIcon from "@material-ui/icons/Check";
 import FilterIcon from "@material-ui/icons/Filter";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
-import PersonIcon from '@material-ui/icons/Person';
 
 import { Card, Row, Col, Container } from "react-bootstrap";
-import projectMembersService from "../../../services/projectMembers.service";
 
 const useStyles = makeStyles((theme) => ({
   popover: {
@@ -61,7 +59,6 @@ function ImageGrid() {
   const [imageFolderName, setImageFolderName] = useState("");
   const [totalImages, setTotalImages] = useState(0);
   const [totalAnnotatedImages, setTotalAnnotatedImages] = useState(0);
-  const [isRejected, setIsRejected] = useState(false);
   let counter = 0;
   const [isSubmitted, setisSubmitted] = useState();
   const [isAccepted, setisAccepted] = useState();
@@ -69,7 +66,6 @@ function ImageGrid() {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [imageInfo, setImageInfo] = useState();
-  const [AnnotatorEmail,setAnnotatorEmail] = useState([]);
   // let imageInfo;
 
   const cardLink = {
@@ -85,7 +81,6 @@ function ImageGrid() {
   };
 
   useEffect(() => {
-    const getPostsFromFirebase = [];
     var docRef = projectFirestore
       .collection("TEAM")
       .doc(teamID)
@@ -107,41 +102,19 @@ function ImageGrid() {
       .catch((error) => {
         console.log("Error getting document:", error);
       });
-
-      projectFirestore.collection("TEAMMEMBERS")
-      .where("projectID", "==", teamID)  
-      .where("role", "==", "annotator")  
-      .onSnapshot((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          getPostsFromFirebase.push({
-            ...doc.data(), //spread operator
-            key: doc.id, // `id` given to us by Firebase
-            
-          });
-          // console.log(doc.data().uid)
-          // console.log(doc.data().email)
-        });
-        setAnnotatorEmail(getPostsFromFirebase);
-      });
     getAnnotationData();
     getImageFolderData();
   }, [imageInfo]);
 
   const getImageFolderData = () => {
     teamService.getImageFolderData(teamID, name, folderID).then((data) => {
-      console.log("Image Folder Data: " + data.data().isRejected);
-      setIsRejected(data.data().isRejected);
+      console.log("Image Folder Data: " + data.data());
       setImageFolderName(data.data().name);
       setTotalImages(data.data().totalImages - 1);
     });
 
     return;
   };
-
-  console.log(AnnotatorEmail)
-
-
-  console.log(imageFolderName)
 
   function getAnnotationData() {
     projectFirestore
@@ -214,16 +187,6 @@ function ImageGrid() {
     let arr = [];
     docs.map((doc) => {
       arr.push(doc);
-
-
-      // Checks if the images is annotated and only loads what is not annotated
-      // if (isRejected && currentUserRole === "annotator") {
-      //   if (!isAnnotated(doc)) {
-      //     console.log(doc);
-      //     arr.push(doc);
-      //   }
-      // } else {arr.push(doc);}
-
     });
     console.log(arr);
     setImagesData(arr);
@@ -337,56 +300,6 @@ function ImageGrid() {
     });
   }
 
-  async function openModal(){
-
-    var options = {};
-    AnnotatorEmail.map((post) => (
-        options[post.email]=post.email
-      ))
-
-
-      const { value: role } =await Swal.fire({
-      title: "Assign Annotator",
-      input: "select",
-      inputOptions: options,
-      inputPlaceholder: "Select Annotator",
-      showCancelButton: true,
-      inputValidator: (value) => {
-        return new Promise((resolve) => {
-          if (value) {
-            console.log("if");
-            console.log(value)
-            resolve();
-          } else {
-            console.log("else");
-            resolve("You need to select role");
-          }
-          // resolve();
-        });
-      },
-    });
-
-    if (role) {
-
-      projectFirestore.collection("TEAM")
-      .doc(teamID)
-      .collection("FOLDERS")
-      .doc(name)
-      .collection("IMAGESFOLDER")
-      .doc(folderID)
-      .update({
-        AssignAnnotator: role,
-      }).then(() => {
-        Swal.fire(`This Folder is now assigned to ${role}`).then( () => {
-          window.location.reload(false);
-      })
-      })
-      .catch(() => {});
-    }
-
-
-  }
-
   const handlePopoverOpen = (event, doc) => {
     setImageInfo(doc);
     setAnchorEl(event.currentTarget);
@@ -454,7 +367,7 @@ function ImageGrid() {
                         startIcon={<EditIcon />}
                         onClick={() => annotateFolder()}
                       >
-                        Annotate Folder
+                        Annotate This Folder
                       </Button>
                       {isSubmitted === false && (
                         <Button
@@ -534,23 +447,13 @@ function ImageGrid() {
                   <Col md="auto">
                     <Box sx={{ flexGrow: 1 }} />
                     {docs.length > 0 && (
-                      <>
-                      <Button
-                         className="text-capitalize"
-                         startIcon={<PersonIcon />}
-                         onClick={() => openModal()}
-                       >
-                         Assign Annotator
-                       </Button>
-
                       <Button
                         className="text-capitalize"
                         startIcon={<EditIcon />}
                         onClick={() => annotateFolder()}
                       >
-                        Annotate Folder
+                        Annotate This Folder
                       </Button>
-                      </>
                     )}
 
                     <Button
@@ -571,149 +474,66 @@ function ImageGrid() {
 
           <div className="row mt-3">
             {docs.length > 0 ? (
-              <>
-                {isRejected && currentUserRole === "annotator"
-                  ? docs.map(
-                      (doc) =>
-                        !isAnnotated(doc) && (
+              docs.map((doc) => (
+                <>
+                  <div
+                    style={cardLink}
+                    className="col-lg-3 col-md-4 col-sm-12 mb-3"
+                    onClick={() => addImage(doc)}
+                  >
+                    <Card
+                      key={doc.id}
+                      border={`${isAnnotated(doc) ? "success" : "danger"}`}
+                      className="h-100"
+                      style={{
+                        backgroundImage: `url(${doc.url})`,
+                        backgroundRepeat: "no-repeat",
+                        backgroundPosition: "center",
+                        backgroundSize: "cover",
+                        border: isActive(doc) ? "4px solid" : "",
+                      }}
+                    >
+                      <InfoOutlinedIcon
+                        style={{ color: "white", border: "1px black" }}
+                        aria-owns={open ? "mouse-over-popover" : undefined}
+                        aria-haspopup="true"
+                        onMouseEnter={(event) => handlePopoverOpen(event, doc)}
+                        onMouseLeave={handlePopoverClose}
+                        className="m-3"
+                      />
+
+                      <Popover
+                        id="mouse-over-popover"
+                        className={classes.popover}
+                        classes={{
+                          paper: classes.paper,
+                        }}
+                        open={open}
+                        anchorEl={anchorEl}
+                        anchorOrigin={{
+                          vertical: "bottom",
+                          horizontal: "right",
+                        }}
+                        transformOrigin={{
+                          vertical: "top",
+                          horizontal: "left",
+                        }}
+                        onClose={handlePopoverClose}
+                        disableRestoreFocus
+                      >
+                        {imageInfo && (
                           <>
-                            <div
-                              style={cardLink}
-                              className="col-lg-3 col-md-4 col-sm-6 mb-3"
-                              onClick={() => addImage(doc)}
-                            >
-                              <Card
-                                key={doc.id}
-                                border={`${
-                                  isAnnotated(doc) ? "success" : "danger"
-                                }`}
-                                className="h-100"
-                                style={{
-                                  backgroundImage: `url(${doc.url})`,
-                                  backgroundRepeat: "no-repeat",
-                                  backgroundPosition: "center",
-                                  backgroundSize: "cover",
-                                  border: isActive(doc) ? "4px solid" : "",
-                                }}
-                              >
-                                <InfoOutlinedIcon
-                                  style={{
-                                    color: "white",
-                                    border: "1px black",
-                                  }}
-                                  aria-owns={
-                                    open ? "mouse-over-popover" : undefined
-                                  }
-                                  aria-haspopup="true"
-                                  onMouseEnter={(event) =>
-                                    handlePopoverOpen(event, doc)
-                                  }
-                                  onMouseLeave={handlePopoverClose}
-                                  className="m-3"
-                                />
-
-                                <Popover
-                                  id="mouse-over-popover"
-                                  className={classes.popover}
-                                  classes={{
-                                    paper: classes.paper,
-                                  }}
-                                  open={open}
-                                  anchorEl={anchorEl}
-                                  anchorOrigin={{
-                                    vertical: "bottom",
-                                    horizontal: "right",
-                                  }}
-                                  transformOrigin={{
-                                    vertical: "top",
-                                    horizontal: "left",
-                                  }}
-                                  onClose={handlePopoverClose}
-                                  disableRestoreFocus
-                                >
-                                  {imageInfo && (
-                                    <>
-                                      <p>Name: {imageInfo.name}</p>
-                                      <p>
-                                        Description: {imageInfo.description}
-                                      </p>
-                                      <p>Uploaded by: {imageInfo.uploader}</p>
-                                      <p>Validated by: {imageInfo.validated}</p>
-                                    </>
-                                  )}
-                                </Popover>
-                              </Card>
-                            </div>
+                            <p>Name: {imageInfo.name}</p>
+                            <p>Description: {imageInfo.description}</p>
+                            <p>Uploaded by: {imageInfo.uploader}</p>
+                            <p>Validated by: {imageInfo.validated}</p>
                           </>
-                        )
-                    )
-                  : docs.map((doc) => (
-                      <>
-                        <div
-                          style={cardLink}
-                          className="col-lg-3 col-md-4 col-sm-6 mb-3"
-                          onClick={() => addImage(doc)}
-                        >
-                          <Card
-                            key={doc.id}
-                            border={`${
-                              isAnnotated(doc) ? "success" : "danger"
-                            }`}
-                            className="h-100"
-                            style={{
-                              backgroundImage: `url(${doc.url})`,
-                              backgroundRepeat: "no-repeat",
-                              backgroundPosition: "center",
-                              backgroundSize: "cover",
-                              border: isActive(doc) ? "4px solid" : "",
-                            }}
-                          >
-                            <InfoOutlinedIcon
-                              style={{ color: "white", border: "1px black" }}
-                              aria-owns={
-                                open ? "mouse-over-popover" : undefined
-                              }
-                              aria-haspopup="true"
-                              onMouseEnter={(event) =>
-                                handlePopoverOpen(event, doc)
-                              }
-                              onMouseLeave={handlePopoverClose}
-                              className="m-3"
-                            />
-
-                            <Popover
-                              id="mouse-over-popover"
-                              className={classes.popover}
-                              classes={{
-                                paper: classes.paper,
-                              }}
-                              open={open}
-                              anchorEl={anchorEl}
-                              anchorOrigin={{
-                                vertical: "bottom",
-                                horizontal: "right",
-                              }}
-                              transformOrigin={{
-                                vertical: "top",
-                                horizontal: "left",
-                              }}
-                              onClose={handlePopoverClose}
-                              disableRestoreFocus
-                            >
-                              {imageInfo && (
-                                <>
-                                  <p>Name: {imageInfo.name}</p>
-                                  <p>Description: {imageInfo.description}</p>
-                                  <p>Uploaded by: {imageInfo.uploader}</p>
-                                  <p>Validated by: {imageInfo.validated}</p>
-                                </>
-                              )}
-                            </Popover>
-                          </Card>
-                        </div>
-                      </>
-                    ))}
-              </>
+                        )}
+                      </Popover>
+                    </Card>
+                  </div>
+                </>
+              ))
             ) : (
               <Container className="d-flex justify-content-center mb-5">
                 <div className="w-100" style={{ maxWidth: "400px" }}>
@@ -762,7 +582,7 @@ function ImageGrid() {
                 <>
                   <div
                     style={cardLink}
-                    className="col-lg-3 col-md-4 col-sm-6 mb-3"
+                    className="col-lg-3 col-md-4 col-sm-12 mb-3"
                     onClick={() => addImage(doc)}
                   >
                     <Card

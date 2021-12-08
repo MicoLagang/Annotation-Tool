@@ -1,25 +1,34 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Modal, Tabs, Tab, Form } from "react-bootstrap";
+import { TextField } from "@material-ui/core";
+import { Link, useHistory } from "react-router-dom";
 import TopNav from "../../Navigation/TopNav";
 import { projectFirestore } from "../../../firebase";
 import projectMembersService from "../../../services/projectMembers.service";
-import { ToastContainer } from "react-toastify";
+import teamService from "../../../services/team.service";
+import { toast, ToastContainer } from "react-toastify";
 import ImagesFolder from "../comps/ImagesFolder";
+import Swal from "sweetalert2";
 
 import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
+import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
-
-import SettingsIcon from "@material-ui/icons/Settings";
 
 export default function TestTeam(post) {
   const teamID = localStorage.getItem("currentTeamID");
   const name = localStorage.getItem("currentProjectID");
+  const [selectedImg, setSelectedImg] = useState(null);
   const [loading, setLoading] = useState(true);
-  const currentTeamName = localStorage.getItem("currentTeamName");
+  const [posts, setPosts] = useState([]);
   const currentUserRole = localStorage.getItem("currentUserRole");
+  const currentTeamName = localStorage.getItem("currentTeamName");
   const uid = localStorage.getItem("currentUserUID");
+  const history = useHistory();
+  const [modalShow, setModalShow] = React.useState(false);
+  const [value, setValue] = useState();
+  const projectNameref = useRef();
 
   projectMembersService.getRole(uid, teamID);
 
@@ -36,12 +45,6 @@ export default function TestTeam(post) {
       position: "absolute",
       bottom: "20px",
       left: "20px",
-      color: "white",
-    },
-    buttons: {
-      position: "absolute",
-      top: "5px",
-      right: "5px",
       color: "white",
     },
     title: {
@@ -79,6 +82,7 @@ export default function TestTeam(post) {
         if (doc.exists) {
           console.log("Document data:", doc.data());
           setUpdata(doc.data());
+          setValue(doc.data().name);
         } else {
           console.log("No such document!");
         }
@@ -99,25 +103,13 @@ export default function TestTeam(post) {
           <Typography style={styles.title}>{updata.name}</Typography>
           <Typography style={styles.text}>{currentTeamName}</Typography>
         </div>
-        <div style={styles.buttons}>
-          <>
-            {currentUserRole === "admin" && (
-              <Button
-                color="inherit"
-                href="/myTeam/gallery/folder/settings"
-              >
-                <SettingsIcon /> Settings
-              </Button>
-            )}
-          </>
-        </div>
       </Card>
     );
   };
 
   return (
     <>
-      {/* <ToastContainer /> */}
+      <ToastContainer />
       <TopNav />
 
       <Container>

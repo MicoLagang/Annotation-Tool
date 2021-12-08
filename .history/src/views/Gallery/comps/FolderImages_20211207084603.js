@@ -9,7 +9,7 @@ import ImagesFolder from "../comps/ImagesFolder";
 import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
 
 import SettingsIcon from "@material-ui/icons/Settings";
 
@@ -37,12 +37,7 @@ export default function TestTeam(post) {
       bottom: "20px",
       left: "20px",
       color: "white",
-    },
-    buttons: {
-      position: "absolute",
-      top: "5px",
-      right: "5px",
-      color: "white",
+      width: "100%",
     },
     title: {
       fontSize: "2rem",
@@ -96,20 +91,22 @@ export default function TestTeam(post) {
           style={styles.media}
         />
         <div style={styles.overlay}>
-          <Typography style={styles.title}>{updata.name}</Typography>
-          <Typography style={styles.text}>{currentTeamName}</Typography>
-        </div>
-        <div style={styles.buttons}>
-          <>
-            {currentUserRole === "admin" && (
-              <Button
-                color="inherit"
-                href="/myTeam/gallery/folder/settings"
-              >
-                <SettingsIcon /> Settings
-              </Button>
-            )}
-          </>
+          <Row>
+            <Col>
+              <Typography style={styles.title}>{updata.name}</Typography>
+              <Typography style={styles.text}>{currentTeamName}</Typography>
+            </Col>
+            <Col md="auto">
+              {currentUserRole === "admin" && (
+                <IconButton
+                  color="inherit"
+                  href="/myTeam/gallery/folder/settings"
+                >
+                  <SettingsIcon />
+                </IconButton>
+              )}
+            </Col>
+          </Row>
         </div>
       </Card>
     );
@@ -117,7 +114,7 @@ export default function TestTeam(post) {
 
   return (
     <>
-      {/* <ToastContainer /> */}
+      <ToastContainer />
       <TopNav />
 
       <Container>

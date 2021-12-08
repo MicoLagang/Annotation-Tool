@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import TopNav from "../../Navigation/TopNav";
 import { projectFirestore } from "../../../firebase";
 import projectMembersService from "../../../services/projectMembers.service";
@@ -9,16 +9,12 @@ import ImagesFolder from "../comps/ImagesFolder";
 import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-
-import SettingsIcon from "@material-ui/icons/Settings";
 
 export default function TestTeam(post) {
   const teamID = localStorage.getItem("currentTeamID");
   const name = localStorage.getItem("currentProjectID");
   const [loading, setLoading] = useState(true);
   const currentTeamName = localStorage.getItem("currentTeamName");
-  const currentUserRole = localStorage.getItem("currentUserRole");
   const uid = localStorage.getItem("currentUserUID");
 
   projectMembersService.getRole(uid, teamID);
@@ -36,12 +32,6 @@ export default function TestTeam(post) {
       position: "absolute",
       bottom: "20px",
       left: "20px",
-      color: "white",
-    },
-    buttons: {
-      position: "absolute",
-      top: "5px",
-      right: "5px",
       color: "white",
     },
     title: {
@@ -99,25 +89,13 @@ export default function TestTeam(post) {
           <Typography style={styles.title}>{updata.name}</Typography>
           <Typography style={styles.text}>{currentTeamName}</Typography>
         </div>
-        <div style={styles.buttons}>
-          <>
-            {currentUserRole === "admin" && (
-              <Button
-                color="inherit"
-                href="/myTeam/gallery/folder/settings"
-              >
-                <SettingsIcon /> Settings
-              </Button>
-            )}
-          </>
-        </div>
       </Card>
     );
   };
 
   return (
     <>
-      {/* <ToastContainer /> */}
+      <ToastContainer />
       <TopNav />
 
       <Container>

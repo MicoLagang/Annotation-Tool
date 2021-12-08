@@ -9,7 +9,7 @@ import ImagesFolder from "../comps/ImagesFolder";
 import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
 
 import SettingsIcon from "@material-ui/icons/Settings";
 
@@ -40,8 +40,8 @@ export default function TestTeam(post) {
     },
     buttons: {
       position: "absolute",
-      top: "5px",
-      right: "5px",
+      bottom: "0px",
+      right: "0px",
       color: "white",
     },
     title: {
@@ -117,7 +117,7 @@ export default function TestTeam(post) {
 
   return (
     <>
-      {/* <ToastContainer /> */}
+      <ToastContainer />
       <TopNav />
 
       <Container>
