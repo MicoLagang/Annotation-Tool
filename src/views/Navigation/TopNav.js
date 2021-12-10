@@ -55,6 +55,8 @@ export default function TopNav() {
   const [loading, setLoading] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [bgcolor, setBgColor] = useState("");
+  const [teams,setTeams] = useState([])
+  const [Teammembers,setTeammembers] = useState([])
 
   const { currentUser, logout } = useAuth();
   const history = useHistory();
@@ -62,6 +64,7 @@ export default function TopNav() {
   localStorage.setItem("currentUserEmail", currentUser.email);
   let currentTeamName = localStorage.getItem("currentTeamName");
   const currentUserRole = localStorage.getItem("currentUserRole");
+  const currentUserID = localStorage.getItem("currentUserUID");
 
 
   const style = {
@@ -92,6 +95,33 @@ export default function TopNav() {
     else if (currentUserRole == "validator") return setBgColor("#834187");
     else if (currentUserRole == "annotator") return setBgColor("#fcc438");
     else if (currentUserRole == "contributor") return setBgColor("#82bb53");
+    const getPostsFromTeam = [];
+    projectFirestore.collection("TEAM")
+    .onSnapshot((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        getPostsFromTeam.push({
+          ...doc.data(), //spread operator
+          key: doc.id, // `id` given to us by Firebase
+            
+        });
+        setTeams(getPostsFromTeam)
+      });
+    });
+
+    const getPostsTeammembers= [];
+    projectFirestore.collection("TEAMMEMBERS")
+    .where("uid","==",currentUserID)
+    .onSnapshot((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        getPostsTeammembers.push({
+          ...doc.data(), //spread operator
+          key: doc.id, // `id` given to us by Firebase
+            
+        });
+        setTeammembers(getPostsTeammembers)
+      });
+    });
+    
   }, []);
 
   async function handleLogout() {
@@ -118,33 +148,63 @@ export default function TopNav() {
     projectMembersService.create(member);
   }
 
-  function JoinTeam() {
+  async function JoinTeam() {
     Swal.fire({
       title: "Join Team",
       input: "text",
       inputPlaceholder: "Enter Team Code",
       confirmButtonText: "JOIN",
-    }).then((result) => {
-      console.log(result);
+    }).then((result) => { 
       if (result.value == "") {
         result.isConfirmed = false;
+        Swal.fire("Pls enter team code!", "", "warning");
       }
-      /* Read more about isConfirmed, isDenied below */
-
       if (result.isConfirmed) {
-        projectFirestore
-          .collection("TEAM")
-          .where("TeamCode", "==", result.value)
-          .get()
-          .then((props) => {
-            props.forEach((doc) => {
-              a(result.value, doc.id, doc.data().name, doc.data().isArchive);
-            });
-          })
-          .catch((error) => {
-            console.log("Error getting documents: ", error);
-          });
-        Swal.fire("Success!", "", "success");
+
+          let check = 0
+          let checkTeam =0
+
+          for (let index = 0; index < teams.length; index++) {
+            const element = teams[index].TeamCode;
+            console.log(element)
+             if(element == result.value){
+                check=1
+              }  
+          }
+    
+          for (let index = 0; index < Teammembers.length; index++) {
+            const element = Teammembers[index].TeamCode;
+            if(element == result.value){
+              checkTeam=1
+            }
+          }
+
+          
+          if(check== 1){
+            projectFirestore
+            .collection("TEAM")
+            .where("TeamCode", "==", result.value)
+            .get()
+            .then((props) => {
+              props.forEach((doc) => {
+                if(currentUserID == doc.data().uid){
+                  Swal.fire("You are already part of this team", "", "warning");
+                }
+                else if(checkTeam ==1){
+                  Swal.fire("You are already part of this team", "", "warning");
+                }
+                else{
+                  a(result.value, doc.id, doc.data().name, doc.data().isArchive);
+                  Swal.fire("Success", "", "success")
+                }
+              });
+            })
+            .catch((error) => {
+              console.log("Error getting documents: ", error);
+            });  
+          }else{
+            Swal.fire("Team code does not exist!", "", "error");
+          }
       }
     });
   }

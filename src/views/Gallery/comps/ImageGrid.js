@@ -117,11 +117,10 @@ function ImageGrid() {
             key: doc.id, // `id` given to us by Firebase
             
           });
-          // console.log(doc.data().uid)
-          // console.log(doc.data().email)
         });
         setAnnotatorEmail(getPostsFromFirebase);
       });
+      
     getAnnotationData();
     getImageFolderData();
   }, [imageInfo]);

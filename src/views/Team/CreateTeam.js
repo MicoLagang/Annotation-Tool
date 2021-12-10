@@ -95,6 +95,7 @@ export default class  CreateTeam extends Component {
    
     const createdAt = timestamp();
     const currentUserEmail = localStorage.getItem("currentUserEmail");
+    const currentUserID = localStorage.getItem("currentUserUID");
 
     const data = {
       name: this.state.name,
@@ -106,9 +107,10 @@ export default class  CreateTeam extends Component {
       userEmail: currentUserEmail,
       updatedAt: "",
       isArchive: false,
+      uid:currentUserID,
     };
 
-    const currentUserID = localStorage.getItem("currentUserUID");
+   
     const member = {
       role: "admin",
       uid: currentUserID,
@@ -122,7 +124,7 @@ export default class  CreateTeam extends Component {
       isArchive: false,
     };
 
-    if(this.state.name && this.state.contactEmail && this.state.owner && this.state.key&& this.state.status){
+    if(this.state.name && this.state.contactEmail && this.state.owner ){
       this.setState({
         isButtonDisabled: true
       });

@@ -38,23 +38,15 @@ export class COCOCloudExporter {
 
         let folderID = localStorage.getItem('currentImagesFolderID')
 
-        if (currentUserRole == "admin") {
-        let data = {
-            data: content,
-            folderID: folderID,
-            admin: currentUserEmail,
-        }
-        imageService.create(data);
+        if (currentUserRole == "admin" || currentUserRole == "validator" || currentUserRole == "annotator") {
+            let data = {
+                data: content,
+                folderID: folderID,
+                admin: currentUserEmail,
+            }
+            imageService.create(data);
         }
 
-        if (currentUserRole == "annotator") {
-        let data = {
-            data: content,
-            folderID: folderID,
-            annotator: currentUserEmail,
-        }
-        imageService.create(data);
-        }
 
     }
 

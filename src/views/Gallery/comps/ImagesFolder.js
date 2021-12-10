@@ -168,6 +168,18 @@ export default function TestTeam() {
                       <Typography color="textSecondary"></Typography>
                     )}
 
+                    {!post.isCompleted && 
+                    !post.isAccepted &&
+                    post.isRejected &&
+                    userRole == "admin" ? (
+                      <>
+                      <Typography color="textSecondary">{post.AssignAnnotator}</Typography>
+                      <Typography color="textSecondary">rejected</Typography>
+                      </>
+                    ) : (
+                      <Typography color="textSecondary"></Typography>
+                    )}
+
 
                     {post.isAccepted &&
                     !post.isCompleted &&
