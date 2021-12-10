@@ -10,8 +10,6 @@ import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import teamService from "../../services/team.service";
 import userServices from "../../services/user.services";
-import TopNav from "../Navigation/TopNav";
-import { Container } from "react-bootstrap";
 
 const useStyles = makeStyles({
   root: {
