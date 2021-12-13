@@ -259,7 +259,8 @@ export default function TopNav() {
             Projects
           </Button>
           <Button  className="text-capitalize" color="inherit" href="/myTeam/gallery/teamMembers">
-            Team Members
+            Team Members 
+            <font color="red"></font>
           </Button>
           <Box sx={{ flexGrow: 1 }} />
           {currentUserRole && <Chip style={style} label={currentUserRole} />}

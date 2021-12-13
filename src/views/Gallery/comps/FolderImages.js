@@ -10,7 +10,7 @@ import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
-
+import Button from "@material-ui/core/Button";
 import SettingsIcon from "@material-ui/icons/Settings";
 
 export default function TestTeam(post) {
@@ -40,8 +40,8 @@ export default function TestTeam(post) {
     },
     buttons: {
       position: "absolute",
-      bottom: "0px",
-      right: "0px",
+      top: "5px",
+      right: "5px",
       color: "white",
     },
     title: {
@@ -91,27 +91,27 @@ export default function TestTeam(post) {
   const card = () => {
     return (
       <Card style={styles.card}>
-        <CardMedia
-          image={"https://gstatic.com/classroom/themes/Psychology.jpg"}
-          style={styles.media}
-        />
-        <div style={styles.overlay}>
-          <Typography style={styles.title}>{updata.name}</Typography>
-          <Typography style={styles.text}>{currentTeamName}</Typography>
-        </div>
-        <div style={styles.buttons}>
-          <>
-            {currentUserRole === "admin" && (
-              <IconButton
-                color="inherit"
-                href="/myTeam/gallery/folder/settings"
-              >
-                <SettingsIcon />
-              </IconButton>
-            )}
-          </>
-        </div>
-      </Card>
+              <CardMedia
+                image={"https://gstatic.com/classroom/themes/Psychology.jpg"}
+                style={styles.media}
+              />
+              <div style={styles.overlay}>
+                <Typography style={styles.title}>{updata.name}</Typography>
+                <Typography style={styles.text}>{currentTeamName}</Typography>
+              </div>
+              <div style={styles.buttons}>
+                <>
+                  {currentUserRole === "admin" && (
+                    <Button
+                      color="inherit"
+                      href="/myTeam/gallery/folder/settings"
+                    >
+                      <SettingsIcon /> Settings
+                    </Button>
+                  )}
+                </>
+              </div>
+            </Card>
     );
   };
 

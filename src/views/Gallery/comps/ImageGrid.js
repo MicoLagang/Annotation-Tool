@@ -24,6 +24,7 @@ import FilterIcon from "@material-ui/icons/Filter";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import PersonIcon from '@material-ui/icons/Person';
+import EjectIcon from '@material-ui/icons/Eject';
 
 import { Card, Row, Col, Container } from "react-bootstrap";
 import projectMembersService from "../../../services/projectMembers.service";
@@ -249,17 +250,35 @@ function ImageGrid() {
   }
 
   function deleteFolder() {
-    teamService.deleteFolder(teamID, name, folderID);
-    history.push("/myTeam/gallery/folder");
+    Swal.fire({
+      title: "Are you sure to delete this Folder Images",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        teamService.deleteFolder(teamID, name, folderID);
+        Swal.fire("Folder Successfully Deleted!", "", "success").then(
+          () => {
+            history.push("/myTeam/gallery/folder")
+          }
+        );
+      } else if (result.isDenied) {
+        Swal.fire("Submission Cancelled", "", "info");
+      }
+    });
   }
 
   function submitAnnotation() {
     Swal.fire({
       title: "Are you sure to submit annotation?",
-      timer: 5000,
-      showDenyButton: true,
-      confirmButtonText: "Submit",
-      denyButtonText: "Cancel",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes",
     }).then((result) => {
       if (result.isConfirmed) {
         teamService.submitAnnotation(teamID, name, folderID);
@@ -274,12 +293,38 @@ function ImageGrid() {
     });
   }
 
+  function evaluateFolder(){
+    Swal.fire({
+      title: "Are you sure to evaluate annotation?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes",
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        // teamService.evaluateAnnotation(teamID, name, folderID);
+        teamService.evaluateAnnotation(teamID, name, folderID)
+        Swal.fire("Success!", "", "success").then(() => {
+          window.location.reload(false);
+        });
+      } else if (result.isDenied) {
+        Swal.fire("Action is cancelled", "", "info");
+      }
+    });
+  }
+
   async function acceptAnnotaion(doc) {
     Swal.fire({
       title: "Are you sure to accept the submitted annotation?",
-      showDenyButton: true,
-      confirmButtonText: "Accept",
-      denyButtonText: "Cancel",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes",
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
@@ -307,9 +352,12 @@ function ImageGrid() {
   function rejectAnnotation() {
     Swal.fire({
       title: "Are you sure to reject the submitted annotation?",
-      showDenyButton: true,
-      confirmButtonText: "Reject",
-      denyButtonText: "Cancel",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes",
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
@@ -435,14 +483,16 @@ function ImageGrid() {
                     <Col></Col>
 
                     <Col md="auto">
-                      <Button
-                        className="text-capitalize"
-                        startIcon={<EditIcon />}
-                        onClick={() => annotateFolder()}
-                      >
-                        Annotate This Folder
-                      </Button>
+                  
                       {isSubmitted === false && (
+                        <>
+                           <Button
+                           className="text-capitalize"
+                           startIcon={<EditIcon />}
+                           onClick={() => annotateFolder()}
+                         >
+                           Annotate This Folder
+                         </Button>
                         <Button
                           className="m-2"
                           startIcon={<ArrowUpwardIcon />}
@@ -450,6 +500,7 @@ function ImageGrid() {
                         >
                           Submit Annotation
                         </Button>
+                        </>
                       )}
                     </Col>
                   </Row>
@@ -536,6 +587,16 @@ function ImageGrid() {
                       >
                         Annotate This Folder
                       </Button>
+                      {isAccepted == true &&(
+                        <Button
+                        className="text-capitalize"
+                        startIcon={<EjectIcon />}
+                        onClick={() => evaluateFolder()}
+                      >
+                        Re-evaluate Folder
+                      </Button>
+                      )}
+                      
                       </>
                     )}
 

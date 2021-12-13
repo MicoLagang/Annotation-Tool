@@ -213,6 +213,21 @@ class TutorialDataService {
       });
   }
 
+  evaluateAnnotation(teamID, name, folderID) {
+    return db
+      .doc(teamID)
+      .collection("FOLDERS")
+      .doc(name)
+      .collection("IMAGESFOLDER")
+      .doc(folderID)
+      .update({
+        isSubmitted: false,
+        isCompleted:false,
+        isRejected:false,
+        isAccepted:false,
+      });
+  }
+
   unArchiveTeam(key) {
     return db.doc(key).update({
       isArchive: false,

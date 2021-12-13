@@ -22,16 +22,12 @@ function App() {
     <>
       <TopNav />
       <Container>
-
         {currentUserRole == "admin" && <UploadForm />}
         {currentUserRole == "contributor" && <UploadForm />}
-
         <ImageGrid setSelectedImg={setSelectedImg} />
-
         {selectedImg && (
           <Modal selectedImg={selectedImg} setSelectedImg={setSelectedImg} />
         )}
-
         {console.log(selectedImg)}
       </Container>
     </>

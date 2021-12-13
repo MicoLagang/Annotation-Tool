@@ -62,7 +62,7 @@ function TeamSettings() {
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonText: "Yes",
     }).then((result) => {
       if (result.isConfirmed) {
         Swal.fire("Deleted!", "Your file has been deleted.", "success");
@@ -83,7 +83,7 @@ function TeamSettings() {
     } catch (e) {
       toast.error("Something went wrong!");
     } finally {
-      toast.success("EDIT SUCCESS");
+      toast.success("EDIT SUCCESS")
       setTimeout(function() {
         history.push("/myTeam");
       }, 5000);
@@ -102,7 +102,7 @@ function TeamSettings() {
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, Archive it!",
+      confirmButtonText: "Yes",
     }).then((result) => {
       if (result.isConfirmed) {
         Swal.fire(

@@ -4,7 +4,7 @@ import ImageGrid from "./ImageGrid";
 import Title from "./Title";
 import UploadForm from "./UploadForm";
 import useStorage from "../hooks/useStorage";
-import { Card, Container } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
 import TopNav from "../../Navigation/TopNav";
 import {
@@ -18,9 +18,36 @@ import { Button } from "@material-ui/core";
 import { motion } from "framer-motion";
 import { useAuth } from "../../../logic/context/AuthContext";
 
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
+import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
+import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import SkipNextIcon from '@material-ui/icons/SkipNext';
+
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex',
+    marginBottom: '20px'
+  },
+  details: {
+    flex: '1 0 auto',
+  },
+  cover: {
+    minWidth: 110,
+  },
+  content: {
+    overflow: "hidden", textOverflow: "ellipsis", width: '15rem'
+  }
+}));
+
 export default function AddImageForm(post) {
-  // const {teamID} = useParams()
-  //   const { name } = useParams()
+  const classes = useStyles();
+  const theme = useTheme();
 
   const [selectedImg, setSelectedImg] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -28,8 +55,10 @@ export default function AddImageForm(post) {
   const [file, setFile] = useState();
   const [images, setImages] = useState([]);
   const [url, setUrl] = useState([]);
+  const [uploadedImageName, setUploadedImageName] = useState([]);
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState(null);
+  const [showUploadForm, setShowUploadForm] = useState(true);
   const history = useHistory();
   const timer = (ms) => new Promise((res) => setTimeout(res, ms));
   let totalImages = 0;
@@ -82,6 +111,7 @@ export default function AddImageForm(post) {
   }
 
   async function handleUpload() {
+    setShowUploadForm(false)
     await fetchTotalImages();
     const promises = [];
     const length = images.length;
@@ -147,10 +177,16 @@ export default function AddImageForm(post) {
           totalImages = totalImages + 1;
           // collectionRef.add({ url, createdAt, name });
           setUrl((prevState) => [...prevState, url]);
+          setUploadedImageName((prevState) => [...prevState, {url: url, name:image.name}])
           console.log(index);
           console.log(images.length);
         }
       );
+      
+
+      // if( index == (images.length - 1 ) ){
+      //   alert('Map Opration Successfully Completed')
+      // }
     });
   }
 
@@ -162,13 +198,14 @@ export default function AddImageForm(post) {
         style={{ minHeight: "100vh" }}
       >
         <div className="w-100" style={{ maxWidth: "350px" }}>
-          <div className="submit-form">
             <h2 className="text-center mb-4">Upload Images</h2>
-            <motion.div
+            {/* <motion.div
               className="progress-bar"
               initial={{ width: 0 }}
               animate={{ width: progress + "%" }}
-            ></motion.div>
+            ></motion.div> */}
+
+          <div className="submit-form">
             <Form>
               <Form.Group controlId="formFileMultiple" className="mb-3">
                 <Form.Control type="file" multiple onChange={handleChange} />
@@ -186,34 +223,38 @@ export default function AddImageForm(post) {
                 />
               </Form.Group>
 
-              <Button
+              {showUploadForm && <Button
                 variant="contained"
                 color="primary"
                 className="w-100"
                 onClick={handleUpload}
               >
                 Upload
-              </Button>
+              </Button>}
             </Form>
           </div>
-          {url.map((url, i) => (
-        <div
-        style={cardLink}
-        className="col-lg-3 col-md-4 col-sm-12 mb-3"
-      >
-        <Card
-          key={i}
-          className="h-100"
-          style={{
-            backgroundImage: `url(${url})`,
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "center",
-            backgroundSize: "cover",
-          }}
-        >
-        </Card>
-      </div>
-      ))}
+
+          {uploadedImageName.map((item, i) => (
+            <Card className={classes.root}>
+              <CardMedia
+                className={classes.cover}
+                image={item.url}
+                title={item.name}
+              />
+              <div className={classes.details}>
+                <CardContent className={classes.content}>
+                  <Typography noWrap variant="caption" color="textSecondary">
+                  {item.name}
+                  </Typography>
+                </CardContent>
+                  <motion.div
+                    className="progress-bar"
+                    initial={{ width: 0 }}
+                    animate={{ width: progress + "%" }}
+                  ></motion.div>
+              </div>
+            </Card>
+          ))}
         </div>
 
       </Container>

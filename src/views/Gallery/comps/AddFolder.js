@@ -30,7 +30,7 @@ export default function AddFolder() {
         history.push("/myTeam/gallery");
       }, 3000);
     }
-    setDouble(true);
+    // setDouble(true);
   }
 
   return (

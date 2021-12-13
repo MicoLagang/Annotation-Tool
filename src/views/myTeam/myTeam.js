@@ -105,22 +105,7 @@ const FolderList = () => {
         <div className="row">
           {posts.length > 0 ? (
             <>
-              {/* <Link
-                to="/new"
-                style={cardLink}
-                className="col-lg-3 col-md-4 col-sm-12 mb-3"
-              >
-                <Card
-                  style={createTeam}
-                  className="d-flex align-items-center justify-content-center h-100"
-                >
-                  <CardContent>
-                    <Typography variant="h5" component="h2">
-                      Create Team
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Link> */}
+
               {posts.map((post) => (
                 <Link
                   to={`/myTeam/gallery`}

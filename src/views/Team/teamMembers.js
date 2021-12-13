@@ -124,14 +124,17 @@ const TeamMembers = () => {
                           Edit
                         </Button>
                       ) : (
-                        <Button
+                        <>
+                           <Button
                           variant="primary"
                           onClick={() => {
                             openModal(post);
                           }}
                         >
                           Edit
-                        </Button>
+                        </Button>                     
+                        </>
+                     
                       )}
                     </td>
                   )}

@@ -10,6 +10,8 @@ import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import teamService from "../../services/team.service";
 import userServices from "../../services/user.services";
+import { Container } from "react-bootstrap";
+import TopNav from "../Navigation/TopNav";
 
 const useStyles = makeStyles({
   root: {
@@ -78,6 +80,9 @@ const FolderList = () => {
   userServices.getName(email);
   return (
     <>
+
+<TopNav></TopNav>
+<Container>
       <div className="row">
         {posts.length > 0 ? (
           posts.map((post) => (
@@ -88,16 +93,6 @@ const FolderList = () => {
               style={cardLink}
               className="col-lg-3 col-md-4 col-sm-12 mb-3"
             >
-              {/* <Card border="dark" className="h-100">
-                <Card.Body className="d-flex align-items-center justify-content-center">
-                  <Card.Title>
-                    {post.name}
-
-                    <h6 align="center">{post.TeamCode}</h6>
-                  </Card.Title>
-                </Card.Body>
-              </Card> */}
-
               <Card className="d-flex align-items-center justify-content-center h-100">
                 <CardContent>
                   <Typography variant="h5" component="h2">
@@ -112,6 +107,7 @@ const FolderList = () => {
           <h6>No Team yet</h6>
         )}
       </div>
+      </Container>
     </>
   );
 };

@@ -11,11 +11,8 @@ export default function Dashboard() {
     localStorage.clear();
 
     return (
-        <>
-            <TopNav></TopNav>
-            <Container>
+        <>       
                 <TeamList />
-            </Container>
         </>
     )
 }
