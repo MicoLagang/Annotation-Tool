@@ -92,7 +92,7 @@ export default function Login(props) {
                 ref={emailRef}
 
                 margin="normal"
-                placeholder="Email Address"
+                placeholder="Email Adress"
                 type="email"
                 required
                 

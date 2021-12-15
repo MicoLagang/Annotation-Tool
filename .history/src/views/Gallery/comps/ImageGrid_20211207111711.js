@@ -11,11 +11,7 @@ import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
 import Popover from "@material-ui/core/Popover";
 import Typography from "@material-ui/core/Typography";
-// import Card from "@material-ui/core/Card";
-import CardMedia from "@material-ui/core/CardMedia";
-import SettingsIcon from "@material-ui/icons/Settings";
 import { makeStyles } from "@material-ui/core/styles";
-import Chip from "@material-ui/core/Chip";
 
 import Button from "@material-ui/core/Button";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -27,11 +23,8 @@ import CheckIcon from "@material-ui/icons/Check";
 import FilterIcon from "@material-ui/icons/Filter";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
-import PersonIcon from '@material-ui/icons/Person';
-import EjectIcon from '@material-ui/icons/Eject';
 
 import { Card, Row, Col, Container } from "react-bootstrap";
-import projectMembersService from "../../../services/projectMembers.service";
 
 const useStyles = makeStyles((theme) => ({
   popover: {
@@ -43,37 +36,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const styles = {
-  media: {
-    height: 0,
-    paddingTop: "200px",
-  },
-  card: {
-    position: "relative",
-    marginBottom: "30px",
-  },
-  overlay: {
-    position: "absolute",
-    bottom: "20px",
-    left: "20px",
-    color: "white",
-  },
-  buttons: {
-    position: "absolute",
-    top: "5px",
-    right: "5px",
-    color: "white",
-  },
-  title: {
-    fontSize: "2rem",
-    fontWeight: "500",
-    lineHeight: "2.75rem",
-  },
-  text: {
-    fontSize: "1rem",
-  },
-};
-
 function ImageGrid() {
   const { docs } = useFirestore("TEAM");
   const { imagesData, setImagesData } = useImage();
@@ -83,8 +45,6 @@ function ImageGrid() {
   const [imagesURL, setImagesURL] = useState([]);
   const [imagesName, setImagesName] = useState([]);
   const [annotatedImagesArray, setAnnotatedImagesArray] = useState([]);
-  const [counter1, setCounter] = useState()
-  let counter = 0;
 
   const currentUserRole = localStorage.getItem("currentUserRole");
   const timer = (ms) => new Promise((res) => setTimeout(res, ms));
@@ -95,34 +55,18 @@ function ImageGrid() {
   const currentUserName = localStorage.getItem("currentUserName");
   let data = [];
   let annotationData;
-  const [imageFolderData, setImageFolderData] = useState({});
+  let imageFolderData;
   const [imageFolderName, setImageFolderName] = useState("");
   const [totalImages, setTotalImages] = useState(0);
   const [totalAnnotatedImages, setTotalAnnotatedImages] = useState(0);
-<<<<<<< HEAD
-  // let counter = 0;
-=======
-  const [isRejected, setIsRejected] = useState(false);
   let counter = 0;
->>>>>>> 7c733d9208c1a3b3d01b3d2f261163206c40b7df
   const [isSubmitted, setisSubmitted] = useState();
   const [isAccepted, setisAccepted] = useState();
 
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [imageInfo, setImageInfo] = useState();
-  const [AnnotatorEmail,setAnnotatorEmail] = useState([]);
-
-  const [bgcolor, setBgColor] = useState("");
-  const [status, setStatus] = useState("");
   // let imageInfo;
-
-  const chip = {
-    backgroundColor: `${bgcolor}`,
-    paddingBottom: "0px !important",
-    fontSize: "14px",
-    color: "white",
-  };
 
   const cardLink = {
     color: "#000000",
@@ -137,7 +81,6 @@ function ImageGrid() {
   };
 
   useEffect(() => {
-    const getPostsFromFirebase = [];
     var docRef = projectFirestore
       .collection("TEAM")
       .doc(teamID)
@@ -150,28 +93,8 @@ function ImageGrid() {
       .get()
       .then((doc) => {
         if (doc.exists) {
-          //gets the data of the image folder
           setisSubmitted(doc.data().isSubmitted);
           setisAccepted(doc.data().isAccepted);
-          
-          if (doc.data().isRejected) {
-            console.log("rejected")
-            setStatus('Rejected');
-            setBgColor("#c92d39");
-          }
-          else if (doc.data().isSubmitted) {
-            console.log("pending")
-            setStatus('Pending')
-            setBgColor("#fcc438");
-          }
-          else if (doc.data().isAccepted || doc.data().isCompleted) {
-            console.log("completed")
-              setStatus("Completed")
-            setBgColor("#82bb53");
-          }
-          
-          setImageFolderData(doc.data());
-          console.log(doc.data())
         } else {
           console.log("No such document!");
         }
@@ -179,21 +102,6 @@ function ImageGrid() {
       .catch((error) => {
         console.log("Error getting document:", error);
       });
-
-      projectFirestore.collection("TEAMMEMBERS")
-      .where("projectID", "==", teamID)  
-      .where("role", "==", "annotator")  
-      .onSnapshot((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          getPostsFromFirebase.push({
-            ...doc.data(), //spread operator
-            key: doc.id, // `id` given to us by Firebase
-            
-          });
-        });
-        setAnnotatorEmail(getPostsFromFirebase);
-      });
-      
     getAnnotationData();
     getImageFolderData();
   }, [imageInfo]);
@@ -201,7 +109,6 @@ function ImageGrid() {
   const getImageFolderData = () => {
     teamService.getImageFolderData(teamID, name, folderID).then((data) => {
       console.log("Image Folder Data: " + data.data().isRejected);
-      setIsRejected(data.data().isRejected);
       setImageFolderName(data.data().name);
       setTotalImages(data.data().totalImages - 1);
     });
@@ -280,16 +187,6 @@ function ImageGrid() {
     let arr = [];
     docs.map((doc) => {
       arr.push(doc);
-
-
-      // Checks if the images is annotated and only loads what is not annotated
-      // if (isRejected && currentUserRole === "annotator") {
-      //   if (!isAnnotated(doc)) {
-      //     console.log(doc);
-      //     arr.push(doc);
-      //   }
-      // } else {arr.push(doc);}
-
     });
     console.log(arr);
     setImagesData(arr);
@@ -314,12 +211,11 @@ function ImageGrid() {
             .split(".")
             .filter((item) => item);
           if (doc.name == SliceImageName[0]) {
-  
+            counter = counter + 1;
+            console.log(counter);
             return true;
           } else {
-   
             continue;
-            
           }
         }
         if (i == annotatedImagesArray.length) {
@@ -329,64 +225,18 @@ function ImageGrid() {
     } else console.log("no records");
   }
 
-
-  console.log("Total Annotated: " + counter1);
-
   function deleteFolder() {
-    Swal.fire({
-<<<<<<< HEAD
-      title: "Are you sure to delete this Folder Images",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        teamService.deleteFolder(teamID, name, folderID);
-        Swal.fire("Folder Successfully Deleted!", "", "success").then(
-          () => {
-            history.push("/myTeam/gallery/folder")
-=======
-      title: "Are you sure to delete this folder?",
-      timer: 5000,
-      showDenyButton: true,
-      confirmButtonText: "yes",
-      denyButtonText: "no",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        teamService.deleteFolder(teamID, name, folderID);
-        Swal.fire("Annotation Successfully Submitted!", "", "success").then(
-          () => {
-            history.push("/myTeam/gallery/folder");
->>>>>>> 7c733d9208c1a3b3d01b3d2f261163206c40b7df
-          }
-        );
-      } else if (result.isDenied) {
-        Swal.fire("Submission Cancelled", "", "info");
-      }
-    });
-<<<<<<< HEAD
-=======
-   
->>>>>>> 7c733d9208c1a3b3d01b3d2f261163206c40b7df
+    teamService.deleteFolder(teamID, name, folderID);
+    history.push("/myTeam/gallery/folder");
   }
 
   function submitAnnotation() {
     Swal.fire({
       title: "Are you sure to submit annotation?",
-<<<<<<< HEAD
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes",
-=======
       timer: 5000,
       showDenyButton: true,
-      confirmButtonText: "yes",
-      denyButtonText: "no",
->>>>>>> 7c733d9208c1a3b3d01b3d2f261163206c40b7df
+      confirmButtonText: "Submit",
+      denyButtonText: "Cancel",
     }).then((result) => {
       if (result.isConfirmed) {
         teamService.submitAnnotation(teamID, name, folderID);
@@ -401,44 +251,12 @@ function ImageGrid() {
     });
   }
 
-  function evaluateFolder(){
-    Swal.fire({
-      title: "Are you sure to evaluate annotation?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes",
-    }).then((result) => {
-      /* Read more about isConfirmed, isDenied below */
-      if (result.isConfirmed) {
-        // teamService.evaluateAnnotation(teamID, name, folderID);
-        teamService.evaluateAnnotation(teamID, name, folderID)
-        Swal.fire("Success!", "", "success").then(() => {
-          window.location.reload(false);
-        });
-      } else if (result.isDenied) {
-        Swal.fire("Action is cancelled", "", "info");
-      }
-    });
-  }
-
   async function acceptAnnotaion(doc) {
     Swal.fire({
       title: "Are you sure to accept the submitted annotation?",
-<<<<<<< HEAD
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes",
-=======
       showDenyButton: true,
-      confirmButtonText: "yes",
-      denyButtonText: "no",
->>>>>>> 7c733d9208c1a3b3d01b3d2f261163206c40b7df
+      confirmButtonText: "Accept",
+      denyButtonText: "Cancel",
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
@@ -466,18 +284,9 @@ function ImageGrid() {
   function rejectAnnotation() {
     Swal.fire({
       title: "Are you sure to reject the submitted annotation?",
-<<<<<<< HEAD
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes",
-=======
       showDenyButton: true,
-      confirmButtonText: "yes",
-      denyButtonText: "no",
->>>>>>> 7c733d9208c1a3b3d01b3d2f261163206c40b7df
+      confirmButtonText: "Reject",
+      denyButtonText: "Cancel",
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
@@ -489,56 +298,6 @@ function ImageGrid() {
         Swal.fire("Action is cancelled", "", "info");
       }
     });
-  }
-
-  async function openModal(){
-
-    var options = {};
-    AnnotatorEmail.map((post) => (
-        options[post.email]=post.email
-      ))
-
-
-      const { value: role } =await Swal.fire({
-      title: "Assign Annotator",
-      input: "select",
-      inputOptions: options,
-      inputPlaceholder: "Select Annotator",
-      showCancelButton: true,
-      inputValidator: (value) => {
-        return new Promise((resolve) => {
-          if (value) {
-            console.log("if");
-            console.log(value)
-            resolve();
-          } else {
-            console.log("else");
-            resolve("You need to select role");
-          }
-          // resolve();
-        });
-      },
-    });
-
-    if (role) {
-
-      projectFirestore.collection("TEAM")
-      .doc(teamID)
-      .collection("FOLDERS")
-      .doc(name)
-      .collection("IMAGESFOLDER")
-      .doc(folderID)
-      .update({
-        AssignAnnotator: role,
-      }).then(() => {
-        Swal.fire(`This Folder is now assigned to ${role}`).then( () => {
-          window.location.reload(false);
-      })
-      })
-      .catch(() => {});
-    }
-
-
   }
 
   const handlePopoverOpen = (event, doc) => {
@@ -565,22 +324,6 @@ function ImageGrid() {
           Back to folders
         </Button>
       </div>
-
-      <Card style={styles.card}>
-        <CardMedia
-          image={"https://gstatic.com/classroom/themes/Psychology.jpg"}
-          style={styles.media}
-        />
-        <div style={styles.overlay}>
-          <Typography style={styles.title}>{imageFolderData.name}</Typography>
-          <Typography style={styles.text}>Images: {imageFolderData.totalImages-1}</Typography>
-        </div>
-        <div style={styles.buttons}>
-          <>
-          <Chip style={chip} label={status} />
-          </>
-        </div>
-      </Card>
 
       {getImageFolderData()}
 
@@ -619,26 +362,14 @@ function ImageGrid() {
                     <Col></Col>
 
                     <Col md="auto">
-<<<<<<< HEAD
-                  
-=======
                       <Button
                         className="text-capitalize"
                         startIcon={<EditIcon />}
                         onClick={() => annotateFolder()}
                       >
-                        Annotate Folder
+                        Annotate This Folder
                       </Button>
->>>>>>> 7c733d9208c1a3b3d01b3d2f261163206c40b7df
                       {isSubmitted === false && (
-                        <>
-                           <Button
-                           className="text-capitalize"
-                           startIcon={<EditIcon />}
-                           onClick={() => annotateFolder()}
-                         >
-                           Annotate This Folder
-                         </Button>
                         <Button
                           className="m-2"
                           startIcon={<ArrowUpwardIcon />}
@@ -646,7 +377,6 @@ function ImageGrid() {
                         >
                           Submit Annotation
                         </Button>
-                        </>
                       )}
                     </Col>
                   </Row>
@@ -717,33 +447,13 @@ function ImageGrid() {
                   <Col md="auto">
                     <Box sx={{ flexGrow: 1 }} />
                     {docs.length > 0 && (
-                      <>
-                      <Button
-                         className="text-capitalize"
-                         startIcon={<PersonIcon />}
-                         onClick={() => openModal()}
-                       >
-                         Assign Annotator
-                       </Button>
-
                       <Button
                         className="text-capitalize"
                         startIcon={<EditIcon />}
                         onClick={() => annotateFolder()}
                       >
-                        Annotate Folder
+                        Annotate This Folder
                       </Button>
-                      {isAccepted == true &&(
-                        <Button
-                        className="text-capitalize"
-                        startIcon={<EjectIcon />}
-                        onClick={() => evaluateFolder()}
-                      >
-                        Re-evaluate Folder
-                      </Button>
-                      )}
-                      
-                      </>
                     )}
 
                     <Button
@@ -764,149 +474,66 @@ function ImageGrid() {
 
           <div className="row mt-3">
             {docs.length > 0 ? (
-              <>
-                {isRejected && currentUserRole === "annotator"
-                  ? docs.map(
-                      (doc) =>
-                        !isAnnotated(doc) && (
+              docs.map((doc) => (
+                <>
+                  <div
+                    style={cardLink}
+                    className="col-lg-3 col-md-4 col-sm-12 mb-3"
+                    onClick={() => addImage(doc)}
+                  >
+                    <Card
+                      key={doc.id}
+                      border={`${isAnnotated(doc) ? "success" : "danger"}`}
+                      className="h-100"
+                      style={{
+                        backgroundImage: `url(${doc.url})`,
+                        backgroundRepeat: "no-repeat",
+                        backgroundPosition: "center",
+                        backgroundSize: "cover",
+                        border: isActive(doc) ? "4px solid" : "",
+                      }}
+                    >
+                      <InfoOutlinedIcon
+                        style={{ color: "white", border: "1px black" }}
+                        aria-owns={open ? "mouse-over-popover" : undefined}
+                        aria-haspopup="true"
+                        onMouseEnter={(event) => handlePopoverOpen(event, doc)}
+                        onMouseLeave={handlePopoverClose}
+                        className="m-3"
+                      />
+
+                      <Popover
+                        id="mouse-over-popover"
+                        className={classes.popover}
+                        classes={{
+                          paper: classes.paper,
+                        }}
+                        open={open}
+                        anchorEl={anchorEl}
+                        anchorOrigin={{
+                          vertical: "bottom",
+                          horizontal: "right",
+                        }}
+                        transformOrigin={{
+                          vertical: "top",
+                          horizontal: "left",
+                        }}
+                        onClose={handlePopoverClose}
+                        disableRestoreFocus
+                      >
+                        {imageInfo && (
                           <>
-                            <div
-                              style={cardLink}
-                              className="col-lg-3 col-md-4 col-sm-6 mb-3"
-                              onClick={() => addImage(doc)}
-                            >
-                              <Card
-                                key={doc.id}
-                                border={`${
-                                  isAnnotated(doc) ? "success" : "danger"
-                                }`}
-                                className="h-100"
-                                style={{
-                                  backgroundImage: `url(${doc.url})`,
-                                  backgroundRepeat: "no-repeat",
-                                  backgroundPosition: "center",
-                                  backgroundSize: "cover",
-                                  border: isActive(doc) ? "4px solid" : "",
-                                }}
-                              >
-                                <InfoOutlinedIcon
-                                  style={{
-                                    color: "white",
-                                    border: "1px black",
-                                  }}
-                                  aria-owns={
-                                    open ? "mouse-over-popover" : undefined
-                                  }
-                                  aria-haspopup="true"
-                                  onMouseEnter={(event) =>
-                                    handlePopoverOpen(event, doc)
-                                  }
-                                  onMouseLeave={handlePopoverClose}
-                                  className="m-3"
-                                />
-
-                                <Popover
-                                  id="mouse-over-popover"
-                                  className={classes.popover}
-                                  classes={{
-                                    paper: classes.paper,
-                                  }}
-                                  open={open}
-                                  anchorEl={anchorEl}
-                                  anchorOrigin={{
-                                    vertical: "bottom",
-                                    horizontal: "right",
-                                  }}
-                                  transformOrigin={{
-                                    vertical: "top",
-                                    horizontal: "left",
-                                  }}
-                                  onClose={handlePopoverClose}
-                                  disableRestoreFocus
-                                >
-                                  {imageInfo && (
-                                    <>
-                                      <p>Name: {imageInfo.name}</p>
-                                      <p>
-                                        Description: {imageInfo.description}
-                                      </p>
-                                      <p>Uploaded by: {imageInfo.uploader}</p>
-                                      <p>Validated by: {imageInfo.validated}</p>
-                                    </>
-                                  )}
-                                </Popover>
-                              </Card>
-                            </div>
+                            <p>Name: {imageInfo.name}</p>
+                            <p>Description: {imageInfo.description}</p>
+                            <p>Uploaded by: {imageInfo.uploader}</p>
+                            <p>Validated by: {imageInfo.validated}</p>
                           </>
-                        )
-                    )
-                  : docs.map((doc) => (
-                      <>
-                        <div
-                          style={cardLink}
-                          className="col-lg-3 col-md-4 col-sm-6 mb-3"
-                          onClick={() => addImage(doc)}
-                        >
-                          <Card
-                            key={doc.id}
-                            border={`${
-                              isAnnotated(doc) ? "success" : "danger"
-                            }`}
-                            className="h-100"
-                            style={{
-                              backgroundImage: `url(${doc.url})`,
-                              backgroundRepeat: "no-repeat",
-                              backgroundPosition: "center",
-                              backgroundSize: "cover",
-                              border: isActive(doc) ? "4px solid" : "",
-                            }}
-                          >
-                            <InfoOutlinedIcon
-                              style={{ color: "white", border: "1px black" }}
-                              aria-owns={
-                                open ? "mouse-over-popover" : undefined
-                              }
-                              aria-haspopup="true"
-                              onMouseEnter={(event) =>
-                                handlePopoverOpen(event, doc)
-                              }
-                              onMouseLeave={handlePopoverClose}
-                              className="m-3"
-                            />
-
-                            <Popover
-                              id="mouse-over-popover"
-                              className={classes.popover}
-                              classes={{
-                                paper: classes.paper,
-                              }}
-                              open={open}
-                              anchorEl={anchorEl}
-                              anchorOrigin={{
-                                vertical: "bottom",
-                                horizontal: "right",
-                              }}
-                              transformOrigin={{
-                                vertical: "top",
-                                horizontal: "left",
-                              }}
-                              onClose={handlePopoverClose}
-                              disableRestoreFocus
-                            >
-                              {imageInfo && (
-                                <>
-                                  <p>Name: {imageInfo.name}</p>
-                                  <p>Description: {imageInfo.description}</p>
-                                  <p>Uploaded by: {imageInfo.uploader}</p>
-                                  <p>Validated by: {imageInfo.validated}</p>
-                                </>
-                              )}
-                            </Popover>
-                          </Card>
-                        </div>
-                      </>
-                    ))}
-              </>
+                        )}
+                      </Popover>
+                    </Card>
+                  </div>
+                </>
+              ))
             ) : (
               <Container className="d-flex justify-content-center mb-5">
                 <div className="w-100" style={{ maxWidth: "400px" }}>
@@ -955,7 +582,7 @@ function ImageGrid() {
                 <>
                   <div
                     style={cardLink}
-                    className="col-lg-3 col-md-4 col-sm-6 mb-3"
+                    className="col-lg-3 col-md-4 col-sm-12 mb-3"
                     onClick={() => addImage(doc)}
                   >
                     <Card

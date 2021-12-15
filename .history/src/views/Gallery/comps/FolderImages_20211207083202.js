@@ -1,32 +1,71 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Form } from "react-bootstrap";
-import { useHistory } from "react-router-dom";
+import { Container, Modal, Tabs, Tab, Form } from "react-bootstrap";
+import { TextField } from "@material-ui/core";
+import { Link, useHistory } from "react-router-dom";
+import TopNav from "../../Navigation/TopNav";
 import { projectFirestore } from "../../../firebase";
 import projectMembersService from "../../../services/projectMembers.service";
 import teamService from "../../../services/team.service";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+import ImagesFolder from "../comps/ImagesFolder";
 import Swal from "sweetalert2";
-import TopNav from "../../Navigation/TopNav";
-import { Container } from "react-bootstrap";
-import { ToastContainer } from "react-toastify";
 
 import Card from "@material-ui/core/Card";
+import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
-import CardActions from "@material-ui/core/CardActions";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 
-function ProjectSettings() {
+export default function TestTeam(post) {
   const teamID = localStorage.getItem("currentTeamID");
   const name = localStorage.getItem("currentProjectID");
+  const [selectedImg, setSelectedImg] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [posts, setPosts] = useState([]);
   const currentUserRole = localStorage.getItem("currentUserRole");
+  const currentTeamName = localStorage.getItem("currentTeamName");
   const uid = localStorage.getItem("currentUserUID");
   const history = useHistory();
+  const [modalShow, setModalShow] = React.useState(false);
   const [value, setValue] = useState();
   const projectNameref = useRef();
 
   projectMembersService.getRole(uid, teamID);
+
+  const createTeam = {
+    backgroundColor: "#FFD803",
+  };
+
+  const cardLink = {
+    color: "#000000",
+    textDecoration: "none",
+    height: "130px",
+  };
+
+  const styles = {
+    media: {
+      height: 0,
+      paddingTop: "200px",
+    },
+    card: {
+      position: "relative",
+      marginBottom: "30px",
+    },
+    overlay: {
+      position: "absolute",
+      bottom: "20px",
+      left: "20px",
+      color: "white",
+    },
+    title: {
+      fontSize: "2rem",
+      fontWeight: "500",
+      lineHeight: "2.75rem",
+    },
+    text: {
+      fontSize: "1rem",
+    },
+  };
 
   const [updata, setUpdata] = useState({
     data: {
@@ -71,7 +110,7 @@ function ProjectSettings() {
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes",
+      confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
         Swal.fire("Deleted!", "Your file has been deleted.", "success");
@@ -103,66 +142,31 @@ function ProjectSettings() {
       });
   };
 
+  const card = () => {
+    return (
+      <Card style={styles.card}>
+        <CardMedia
+          image={"https://gstatic.com/classroom/themes/Psychology.jpg"}
+          style={styles.media}
+        />
+        <div style={styles.overlay}>
+          <Typography style={styles.title}>{updata.name}</Typography>
+          <Typography style={styles.text}>{currentTeamName}</Typography>
+        </div>
+      </Card>
+    );
+  };
+
   return (
     <>
-      <TopNav></TopNav>
       <ToastContainer />
-      <Container
-        className="mt-5 d-flex justify-content-center"
-        style={{ minHeight: "100vh" }}
-      >
-        <div className="w-100" style={{ maxWidth: "350px" }}>
-          {currentUserRole === "admin" && (
-            <Card style={{ width: "100%" }}>
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                  EDIT PROJECT NAME
-                </Typography>
-                <Form.Group className="mb-3" controlId="formBasicEmail">
-                  <Form.Control
-                    type="text"
-                    defaultValue={value}
-                    ref={projectNameref}
-                  />
-                  <Form.Text className="text-muted">
-                    Edit your project name
-                  </Form.Text>
-                </Form.Group>
-                <Button
-                  color="primary"
-                  className="text-capitalize"
-                  onClick={update}
-                >
-                  Update
-                </Button>
-              </CardContent>
-            </Card>
-          )}
-          <br></br>
-          {currentUserRole === "admin" && (
-            <Card style={{ width: "100%" }}>
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                  DELETE THIS PROJECT
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Once you delete a project, there is no going back. Please be
-                  certain.
-                </Typography>
-                <Button
-                  color="secondary"
-                  className="text-capitalize"
-                  onClick={deleteProject}
-                >
-                  Delete
-                </Button>
-              </CardContent>
-            </Card>
-          )}
-        </div>
+      <TopNav />
+
+      <Container>
+        {card()}
+
+        <ImagesFolder></ImagesFolder>
       </Container>
     </>
   );
 }
-
-export default ProjectSettings;

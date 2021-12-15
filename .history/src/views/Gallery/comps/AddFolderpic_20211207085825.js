@@ -1,10 +1,4 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useParams } from "react-router-dom";
-import ImageGrid from "./ImageGrid";
-import Title from "./Title";
-import UploadForm from "./UploadForm";
-import useStorage from "../hooks/useStorage";
-import { Card, Container } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
 import TopNav from "../../Navigation/TopNav";
 import { projectFirestore } from "../../../firebase";
@@ -36,7 +30,6 @@ export default function TestTeam(post) {
 
   function saveData() {
     if (foldername.current.value) {
-      setDouble(true);
       projectFirestore
         .collection("TEAM")
         .doc(teamID)
@@ -50,14 +43,13 @@ export default function TestTeam(post) {
           isSubmitted: false,
           isCompleted: false,
           isRejected: false,
-          isDeleted:false,
         });
       toast.success("Folder Created Successfully");
       setTimeout(function() {
         history.push("/myTeam/gallery/folder");
       }, 5000);
     }
-    // setDouble(true
+    setDouble(true);
   }
 
   return (
@@ -74,43 +66,38 @@ export default function TestTeam(post) {
     //     </div>
 
     <>
-      <TopNav />
-      <Container
-        className="mt-5 d-flex justify-content-center"
-        style={{ minHeight: "100vh" }}
-      >
-        <ToastContainer />
-        <div className="submit-form">
-          <h2 className="text-center mb-4">Create Images Folder</h2>
-          <Form>
-            {/* <div>{teamID}</div> */}
-            <Form.Group className="mb-3">
-              <Form.Control
-                type="text"
-                className="form-control"
-                id="folderName"
-                required
-                //   onChange={foldername}
-                ref={foldername}
-                placeholder="Name"
-                name="owner"
-              />
-            </Form.Group>
+      {/* <TopNav/> */}
+      <ToastContainer />
+      <div className="submit-form">
+        <h2 className="text-center mb-4">Create Images Folder</h2>
+        <Form>
+          {/* <div>{teamID}</div> */}
+          <Form.Group className="mb-3">
+            <Form.Control
+              type="text"
+              className="form-control"
+              id="folderName"
+              required
+              //   onChange={foldername}
+              ref={foldername}
+              placeholder="Name"
+              name="owner"
+            />
+          </Form.Group>
 
-            <Button
-              disabled={double}
-              onClick={() => {
-                saveData();
-              }}
-              variant="contained"
-              color="primary"
-              className="w-100"
-            >
-              Create
-            </Button>
-          </Form>
-        </div>
-      </Container>
+          <Button
+            disabled={double}
+            onClick={() => {
+              saveData();
+            }}
+            variant="contained"
+            color="primary"
+            className="w-100"
+          >
+            Create
+          </Button>
+        </Form>
+      </div>
     </>
   );
 }

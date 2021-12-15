@@ -8,7 +8,6 @@ import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import TopNav from "../../Navigation/TopNav";
 import { Container } from "react-bootstrap";
-import { ToastContainer } from "react-toastify";
 
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -71,7 +70,7 @@ function ProjectSettings() {
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes",
+      confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
         Swal.fire("Deleted!", "Your file has been deleted.", "success");
@@ -106,7 +105,6 @@ function ProjectSettings() {
   return (
     <>
       <TopNav></TopNav>
-      <ToastContainer />
       <Container
         className="mt-5 d-flex justify-content-center"
         style={{ minHeight: "100vh" }}

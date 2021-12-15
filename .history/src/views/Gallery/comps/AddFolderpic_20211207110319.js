@@ -50,14 +50,13 @@ export default function TestTeam(post) {
           isSubmitted: false,
           isCompleted: false,
           isRejected: false,
-          isDeleted:false,
         });
       toast.success("Folder Created Successfully");
       setTimeout(function() {
         history.push("/myTeam/gallery/folder");
       }, 5000);
     }
-    // setDouble(true
+    setDouble(true);
   }
 
   return (
