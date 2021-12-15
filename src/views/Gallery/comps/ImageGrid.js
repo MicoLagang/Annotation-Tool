@@ -11,7 +11,11 @@ import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
 import Popover from "@material-ui/core/Popover";
 import Typography from "@material-ui/core/Typography";
+// import Card from "@material-ui/core/Card";
+import CardMedia from "@material-ui/core/CardMedia";
+import SettingsIcon from "@material-ui/icons/Settings";
 import { makeStyles } from "@material-ui/core/styles";
+import Chip from "@material-ui/core/Chip";
 
 import Button from "@material-ui/core/Button";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -39,6 +43,37 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const styles = {
+  media: {
+    height: 0,
+    paddingTop: "200px",
+  },
+  card: {
+    position: "relative",
+    marginBottom: "30px",
+  },
+  overlay: {
+    position: "absolute",
+    bottom: "20px",
+    left: "20px",
+    color: "white",
+  },
+  buttons: {
+    position: "absolute",
+    top: "5px",
+    right: "5px",
+    color: "white",
+  },
+  title: {
+    fontSize: "2rem",
+    fontWeight: "500",
+    lineHeight: "2.75rem",
+  },
+  text: {
+    fontSize: "1rem",
+  },
+};
+
 function ImageGrid() {
   const { docs } = useFirestore("TEAM");
   const { imagesData, setImagesData } = useImage();
@@ -48,6 +83,8 @@ function ImageGrid() {
   const [imagesURL, setImagesURL] = useState([]);
   const [imagesName, setImagesName] = useState([]);
   const [annotatedImagesArray, setAnnotatedImagesArray] = useState([]);
+  const [counter1, setCounter] = useState()
+  let counter = 0;
 
   const currentUserRole = localStorage.getItem("currentUserRole");
   const timer = (ms) => new Promise((res) => setTimeout(res, ms));
@@ -58,11 +95,11 @@ function ImageGrid() {
   const currentUserName = localStorage.getItem("currentUserName")
   let data = [];
   let annotationData;
-  let imageFolderData;
+  const [imageFolderData, setImageFolderData] = useState({});
   const [imageFolderName, setImageFolderName] = useState("");
   const [totalImages, setTotalImages] = useState(0);
   const [totalAnnotatedImages, setTotalAnnotatedImages] = useState(0);
-  let counter = 0;
+  // let counter = 0;
   const [isSubmitted, setisSubmitted] = useState();
   const [isAccepted, setisAccepted] = useState();
 
@@ -70,7 +107,17 @@ function ImageGrid() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [imageInfo, setImageInfo] = useState();
   const [AnnotatorEmail,setAnnotatorEmail] = useState([]);
+
+  const [bgcolor, setBgColor] = useState("");
+  const [status, setStatus] = useState("");
   // let imageInfo;
+
+  const chip = {
+    backgroundColor: `${bgcolor}`,
+    paddingBottom: "0px !important",
+    fontSize: "14px",
+    color: "white",
+  };
 
   const cardLink = {
     color: "#000000",
@@ -98,8 +145,28 @@ function ImageGrid() {
       .get()
       .then((doc) => {
         if (doc.exists) {
+          //gets the data of the image folder
           setisSubmitted(doc.data().isSubmitted);
           setisAccepted(doc.data().isAccepted);
+          
+          if (doc.data().isRejected) {
+            console.log("rejected")
+            setStatus('Rejected');
+            setBgColor("#c92d39");
+          }
+          else if (doc.data().isSubmitted) {
+            console.log("pending")
+            setStatus('Pending')
+            setBgColor("#fcc438");
+          }
+          else if (doc.data().isAccepted || doc.data().isCompleted) {
+            console.log("completed")
+              setStatus("Completed")
+            setBgColor("#82bb53");
+          }
+          
+          setImageFolderData(doc.data());
+          console.log(doc.data())
         } else {
           console.log("No such document!");
         }
@@ -134,11 +201,6 @@ function ImageGrid() {
 
     return;
   };
-
-  console.log(AnnotatorEmail)
-
-
-  console.log(imageFolderName)
 
   function getAnnotationData() {
     projectFirestore
@@ -235,11 +297,12 @@ function ImageGrid() {
             .split(".")
             .filter((item) => item);
           if (doc.name == SliceImageName[0]) {
-            counter = counter + 1;
-            console.log(counter);
+  
             return true;
           } else {
+   
             continue;
+            
           }
         }
         if (i == annotatedImagesArray.length) {
@@ -248,6 +311,9 @@ function ImageGrid() {
       }
     } else console.log("no records");
   }
+
+
+  console.log("Total Annotated: " + counter1);
 
   function deleteFolder() {
     Swal.fire({
@@ -445,6 +511,22 @@ function ImageGrid() {
           Back to folders
         </Button>
       </div>
+
+      <Card style={styles.card}>
+        <CardMedia
+          image={"https://gstatic.com/classroom/themes/Psychology.jpg"}
+          style={styles.media}
+        />
+        <div style={styles.overlay}>
+          <Typography style={styles.title}>{imageFolderData.name}</Typography>
+          <Typography style={styles.text}>Images: {imageFolderData.totalImages-1}</Typography>
+        </div>
+        <div style={styles.buttons}>
+          <>
+          <Chip style={chip} label={status} />
+          </>
+        </div>
+      </Card>
 
       {getImageFolderData()}
 

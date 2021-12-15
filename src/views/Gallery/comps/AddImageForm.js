@@ -208,7 +208,7 @@ export default function AddImageForm(post) {
           <div className="submit-form">
             <Form>
               <Form.Group controlId="formFileMultiple" className="mb-3">
-                <Form.Control type="file" multiple onChange={handleChange} />
+                <Form.Control type="file" accept="image/x-png,image/jpeg" multiple onChange={handleChange} style={{color: "black"}} />
               </Form.Group>
               <Form.Group className="mb-3">
                 <Form.Control
