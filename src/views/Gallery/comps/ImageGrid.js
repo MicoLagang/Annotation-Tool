@@ -93,6 +93,7 @@ function ImageGrid() {
   const folderID = localStorage.getItem("currentImagesFolderID");
   const userEmail = localStorage.getItem("currentUserEmail");
   const currentUserName = localStorage.getItem("currentUserName")
+  const [isRejected, setIsRejected] = useState(false);
   let data = [];
   let annotationData;
   const [imageFolderData, setImageFolderData] = useState({});
@@ -182,7 +183,7 @@ function ImageGrid() {
         querySnapshot.forEach((doc) => {
           getPostsFromFirebase.push({
             ...doc.data(), //spread operator
-            key: doc.id, // `id` given to us by Firebase
+            key: doc.id, // id given to us by Firebase
             
           });
         });
@@ -696,70 +697,153 @@ function ImageGrid() {
             </>
           )}
 
-          <Divider variant="middle" />
+<Divider variant="middle" />
 
           <div className="row mt-3">
             {docs.length > 0 ? (
-              docs.map((doc) => (
-                <>
-                  <div
-                    style={cardLink}
-                    className="col-lg-3 col-md-4 col-sm-12 mb-3"
-                    onClick={() => addImage(doc)}
-                  >
-                    <Card
-                      key={doc.id}
-                      border={`${isAnnotated(doc) ? "success" : "danger"}`}
-                      className="h-100"
-                      style={{
-                        backgroundImage: `url(${doc.url})`,
-                        backgroundRepeat: "no-repeat",
-                        backgroundPosition: "center",
-                        backgroundSize: "cover",
-                        border: isActive(doc) ? "4px solid" : "",
-                      }}
-                    >
-                      <InfoOutlinedIcon
-                        style={{ color: "white", border: "1px black" }}
-                        aria-owns={open ? "mouse-over-popover" : undefined}
-                        aria-haspopup="true"
-                        onMouseEnter={(event) => handlePopoverOpen(event, doc)}
-                        onMouseLeave={handlePopoverClose}
-                        className="m-3"
-                      />
-
-                      <Popover
-                        id="mouse-over-popover"
-                        className={classes.popover}
-                        classes={{
-                          paper: classes.paper,
-                        }}
-                        open={open}
-                        anchorEl={anchorEl}
-                        anchorOrigin={{
-                          vertical: "bottom",
-                          horizontal: "right",
-                        }}
-                        transformOrigin={{
-                          vertical: "top",
-                          horizontal: "left",
-                        }}
-                        onClose={handlePopoverClose}
-                        disableRestoreFocus
-                      >
-                        {imageInfo && (
+              <>
+                {isRejected && currentUserRole === "annotator"
+                  ? docs.map(
+                      (doc) =>
+                        !isAnnotated(doc) && (
                           <>
-                            <p>Name: {imageInfo.name}</p>
-                            <p>Description: {imageInfo.description}</p>
-                            <p>Uploaded by: {imageInfo.uploader}</p>
-                            <p>Validated by: {imageInfo.validated}</p>
+                            <div
+                              style={cardLink}
+                              className="col-lg-3 col-md-4 col-sm-6 mb-3"
+                              onClick={() => addImage(doc)}
+                            >
+                              <Card
+                                key={doc.id}
+                                border={`${
+                                  isAnnotated(doc) ? "success" : "danger"
+                                }`}
+                                className="h-100"
+                                style={{
+                                  backgroundImage: `url(${doc.url})`,
+                                  backgroundRepeat: "no-repeat",
+                                  backgroundPosition: "center",
+                                  backgroundSize: "cover",
+                                  border: isActive(doc) ? "4px solid" : "",
+                                }}
+                              >
+                                <InfoOutlinedIcon
+                                  style={{
+                                    color: "white",
+                                    border: "1px black",
+                                  }}
+                                  aria-owns={
+                                    open ? "mouse-over-popover" : undefined
+                                  }
+                                  aria-haspopup="true"
+                                  onMouseEnter={(event) =>
+                                    handlePopoverOpen(event, doc)
+                                  }
+                                  onMouseLeave={handlePopoverClose}
+                                  className="m-3"
+                                />
+
+                                <Popover
+                                  id="mouse-over-popover"
+                                  className={classes.popover}
+                                  classes={{
+                                    paper: classes.paper,
+                                  }}
+                                  open={open}
+                                  anchorEl={anchorEl}
+                                  anchorOrigin={{
+                                    vertical: "bottom",
+                                    horizontal: "right",
+                                  }}
+                                  transformOrigin={{
+                                    vertical: "top",
+                                    horizontal: "left",
+                                  }}
+                                  onClose={handlePopoverClose}
+                                  disableRestoreFocus
+                                >
+                                  {imageInfo && (
+                                    <>
+                                      <p>Name: {imageInfo.name}</p>
+                                      <p>
+                                        Description: {imageInfo.description}
+                                      </p>
+                                      <p>Uploaded by: {imageInfo.uploader}</p>
+                                      <p>Validated by: {imageInfo.validated}</p>
+                                    </>
+                                  )}
+                                </Popover>
+                              </Card>
+                            </div>
                           </>
-                        )}
-                      </Popover>
-                    </Card>
-                  </div>
-                </>
-              ))
+                        )
+                    )
+                  : docs.map((doc) => (
+                      <>
+                        <div
+                          style={cardLink}
+                          className="col-lg-3 col-md-4 col-sm-6 mb-3"
+                          onClick={() => addImage(doc)}
+                        >
+                          <Card
+                            key={doc.id}
+                            border={`${
+                              isAnnotated(doc) ? "success" : "danger"
+                            }`}
+                            className="h-100"
+                            style={{
+                              backgroundImage: `url(${doc.url})`,
+                              backgroundRepeat: "no-repeat",
+                              backgroundPosition: "center",
+                              backgroundSize: "cover",
+                              border: isActive(doc) ? "4px solid" : "",
+                            }}
+                          >
+                            <InfoOutlinedIcon
+                              style={{ color: "white", border: "1px black" }}
+                              aria-owns={
+                                open ? "mouse-over-popover" : undefined
+                              }
+                              aria-haspopup="true"
+                              onMouseEnter={(event) =>
+                                handlePopoverOpen(event, doc)
+                              }
+                              onMouseLeave={handlePopoverClose}
+                              className="m-3"
+                            />
+
+                            <Popover
+                              id="mouse-over-popover"
+                              className={classes.popover}
+                              classes={{
+                                paper: classes.paper,
+                              }}
+                              open={open}
+                              anchorEl={anchorEl}
+                              anchorOrigin={{
+                                vertical: "bottom",
+                                horizontal: "right",
+                              }}
+                              transformOrigin={{
+                                vertical: "top",
+                                horizontal: "left",
+                              }}
+                              onClose={handlePopoverClose}
+                              disableRestoreFocus
+                            >
+                              {imageInfo && (
+                                <>
+                                  <p>Name: {imageInfo.name}</p>
+                                  <p>Description: {imageInfo.description}</p>
+                                  <p>Uploaded by: {imageInfo.uploader}</p>
+                                  <p>Validated by: {imageInfo.validated}</p>
+                                </>
+                              )}
+                            </Popover>
+                          </Card>
+                        </div>
+                      </>
+                    ))}
+              </>
             ) : (
               <Container className="d-flex justify-content-center mb-5">
                 <div className="w-100" style={{ maxWidth: "400px" }}>
@@ -804,11 +888,11 @@ function ImageGrid() {
 
           <div className="row mt-3">
             {docs.length > 0 ? (
-               docs.map((doc) => (
+              docs.map((doc) => (
                 <>
                   <div
                     style={cardLink}
-                    className="col-lg-3 col-md-4 col-sm-12 mb-3"
+                    className="col-lg-3 col-md-4 col-sm-6 mb-3"
                     onClick={() => addImage(doc)}
                   >
                     <Card

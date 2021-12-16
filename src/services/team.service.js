@@ -195,6 +195,7 @@ class TutorialDataService {
         isAccepted: true,
         isCompleted:false,
         isRejected:false,
+        isSubmitted: false,
       });
   }
 
