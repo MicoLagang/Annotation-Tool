@@ -89,6 +89,7 @@ function ImageGrid() {
   const currentUserName = localStorage.getItem("currentUserName");
   let data = [];
   let annotationData;
+  let imageFolderData;
   const [imageFolderName, setImageFolderName] = useState("");
   const [totalImages, setTotalImages] = useState(0);
   const [totalAnnotatedImages, setTotalAnnotatedImages] = useState(0);

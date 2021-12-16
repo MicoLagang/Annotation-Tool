@@ -11,7 +11,11 @@ import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
 import Popover from "@material-ui/core/Popover";
 import Typography from "@material-ui/core/Typography";
+// import Card from "@material-ui/core/Card";
+import CardMedia from "@material-ui/core/CardMedia";
+import SettingsIcon from "@material-ui/icons/Settings";
 import { makeStyles } from "@material-ui/core/styles";
+import Chip from "@material-ui/core/Chip";
 
 import Button from "@material-ui/core/Button";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -24,10 +28,10 @@ import FilterIcon from "@material-ui/icons/Filter";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import PersonIcon from '@material-ui/icons/Person';
+import EjectIcon from '@material-ui/icons/Eject';
 
 import { Card, Row, Col, Container } from "react-bootstrap";
 import projectMembersService from "../../../services/projectMembers.service";
-import { CardMedia, Chip } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   popover: {
@@ -79,6 +83,8 @@ function ImageGrid() {
   const [imagesURL, setImagesURL] = useState([]);
   const [imagesName, setImagesName] = useState([]);
   const [annotatedImagesArray, setAnnotatedImagesArray] = useState([]);
+  const [counter1, setCounter] = useState()
+  let counter = 0;
 
   const currentUserRole = localStorage.getItem("currentUserRole");
   const timer = (ms) => new Promise((res) => setTimeout(res, ms));
@@ -86,14 +92,14 @@ function ImageGrid() {
   const name = localStorage.getItem("currentProjectID");
   const folderID = localStorage.getItem("currentImagesFolderID");
   const userEmail = localStorage.getItem("currentUserEmail");
-  const currentUserName = localStorage.getItem("currentUserName");
+  const currentUserName = localStorage.getItem("currentUserName")
   let data = [];
   let annotationData;
+  const [imageFolderData, setImageFolderData] = useState({});
   const [imageFolderName, setImageFolderName] = useState("");
   const [totalImages, setTotalImages] = useState(0);
   const [totalAnnotatedImages, setTotalAnnotatedImages] = useState(0);
-  const [isRejected, setIsRejected] = useState(false);
-  let counter = 0;
+  // let counter = 0;
   const [isSubmitted, setisSubmitted] = useState();
   const [isAccepted, setisAccepted] = useState();
 
@@ -101,10 +107,17 @@ function ImageGrid() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [imageInfo, setImageInfo] = useState();
   const [AnnotatorEmail,setAnnotatorEmail] = useState([]);
+
   const [bgcolor, setBgColor] = useState("");
   const [status, setStatus] = useState("");
-  const [imageFolderData, setImageFolderData] = useState({});
   // let imageInfo;
+
+  const chip = {
+    backgroundColor: `${bgcolor}`,
+    paddingBottom: "0px !important",
+    fontSize: "14px",
+    color: "white",
+  };
 
   const cardLink = {
     color: "#000000",
@@ -116,13 +129,6 @@ function ImageGrid() {
     color: "#000000",
     textDecoration: "none",
     height: "50px",
-  };
-
-  const chip = {
-    backgroundColor: `${bgcolor}`,
-    paddingBottom: "0px !important",
-    fontSize: "14px",
-    color: "white",
   };
 
   useEffect(() => {
@@ -189,19 +195,12 @@ function ImageGrid() {
 
   const getImageFolderData = () => {
     teamService.getImageFolderData(teamID, name, folderID).then((data) => {
-      console.log("Image Folder Data: " + data.data().isRejected);
-      setIsRejected(data.data().isRejected);
       setImageFolderName(data.data().name);
       setTotalImages(data.data().totalImages - 1);
     });
 
     return;
   };
-
-  console.log(AnnotatorEmail)
-
-
-  console.log(imageFolderName)
 
   function getAnnotationData() {
     projectFirestore
@@ -274,16 +273,6 @@ function ImageGrid() {
     let arr = [];
     docs.map((doc) => {
       arr.push(doc);
-
-
-      // Checks if the images is annotated and only loads what is not annotated
-      // if (isRejected && currentUserRole === "annotator") {
-      //   if (!isAnnotated(doc)) {
-      //     console.log(doc);
-      //     arr.push(doc);
-      //   }
-      // } else {arr.push(doc);}
-
     });
     console.log(arr);
     setImagesData(arr);
@@ -308,11 +297,12 @@ function ImageGrid() {
             .split(".")
             .filter((item) => item);
           if (doc.name == SliceImageName[0]) {
-            counter = counter + 1;
-            console.log(counter);
+  
             return true;
           } else {
+   
             continue;
+            
           }
         }
         if (i == annotatedImagesArray.length) {
@@ -322,35 +312,39 @@ function ImageGrid() {
     } else console.log("no records");
   }
 
+
+  console.log("Total Annotated: " + counter1);
+
   function deleteFolder() {
     Swal.fire({
-      title: "Are you sure to delete this folder?",
-      timer: 5000,
-      showDenyButton: true,
-      confirmButtonText: "yes",
-      denyButtonText: "no",
+      title: "Are you sure to delete this Folder Images",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes",
     }).then((result) => {
       if (result.isConfirmed) {
         teamService.deleteFolder(teamID, name, folderID);
-        Swal.fire("Annotation Successfully Submitted!", "", "success").then(
+        Swal.fire("Folder Successfully Deleted!", "", "success").then(
           () => {
-            history.push("/myTeam/gallery/folder");
+            history.push("/myTeam/gallery/folder")
           }
         );
       } else if (result.isDenied) {
         Swal.fire("Submission Cancelled", "", "info");
       }
     });
-   
   }
 
   function submitAnnotation() {
     Swal.fire({
       title: "Are you sure to submit annotation?",
-      timer: 5000,
-      showDenyButton: true,
-      confirmButtonText: "yes",
-      denyButtonText: "no",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes",
     }).then((result) => {
       if (result.isConfirmed) {
         teamService.submitAnnotation(teamID, name, folderID);
@@ -365,12 +359,38 @@ function ImageGrid() {
     });
   }
 
+  function evaluateFolder(){
+    Swal.fire({
+      title: "Are you sure to evaluate annotation?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes",
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        // teamService.evaluateAnnotation(teamID, name, folderID);
+        teamService.evaluateAnnotation(teamID, name, folderID)
+        Swal.fire("Success!", "", "success").then(() => {
+          window.location.reload(false);
+        });
+      } else if (result.isDenied) {
+        Swal.fire("Action is cancelled", "", "info");
+      }
+    });
+  }
+
   async function acceptAnnotaion(doc) {
     Swal.fire({
       title: "Are you sure to accept the submitted annotation?",
-      showDenyButton: true,
-      confirmButtonText: "yes",
-      denyButtonText: "no",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes",
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
@@ -398,9 +418,12 @@ function ImageGrid() {
   function rejectAnnotation() {
     Swal.fire({
       title: "Are you sure to reject the submitted annotation?",
-      showDenyButton: true,
-      confirmButtonText: "yes",
-      denyButtonText: "no",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes",
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
@@ -851,11 +874,11 @@ function ImageGrid() {
 
           <div className="row mt-3">
             {docs.length > 0 ? (
-              docs.map((doc) => (
+               docs.map((doc) => (
                 <>
                   <div
                     style={cardLink}
-                    className="col-lg-3 col-md-4 col-sm-6 mb-3"
+                    className="col-lg-3 col-md-4 col-sm-12 mb-3"
                     onClick={() => addImage(doc)}
                   >
                     <Card

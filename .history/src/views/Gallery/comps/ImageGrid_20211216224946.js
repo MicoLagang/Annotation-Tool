@@ -89,6 +89,7 @@ function ImageGrid() {
   const currentUserName = localStorage.getItem("currentUserName");
   let data = [];
   let annotationData;
+  let imageFolderData;
   const [imageFolderName, setImageFolderName] = useState("");
   const [totalImages, setTotalImages] = useState(0);
   const [totalAnnotatedImages, setTotalAnnotatedImages] = useState(0);
@@ -135,7 +136,7 @@ function ImageGrid() {
       .collection("IMAGESFOLDER")
       .doc(folderID);
 
-    docRef
+      docRef
       .get()
       .then((doc) => {
         if (doc.exists) {
@@ -176,13 +177,14 @@ function ImageGrid() {
         querySnapshot.forEach((doc) => {
           getPostsFromFirebase.push({
             ...doc.data(), //spread operator
-            key: doc.id, // id given to us by Firebase
+            key: doc.id, // `id` given to us by Firebase
             
           });
+          // console.log(doc.data().uid)
+          // console.log(doc.data().email)
         });
         setAnnotatorEmail(getPostsFromFirebase);
       });
-      
     getAnnotationData();
     getImageFolderData();
   }, [imageInfo]);

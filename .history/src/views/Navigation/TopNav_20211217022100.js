@@ -270,7 +270,16 @@ export default function TopNav() {
         </>
       ) : (
         <>
-          <img onClick={() => history.push("/")} src="/images/logo.png" style={{height:'20px'}}></img>
+          <Typography
+            variant="h6"
+            noWrap
+            component="div"
+            sx={{ flexGrow: 1 }}
+            onClick={() => history.push("/")}
+          >
+            Ilabel
+          </Typography>
+          <img src="/images/logo.png"></img>
 
           <Box sx={{ flexGrow: 1 }} />
 

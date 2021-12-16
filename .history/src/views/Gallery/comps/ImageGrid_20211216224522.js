@@ -27,7 +27,7 @@ import PersonIcon from '@material-ui/icons/Person';
 
 import { Card, Row, Col, Container } from "react-bootstrap";
 import projectMembersService from "../../../services/projectMembers.service";
-import { CardMedia, Chip } from "@material-ui/core";
+import { CardMedia } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   popover: {
@@ -38,37 +38,6 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
   },
 }));
-
-const styles = {
-  media: {
-    height: 0,
-    paddingTop: "200px",
-  },
-  card: {
-    position: "relative",
-    marginBottom: "30px",
-  },
-  overlay: {
-    position: "absolute",
-    bottom: "20px",
-    left: "20px",
-    color: "white",
-  },
-  buttons: {
-    position: "absolute",
-    top: "5px",
-    right: "5px",
-    color: "white",
-  },
-  title: {
-    fontSize: "2rem",
-    fontWeight: "500",
-    lineHeight: "2.75rem",
-  },
-  text: {
-    fontSize: "1rem",
-  },
-};
 
 function ImageGrid() {
   const { docs } = useFirestore("TEAM");
@@ -89,6 +58,7 @@ function ImageGrid() {
   const currentUserName = localStorage.getItem("currentUserName");
   let data = [];
   let annotationData;
+  let imageFolderData;
   const [imageFolderName, setImageFolderName] = useState("");
   const [totalImages, setTotalImages] = useState(0);
   const [totalAnnotatedImages, setTotalAnnotatedImages] = useState(0);
@@ -101,9 +71,6 @@ function ImageGrid() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [imageInfo, setImageInfo] = useState();
   const [AnnotatorEmail,setAnnotatorEmail] = useState([]);
-  const [bgcolor, setBgColor] = useState("");
-  const [status, setStatus] = useState("");
-  const [imageFolderData, setImageFolderData] = useState({});
   // let imageInfo;
 
   const cardLink = {
@@ -116,13 +83,6 @@ function ImageGrid() {
     color: "#000000",
     textDecoration: "none",
     height: "50px",
-  };
-
-  const chip = {
-    backgroundColor: `${bgcolor}`,
-    paddingBottom: "0px !important",
-    fontSize: "14px",
-    color: "white",
   };
 
   useEffect(() => {
@@ -139,28 +99,8 @@ function ImageGrid() {
       .get()
       .then((doc) => {
         if (doc.exists) {
-          //gets the data of the image folder
           setisSubmitted(doc.data().isSubmitted);
           setisAccepted(doc.data().isAccepted);
-          
-          if (doc.data().isRejected) {
-            console.log("rejected")
-            setStatus('Rejected');
-            setBgColor("#c92d39");
-          }
-          else if (doc.data().isSubmitted) {
-            console.log("pending")
-            setStatus('Pending')
-            setBgColor("#fcc438");
-          }
-          else if (doc.data().isAccepted || doc.data().isCompleted) {
-            console.log("completed")
-              setStatus("Completed")
-            setBgColor("#82bb53");
-          }
-          
-          setImageFolderData(doc.data());
-          console.log(doc.data())
         } else {
           console.log("No such document!");
         }
@@ -176,13 +116,14 @@ function ImageGrid() {
         querySnapshot.forEach((doc) => {
           getPostsFromFirebase.push({
             ...doc.data(), //spread operator
-            key: doc.id, // id given to us by Firebase
+            key: doc.id, // `id` given to us by Firebase
             
           });
+          // console.log(doc.data().uid)
+          // console.log(doc.data().email)
         });
         setAnnotatorEmail(getPostsFromFirebase);
       });
-      
     getAnnotationData();
     getImageFolderData();
   }, [imageInfo]);

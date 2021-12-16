@@ -89,6 +89,7 @@ function ImageGrid() {
   const currentUserName = localStorage.getItem("currentUserName");
   let data = [];
   let annotationData;
+  let imageFolderData;
   const [imageFolderName, setImageFolderName] = useState("");
   const [totalImages, setTotalImages] = useState(0);
   const [totalAnnotatedImages, setTotalAnnotatedImages] = useState(0);
@@ -139,28 +140,8 @@ function ImageGrid() {
       .get()
       .then((doc) => {
         if (doc.exists) {
-          //gets the data of the image folder
           setisSubmitted(doc.data().isSubmitted);
           setisAccepted(doc.data().isAccepted);
-          
-          if (doc.data().isRejected) {
-            console.log("rejected")
-            setStatus('Rejected');
-            setBgColor("#c92d39");
-          }
-          else if (doc.data().isSubmitted) {
-            console.log("pending")
-            setStatus('Pending')
-            setBgColor("#fcc438");
-          }
-          else if (doc.data().isAccepted || doc.data().isCompleted) {
-            console.log("completed")
-              setStatus("Completed")
-            setBgColor("#82bb53");
-          }
-          
-          setImageFolderData(doc.data());
-          console.log(doc.data())
         } else {
           console.log("No such document!");
         }
@@ -176,13 +157,14 @@ function ImageGrid() {
         querySnapshot.forEach((doc) => {
           getPostsFromFirebase.push({
             ...doc.data(), //spread operator
-            key: doc.id, // id given to us by Firebase
+            key: doc.id, // `id` given to us by Firebase
             
           });
+          // console.log(doc.data().uid)
+          // console.log(doc.data().email)
         });
         setAnnotatorEmail(getPostsFromFirebase);
       });
-      
     getAnnotationData();
     getImageFolderData();
   }, [imageInfo]);

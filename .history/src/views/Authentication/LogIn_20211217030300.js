@@ -224,7 +224,7 @@ function Login(props) {
     <Grid container className={classes.container}>
       <div className={classes.logotypeContainer}>
         {/* <img src={logo} alt="logo" className={classes.logotypeImage} /> */}
-        <img src="/images/logo.png" style={{height:'70px'}}></img>
+        <img src="/images/logo.png" style={{height:'40px'}}></img>
         <h5>A Digital Annotation Tool for Machine Vision Task</h5>
       </div>
       <div className={classes.formContainer}>
