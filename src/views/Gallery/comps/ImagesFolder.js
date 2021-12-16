@@ -168,7 +168,7 @@ export default function TestTeam() {
                       <Typography color="textSecondary"></Typography>
                     )}
 
-                    {!post.isCompleted && 
+                    {/* {!post.isCompleted && 
                     !post.isAccepted &&
                     post.isRejected &&
                     userRole == "admin" ? (
@@ -178,7 +178,7 @@ export default function TestTeam() {
                       </>
                     ) : (
                       <Typography color="textSecondary"></Typography>
-                    )}
+                    )} */}
 
 
                     {!post.isCompleted && 
