@@ -74,40 +74,42 @@ export default function TestTeam(post) {
     //     </div>
 
     <>
-      <TopNav/>
-      <Container className="mt-5 d-flex justify-content-center"
-        style={{ minHeight: "100vh" }}>
-      <ToastContainer />
-      <div className="submit-form">
-        <h2 className="text-center mb-4">Create Images Folder</h2>
-        <Form>
-          {/* <div>{teamID}</div> */}
-          <Form.Group className="mb-3">
-            <Form.Control
-              type="text"
-              className="form-control"
-              id="folderName"
-              required
-              //   onChange={foldername}
-              ref={foldername}
-              placeholder="Name"
-              name="owner"
-            />
-          </Form.Group>
+      <TopNav />
+      <Container
+        className="mt-5 d-flex justify-content-center"
+        style={{ minHeight: "100vh" }}
+      >
+        <ToastContainer />
+        <div className="submit-form">
+          <h2 className="text-center mb-4">Create Images Folder</h2>
+          <Form>
+            {/* <div>{teamID}</div> */}
+            <Form.Group className="mb-3">
+              <Form.Control
+                type="text"
+                className="form-control"
+                id="folderName"
+                required
+                //   onChange={foldername}
+                ref={foldername}
+                placeholder="Name"
+                name="owner"
+              />
+            </Form.Group>
 
-          <Button
-            disabled={double}
-            onClick={() => {
-              saveData();
-            }}
-            variant="contained"
-            color="primary"
-            className="w-100"
-          >
-            Create
-          </Button>
-        </Form>
-      </div>
+            <Button
+              disabled={double}
+              onClick={() => {
+                saveData();
+              }}
+              variant="contained"
+              color="primary"
+              className="w-100"
+            >
+              Create
+            </Button>
+          </Form>
+        </div>
       </Container>
     </>
   );
