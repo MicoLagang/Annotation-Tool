@@ -13,7 +13,7 @@ import { AnnotationFormatType } from '../../../data/enums/AnnotationFormatType';
 import { ImportFormatData } from '../../../data/ImportFormatData';
 import { ImporterSpecData } from '../../../data/ImporterSpecData';
 import { projectFirestore } from '../../../firebase';
-import { Button } from '@material-ui/core';
+import { Timer } from '@material-ui/icons';
 
 interface IProps {
     activeLabelType: LabelType,
@@ -38,10 +38,15 @@ const LoadAnnotationsPopup: React.FC<IProps> = (
     });
 
     const [labelType, setLabelType] = useState(activeLabelType);
+    const [formatType, setFormatType] = useState(resolveFormatType(activeLabelType));
     const [loadedLabelNames, setLoadedLabelNames] = useState([]);
     const [loadedImageData, setLoadedImageData] = useState([]);
     const [annotationsLoadedError, setAnnotationsLoadedError] = useState(null);
     const db = projectFirestore.collection("ANNOTATIONS");
+    
+    const timer = ms => new Promise(res => setTimeout(res, ms))
+
+    // const importerSpecData = require('../../../data/ImporterSpecData');
 
     async function onAccept() {
 
@@ -58,39 +63,73 @@ const LoadAnnotationsPopup: React.FC<IProps> = (
     };
 
     const loadJSON = () => {
-        console.log("Loading file...")
+        // console.log("Loading file...")
+        // let data;
+        
+        // var docRef = projectFirestore
+        // .collection("ANNOTATIONS")
+        // .doc("nb8DAwn1DHfP6QrrgWMM");
+
+        // docRef
+        // .get()
+        // .then((doc) => {
+        //     if (doc.exists) {
+        //         console.log("Document data:", doc.data().data);
+        //         data = doc.data().data
+        //         // var datastring = JSON.stringify(data);
+                
+        //         // console.log("Data String:", datastring);
+        //         let dataFile = new File([data], "data.json", {
+        //                 type: "application/json"
+        //         });
+
+        //         acceptedFiles[0] = dataFile
+        //         console.log(acceptedFiles);
+                  
+        //         const importer = new (ImporterSpecData[resolveFormatType(LabelType.POLYGON)])([LabelType.POLYGON])
+        //         console.log(importer)
+        //         importer.import(acceptedFiles, onAnnotationLoadSuccess, onAnnotationsLoadFailure);
+        //         console.log(loadedLabelNames.length)
+        //         onAccept();
+        //     } else {
+        //         console.log("No such document!");
+        //     }
+        // })
+        // .catch((error) => {
+        //     console.log("Error getting document:", error);
+        // });
+
+           console.log("Loading file...")
         let data = []
         let folderID = localStorage.getItem("currentImagesFolderID")
 
-        projectFirestore.collection("ANNOTATIONS").where("folderID", "==", folderID)
+        var docRef = projectFirestore
+        .collection("ANNOTATIONS")
+            .where("folderID", "==", folderID)
             .onSnapshot((querySnapshot) => {
                 querySnapshot.forEach((doc) => {
-                    data.push({
-                        ...doc.data(),
-                        key: doc.id,
-                    });
+                data.push({
+                    ...doc.data(), //spread operator
+                    key: doc.id, // id given to us by Firebase
                 });
-                if(data[0]) {
+                });
+                console.log("Document data:", data[0].data);
+                // let dataJSON = data[0].data().data
+                // var datastring = JSON.stringify(data);
+                
+                // console.log("Data String:", datastring);
+                let dataFile = new File([data[0].data], "data.json", {
+                        type: "application/json"
+                });
 
-                    console.log("Document data:", data[0].data);
-    
-                    let dataFile = new File([data[0].data], "data.json", {
-                            type: "application/json"
-                    });
-    
-                    acceptedFiles[0] = dataFile
-                    console.log(acceptedFiles);
-                      
-                    const importer = new (ImporterSpecData[resolveFormatType(LabelType.POLYGON)])([LabelType.POLYGON])
-                    console.log(importer)
-                    importer.import(acceptedFiles, onAnnotationLoadSuccess, onAnnotationsLoadFailure);
-                    console.log(loadedLabelNames.length)
-                    onAccept();
-
-                } else {
-                    alert('No saved annotation data');
-                    onReject();
-                }
+                acceptedFiles[0] = dataFile
+                console.log(acceptedFiles);
+                  
+                const importer = new (ImporterSpecData[resolveFormatType(LabelType.POLYGON)])([LabelType.POLYGON])
+                console.log(importer)
+                importer.import(acceptedFiles, onAnnotationLoadSuccess, onAnnotationsLoadFailure);
+                console.log(loadedLabelNames.length)
+                onAccept();
                 
             });
     }
@@ -134,13 +173,14 @@ const LoadAnnotationsPopup: React.FC<IProps> = (
             </>;
         } else {
             return <>
+                {/* <input {...getInputProps()} /> */}
                 <img
                     draggable={false}
                     alt={"upload"}
                     src={"ico/box-opened.png"}
                 />
                 <p className="extraBold">Load the saved annotations for this images?</p>
-                <Button variant="contained" onClick={loadJSON}>Load</Button>
+                <button onClick={loadJSON}>LOAD</button>
             </>;
         }
     }

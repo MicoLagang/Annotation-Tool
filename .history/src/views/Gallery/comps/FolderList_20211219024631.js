@@ -43,7 +43,6 @@ function FolderList() {
     media: {
       height: 0,
       paddingTop: "200px",
-      backgroundPosition: 'right'
     },
     card: {
       position: "relative",
@@ -158,7 +157,7 @@ function FolderList() {
       <Card style={styles.card}>
         <CardMedia
           // image={"https://gstatic.com/classroom/themes/Psychology.jpg"}
-          image={"/images/projectcard.png"}
+          image={"/images/teamcard.png"}
           style={styles.media}
         />
         <div style={styles.overlay}>

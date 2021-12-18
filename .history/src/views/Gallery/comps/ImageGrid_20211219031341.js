@@ -47,7 +47,6 @@ const styles = {
   media: {
     height: 0,
     paddingTop: "200px",
-    backgroundPosition: 'right'
   },
   card: {
     position: "relative",

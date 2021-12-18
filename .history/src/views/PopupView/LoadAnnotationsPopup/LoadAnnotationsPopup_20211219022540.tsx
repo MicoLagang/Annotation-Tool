@@ -87,9 +87,6 @@ const LoadAnnotationsPopup: React.FC<IProps> = (
                     console.log(loadedLabelNames.length)
                     onAccept();
 
-                } else {
-                    alert('No saved annotation data');
-                    onReject();
                 }
                 
             });

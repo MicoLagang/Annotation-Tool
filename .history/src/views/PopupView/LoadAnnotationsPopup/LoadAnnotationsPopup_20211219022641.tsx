@@ -89,7 +89,7 @@ const LoadAnnotationsPopup: React.FC<IProps> = (
 
                 } else {
                     alert('No saved annotation data');
-                    onReject();
+                    onReject;
                 }
                 
             });

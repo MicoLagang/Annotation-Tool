@@ -70,7 +70,7 @@ const LoadAnnotationsPopup: React.FC<IProps> = (
                         key: doc.id,
                     });
                 });
-                if(data[0]) {
+                if(data[0].data) {
 
                     console.log("Document data:", data[0].data);
     
@@ -87,9 +87,6 @@ const LoadAnnotationsPopup: React.FC<IProps> = (
                     console.log(loadedLabelNames.length)
                     onAccept();
 
-                } else {
-                    alert('No saved annotation data');
-                    onReject();
                 }
                 
             });

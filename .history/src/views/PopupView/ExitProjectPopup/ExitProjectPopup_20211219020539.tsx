@@ -55,7 +55,7 @@ const ExitProjectPopup: React.FC<IProps> = (props) => {
         updateImageData([]);
         updateFirstLabelCreatedFlag(false);
         PopupActions.close();
-        history.push("/")
+        history.push("/myTeam/gallery/folder/imagesfolder")
     };
 
     const onReject = () => {

@@ -6,12 +6,11 @@ import { EditorFeatureData, IEditorFeature } from "../../data/info/EditorFeature
 import { Tooltip } from "@material-ui/core";
 import withStyles from "@material-ui/core/styles/withStyles";
 import ImagesDropZone from "./ImagesDropZone/ImagesDropZone";
-import { useHistory } from "react-router-dom";
+// import ImagesFromCloud from './ImagesFromCloud/ImagesFromCloud';
 
 const MainView: React.FC = () => {
     const [projectInProgress, setProjectInProgress] = useState(true);
     const [projectCanceled, setProjectCanceled] = useState(false);
-    const history = useHistory();
 
     const startProject = () => {
         setProjectInProgress(true);
@@ -83,8 +82,6 @@ const MainView: React.FC = () => {
                         draggable={false}
                         alt={"main-logo"}
                         src={"images/logo.png"}
-                        onClick={() => history.push("/")}
-                        style={{cursor:'pointer'}}
                     />
                 </div>
                 <div className="EditorFeaturesWrapper">

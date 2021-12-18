@@ -13,7 +13,6 @@ import { AnnotationFormatType } from '../../../data/enums/AnnotationFormatType';
 import { ImportFormatData } from '../../../data/ImportFormatData';
 import { ImporterSpecData } from '../../../data/ImporterSpecData';
 import { projectFirestore } from '../../../firebase';
-import { Button } from '@material-ui/core';
 
 interface IProps {
     activeLabelType: LabelType,
@@ -70,27 +69,20 @@ const LoadAnnotationsPopup: React.FC<IProps> = (
                         key: doc.id,
                     });
                 });
-                if(data[0]) {
+                console.log("Document data:", data[0].data);
 
-                    console.log("Document data:", data[0].data);
-    
-                    let dataFile = new File([data[0].data], "data.json", {
-                            type: "application/json"
-                    });
-    
-                    acceptedFiles[0] = dataFile
-                    console.log(acceptedFiles);
-                      
-                    const importer = new (ImporterSpecData[resolveFormatType(LabelType.POLYGON)])([LabelType.POLYGON])
-                    console.log(importer)
-                    importer.import(acceptedFiles, onAnnotationLoadSuccess, onAnnotationsLoadFailure);
-                    console.log(loadedLabelNames.length)
-                    onAccept();
+                let dataFile = new File([data[0].data], "data.json", {
+                        type: "application/json"
+                });
 
-                } else {
-                    alert('No saved annotation data');
-                    onReject();
-                }
+                acceptedFiles[0] = dataFile
+                console.log(acceptedFiles);
+                  
+                const importer = new (ImporterSpecData[resolveFormatType(LabelType.POLYGON)])([LabelType.POLYGON])
+                console.log(importer)
+                importer.import(acceptedFiles, onAnnotationLoadSuccess, onAnnotationsLoadFailure);
+                console.log(loadedLabelNames.length)
+                onAccept();
                 
             });
     }
@@ -140,7 +132,7 @@ const LoadAnnotationsPopup: React.FC<IProps> = (
                     src={"ico/box-opened.png"}
                 />
                 <p className="extraBold">Load the saved annotations for this images?</p>
-                <Button variant="contained" onClick={loadJSON}>Load</Button>
+                <button onClick={loadJSON}>LOAD</button>
             </>;
         }
     }

@@ -27,7 +27,6 @@ export default function TestTeam(post) {
     media: {
       height: 0,
       paddingTop: "200px",
-      backgroundPosition: 'right'
     },
     card: {
       position: "relative",
@@ -94,7 +93,7 @@ export default function TestTeam(post) {
       <Card style={styles.card}>
               <CardMedia
                 // image={"https://gstatic.com/classroom/themes/Psychology.jpg"}
-                image={"/images/foldercard.png"}
+                image={"/images/projectcard.png"}
                 style={styles.media}
               />
               <div style={styles.overlay}>

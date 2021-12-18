@@ -43,7 +43,6 @@ function FolderList() {
     media: {
       height: 0,
       paddingTop: "200px",
-      backgroundPosition: 'right'
     },
     card: {
       position: "relative",
@@ -157,8 +156,7 @@ function FolderList() {
       <Container>
       <Card style={styles.card}>
         <CardMedia
-          // image={"https://gstatic.com/classroom/themes/Psychology.jpg"}
-          image={"/images/projectcard.png"}
+          image={"https://gstatic.com/classroom/themes/Psychology.jpg"}
           style={styles.media}
         />
         <div style={styles.overlay}>
@@ -166,7 +164,7 @@ function FolderList() {
           <Typography style={styles.text}>{updata.TeamCode} <span onClick={() =>  {
             navigator.clipboard.writeText(updata.TeamCode)
             toast.success("Team Code copied to clipboard");
-          }}>  <FileCopyIcon style={{ fontSize: 14, cursor: 'pointer' }}/> </span> </Typography>
+          }}>  <FileCopyIcon/> </span> </Typography>
         </div>
       </Card>
 

@@ -84,7 +84,6 @@ const MainView: React.FC = () => {
                         alt={"main-logo"}
                         src={"images/logo.png"}
                         onClick={() => history.push("/")}
-                        style={{cursor:'pointer'}}
                     />
                 </div>
                 <div className="EditorFeaturesWrapper">

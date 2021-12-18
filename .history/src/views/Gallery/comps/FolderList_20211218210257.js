@@ -3,6 +3,7 @@ import { projectFirestore } from "../../../firebase";
 import { Link, useHistory } from "react-router-dom";
 import { Container } from "react-bootstrap";
 import AddIcon from "@material-ui/icons/Add";
+import { ToastContainer } from "react-toastify";
 import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
@@ -11,7 +12,6 @@ import Typography from "@material-ui/core/Typography";
 import TopNav from "../../Navigation/TopNav";
 import { CircularProgress } from "@material-ui/core";
 import FileCopyIcon from '@material-ui/icons/FileCopy';
-import { toast, ToastContainer } from "react-toastify";
 
 function FolderList() {
   const [loading, setLoading] = useState(true);
@@ -43,7 +43,6 @@ function FolderList() {
     media: {
       height: 0,
       paddingTop: "200px",
-      backgroundPosition: 'right'
     },
     card: {
       position: "relative",
@@ -157,16 +156,15 @@ function FolderList() {
       <Container>
       <Card style={styles.card}>
         <CardMedia
-          // image={"https://gstatic.com/classroom/themes/Psychology.jpg"}
-          image={"/images/projectcard.png"}
+          image={"https://gstatic.com/classroom/themes/Psychology.jpg"}
           style={styles.media}
         />
         <div style={styles.overlay}>
           <Typography style={styles.title}>{updata.name}</Typography>
           <Typography style={styles.text}>{updata.TeamCode} <span onClick={() =>  {
             navigator.clipboard.writeText(updata.TeamCode)
-            toast.success("Team Code copied to clipboard");
-          }}>  <FileCopyIcon style={{ fontSize: 14, cursor: 'pointer' }}/> </span> </Typography>
+            toast.success("Project Created Successfully");
+          }}>  <FileCopyIcon/> </span> </Typography>
         </div>
       </Card>
 
