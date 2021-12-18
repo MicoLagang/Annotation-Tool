@@ -87,7 +87,7 @@ const FolderList = () => {
 
 <TopNav></TopNav>
 <Container>
-      <Typography variant="h2" component="h2" className="mb-4">
+      <Typography variant="h2" component="h2" className="mb-3">
         Dashboard
       </Typography>
       <div className="row">

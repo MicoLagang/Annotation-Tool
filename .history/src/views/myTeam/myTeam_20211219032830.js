@@ -103,7 +103,7 @@ const FolderList = () => {
               Create Team
             </Button>
 
-            <Divider variant="middle" className="my-1" />
+            <Divider variant="middle" />
           </>
         )}
 
