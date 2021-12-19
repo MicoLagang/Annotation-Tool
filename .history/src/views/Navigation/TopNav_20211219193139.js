@@ -370,6 +370,19 @@ export default function TopNav() {
 
           <Box sx={{ flexGrow: 1 }} />
 
+          <Button
+            className="text-capitalize"
+            type="button"
+            onClick={installPWA}
+            style={{
+              height: "55px",
+              width: "100%",
+              color: "#272343",
+              backgroundColor: "#ffd803",
+            }}
+          >
+            <GetAppIcon /> Install iLABEL app
+          </Button>
           <div>
             {supported() && !isInstalled() && (
               <Button

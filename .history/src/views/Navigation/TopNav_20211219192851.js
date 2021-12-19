@@ -369,7 +369,6 @@ export default function TopNav() {
           {list()}
 
           <Box sx={{ flexGrow: 1 }} />
-
           <div>
             {supported() && !isInstalled() && (
               <Button

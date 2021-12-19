@@ -14,8 +14,8 @@ import Menu from "@material-ui/core/Menu";
 import Button from "@material-ui/core/Button";
 import { ListItemIcon } from "@material-ui/core";
 import Chip from "@material-ui/core/Chip";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import Divider from "@material-ui/core/Divider";
+import LinearProgress from '@material-ui/core/LinearProgress';
+import Divider from '@material-ui/core/Divider';
 
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import MenuIcon from "@material-ui/icons/Menu";
@@ -23,8 +23,7 @@ import AddIcon from "@material-ui/icons/Add";
 import GroupIcon from "@material-ui/icons/Group";
 import BuildIcon from "@material-ui/icons/Build";
 import SettingsIcon from "@material-ui/icons/Settings";
-import DashboardIcon from "@material-ui/icons/Dashboard";
-import GetAppIcon from "@material-ui/icons/GetApp";
+import DashboardIcon from '@material-ui/icons/Dashboard';
 
 import { useAuth } from "../../logic/context/AuthContext";
 import { useHistory } from "react-router-dom";
@@ -44,7 +43,7 @@ const AppBar = styled(MuiAppBar, {
   }),
   ...(open && {
     width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: ` ${drawerWidth}px`,
+    marginLeft:` ${drawerWidth}px`,
     transition: theme.transitions.create(["margin", "width"], {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
@@ -57,8 +56,8 @@ export default function TopNav() {
   const [loading, setLoading] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [bgcolor, setBgColor] = useState("");
-  const [teams, setTeams] = useState([]);
-  const [Teammembers, setTeammembers] = useState([]);
+  const [teams,setTeams] = useState([])
+  const [Teammembers,setTeammembers] = useState([])
 
   const { currentUser, logout } = useAuth();
   const history = useHistory();
@@ -68,6 +67,7 @@ export default function TopNav() {
   const currentUserRole = localStorage.getItem("currentUserRole");
   const currentUserID = localStorage.getItem("currentUserUID");
   const { pwaInstall, supported, isInstalled } = useReactPWAInstall();
+
 
   const style = {
     backgroundColor: `${bgcolor}`,
@@ -98,29 +98,32 @@ export default function TopNav() {
     else if (currentUserRole == "annotator") return setBgColor("#fcc438");
     else if (currentUserRole == "contributor") return setBgColor("#82bb53");
     const getPostsFromTeam = [];
-    projectFirestore.collection("TEAM").onSnapshot((querySnapshot) => {
+    projectFirestore.collection("TEAM")
+    .onSnapshot((querySnapshot) => {
       querySnapshot.forEach((doc) => {
         getPostsFromTeam.push({
           ...doc.data(), //spread operator
           key: doc.id, // `id` given to us by Firebase
+            
         });
-        setTeams(getPostsFromTeam);
+        setTeams(getPostsFromTeam)
       });
     });
 
-    const getPostsTeammembers = [];
-    projectFirestore
-      .collection("TEAMMEMBERS")
-      .where("uid", "==", currentUserID)
-      .onSnapshot((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          getPostsTeammembers.push({
-            ...doc.data(), //spread operator
-            key: doc.id, // `id` given to us by Firebase
-          });
-          setTeammembers(getPostsTeammembers);
+    const getPostsTeammembers= [];
+    projectFirestore.collection("TEAMMEMBERS")
+    .where("uid","==",currentUserID)
+    .onSnapshot((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        getPostsTeammembers.push({
+          ...doc.data(), //spread operator
+          key: doc.id, // `id` given to us by Firebase
+            
         });
+        setTeammembers(getPostsTeammembers)
       });
+    });
+    
   }, []);
 
   async function handleLogout() {
@@ -153,58 +156,57 @@ export default function TopNav() {
       input: "text",
       inputPlaceholder: "Enter Team Code",
       confirmButtonText: "JOIN",
-    }).then((result) => {
+    }).then((result) => { 
       if (result.value == "") {
         result.isConfirmed = false;
         Swal.fire("Pls enter team code!", "", "warning");
       }
       if (result.isConfirmed) {
-        let check = 0;
-        let checkTeam = 0;
 
-        for (let index = 0; index < teams.length; index++) {
-          const element = teams[index].TeamCode;
-          console.log(element);
-          if (element == result.value) {
-            check = 1;
+          let check = 0
+          let checkTeam =0
+
+          for (let index = 0; index < teams.length; index++) {
+            const element = teams[index].TeamCode;
+            console.log(element)
+             if(element == result.value){
+                check=1
+              }  
           }
-        }
-
-        for (let index = 0; index < Teammembers.length; index++) {
-          const element = Teammembers[index].TeamCode;
-          if (element == result.value) {
-            checkTeam = 1;
+    
+          for (let index = 0; index < Teammembers.length; index++) {
+            const element = Teammembers[index].TeamCode;
+            if(element == result.value){
+              checkTeam=1
+            }
           }
-        }
 
-        if (check == 1) {
-          projectFirestore
+          
+          if(check== 1){
+            projectFirestore
             .collection("TEAM")
             .where("TeamCode", "==", result.value)
             .get()
             .then((props) => {
               props.forEach((doc) => {
-                if (currentUserID == doc.data().uid) {
+                if(currentUserID == doc.data().uid){
                   Swal.fire("You are already part of this team", "", "warning");
-                } else if (checkTeam == 1) {
+                }
+                else if(checkTeam ==1){
                   Swal.fire("You are already part of this team", "", "warning");
-                } else {
-                  a(
-                    result.value,
-                    doc.id,
-                    doc.data().name,
-                    doc.data().isArchive
-                  );
-                  Swal.fire("Success", "", "success");
+                }
+                else{
+                  a(result.value, doc.id, doc.data().name, doc.data().isArchive);
+                  Swal.fire("Success", "", "success")
                 }
               });
             })
             .catch((error) => {
               console.log("Error getting documents: ", error);
-            });
-        } else {
-          Swal.fire("Team code does not exist!", "", "error");
-        }
+            });  
+          }else{
+            Swal.fire("Team code does not exist!", "", "error");
+          }
       }
     });
   }
@@ -255,36 +257,22 @@ export default function TopNav() {
             {currentTeamName}
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
-          <Button
-            className="text-capitalize"
-            color="inherit"
-            href="/myTeam/gallery"
-          >
+          <Button className="text-capitalize" color="inherit" href="/myTeam/gallery">
             Projects
           </Button>
-          <Button
-            className="text-capitalize"
-            color="inherit"
-            href="/myTeam/gallery/teamMembers"
-          >
-            Team Members
+          <Button  className="text-capitalize" color="inherit" href="/myTeam/gallery/teamMembers">
+            Team Members 
             <font color="red"></font>
           </Button>
           <Box sx={{ flexGrow: 1 }} />
           {currentUserRole && <Chip style={style} label={currentUserRole} />}
-          {currentUserRole === "admin" && (
-            <IconButton color="inherit" href="/myTeam/gallery/settings">
-              <SettingsIcon />
-            </IconButton>
-          )}
+          {currentUserRole === "admin" && <IconButton color="inherit" href="/myTeam/gallery/settings">
+            <SettingsIcon />
+          </IconButton>}
         </>
       ) : (
         <>
-          <img
-            onClick={() => history.push("/")}
-            src="/images/logo.png"
-            style={{ height: "20px" }}
-          ></img>
+          <img onClick={() => history.push("/")} src="/images/logo.png" style={{height:'20px'}}></img>
 
           <Box sx={{ flexGrow: 1 }} />
 
@@ -298,7 +286,7 @@ export default function TopNav() {
 
   const installPWA = () => {
     pwaInstall({
-      title: "Install iLABEL app",
+      title: "Intall iLABEL",
       description: "Now you can use iLabel Annotation tool offline",
     })
       .then(() => alert("iLABEL installed successfully"))
@@ -308,6 +296,7 @@ export default function TopNav() {
   return (
     <>
       <Box sx={{ flexGrow: 1 }} className="mb-4">
+
         <AppBar position="static" open={open}>
           <Toolbar>
             <IconButton
@@ -350,7 +339,9 @@ export default function TopNav() {
               open={Boolean(anchorEl)}
               onClose={handleClose}
             >
-              <MenuItem>{currentUser.email}</MenuItem>
+              <MenuItem >
+                {currentUser.email}
+              </MenuItem>
               <Divider />
               <MenuItem onClick={() => history.push("/update-profile")}>
                 Profile
@@ -367,27 +358,15 @@ export default function TopNav() {
 
         <Drawer open={open} anchor={"left"} onClose={handleDrawerClose}>
           {list()}
-
-          <Box sx={{ flexGrow: 1 }} />
-
           <div>
             {supported() && !isInstalled() && (
-              <Button
-                className="text-capitalize"
-                type="button"
-                onClick={installPWA}
-                style={{
-                  height: "55px",
-                  width: "100%",
-                  color: "#272343",
-                  backgroundColor: "#ffd803",
-                }}
-              >
-                <GetAppIcon /> Install iLABEL app
-              </Button>
+              <Button className="text-capitalize" color="inherit" type="button" onClick={installPWA}>
+                Install iLABEL
+            </Button>
             )}
           </div>
         </Drawer>
+
       </Box>
     </>
   );
