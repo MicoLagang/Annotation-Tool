@@ -16,6 +16,7 @@ import {ProjectData} from "../../../store/general/types";
 import {updateProjectData} from "../../../store/general/actionCreators";
 import { useHistory } from "react-router-dom";
 
+
 interface IProps {
     updateActiveImageIndex: (activeImageIndex: number) => any;
     updateActiveLabelNameId: (activeLabelId: string) => any;
@@ -55,7 +56,9 @@ const ExitProjectPopup: React.FC<IProps> = (props) => {
         updateImageData([]);
         updateFirstLabelCreatedFlag(false);
         PopupActions.close();
-        history.push("/")
+
+        history.push("/myTeam/gallery/folder")
+        window.location.reload()
     };
 
     const onReject = () => {

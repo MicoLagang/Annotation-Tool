@@ -12,6 +12,7 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
 import SettingsIcon from "@material-ui/icons/Settings";
+import { useImage } from "../../../logic/context/imageContext";
 
 export default function TestTeam(post) {
   const teamID = localStorage.getItem("currentTeamID");
@@ -20,6 +21,7 @@ export default function TestTeam(post) {
   const currentTeamName = localStorage.getItem("currentTeamName");
   const currentUserRole = localStorage.getItem("currentUserRole");
   const uid = localStorage.getItem("currentUserUID");
+  const { imagesData, setImagesData } = useImage();
 
   projectMembersService.getRole(uid, teamID);
 
@@ -63,7 +65,9 @@ export default function TestTeam(post) {
     uid: "",
   });
 
+
   useEffect(() => {
+    // setImagesData(null)
     getValue();
   }, [loading]); // empty dependencies array => useEffect only called once
 

@@ -99,10 +99,10 @@ export class DrawUtil {
         ctx.save();
         ctx.fillStyle = color;
         ctx.beginPath();
-        ctx.moveTo(anchors[0].x, anchors[0].y);
-        for (let i = 1; i < anchors.length; i ++) {
-            ctx.lineTo(anchors[i].x, anchors[i].y);
-        }
+        // ctx.moveTo(anchors[0].x, anchors[0].y);
+        // for (let i = 1; i < anchors.length; i ++) {
+        //     ctx.lineTo(anchors[i].x, anchors[i].y);
+        // }
         ctx.closePath();
         ctx.fill();
         ctx.restore();
