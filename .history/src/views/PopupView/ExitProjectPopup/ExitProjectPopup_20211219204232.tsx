@@ -14,7 +14,6 @@ import {ImageData, LabelName} from "../../../store/labels/types";
 import {PopupActions} from "../../../logic/actions/PopupActions";
 import {ProjectData} from "../../../store/general/types";
 import {updateProjectData} from "../../../store/general/actionCreators";
-import { useHistory } from "react-router-dom";
 
 interface IProps {
     updateActiveImageIndex: (activeImageIndex: number) => any;
@@ -26,7 +25,6 @@ interface IProps {
 }
 
 const ExitProjectPopup: React.FC<IProps> = (props) => {
-    const history = useHistory();
 
     const {
         updateActiveLabelNameId,
@@ -54,10 +52,7 @@ const ExitProjectPopup: React.FC<IProps> = (props) => {
         updateActiveImageIndex(null);
         updateImageData([]);
         updateFirstLabelCreatedFlag(false);
-        
         PopupActions.close();
-        history.push("/myTeam/gallery/folder")
-        window.location.reload()
     };
 
     const onReject = () => {

@@ -50,9 +50,9 @@ class LabelsToolkit extends React.Component<IProps, IState> {
                 LabelType.IMAGE_RECOGNITION
             ] :
             [
-                // LabelType.RECT,
-                // LabelType.POINT,
-                // LabelType.LINE,
+                LabelType.RECT,
+                LabelType.POINT,
+                LabelType.LINE,
                 LabelType.POLYGON
             ];
 
