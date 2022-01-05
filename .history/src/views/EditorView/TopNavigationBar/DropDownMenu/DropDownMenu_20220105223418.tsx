@@ -6,18 +6,12 @@ import {EventType} from "../../../../data/enums/EventType";
 import {updatePreventCustomCursorStatus} from "../../../../store/general/actionCreators";
 import {AppState} from "../../../../store";
 import {connect} from "react-redux";
-import { useImage } from "../../../../logic/context/imageContext";
 
 interface IProps {
     updatePreventCustomCursorStatus: (preventCustomCursor: boolean) => any;
 }
 
-const DropDownMenu: React.FC<IProps> = ({ updatePreventCustomCursorStatus }) => {
-    
-    const { imagesData, setImagesData } = useImage()
-    const currentUserRole = localStorage.getItem('currentUserRole');
-
-
+const DropDownMenu: React.FC<IProps> = ({updatePreventCustomCursorStatus}) => {
     const topAnchor = 35;
 
     const [activeTabIdx, setActiveTabIdx] = useState(null);
@@ -89,6 +83,7 @@ const DropDownMenu: React.FC<IProps> = ({ updatePreventCustomCursorStatus }) => 
     }
 
     const getDropDownTab = (data: DropDownMenuNode, index: number) => {
+        console.log(data.name)
         return <div
             className={getDropDownMenuTabClassName(index)}
             key={index}
@@ -118,60 +113,14 @@ const DropDownMenu: React.FC<IProps> = ({ updatePreventCustomCursorStatus }) => 
                 onMouseLeave={onMouseLeaveWindow}
             >
                 {data.children.map((element: DropDownMenuNode, index: number) => {
-                    console.log(element.name)
-                    console.log(currentUserRole)
-                    console.log(imagesData)
-
-                    if (imagesData == null) {
-                        return <div className={getDropDownMenuContentOption(element.disabled)}
-                            onClick={wrapOnClick(element.onClick, element.disabled)}
-                            key={index}
-                        >
-                            <div className="Marker"/>
-                            <img src={element.imageSrc} alt={element.imageAlt}/>
-                            {element.name}
-                        </div>
-                    }
-                    if (currentUserRole == 'admin') {
-                        if (element.name == 'Edit Labels' ||
-                            element.name == 'Export Annotations' ||
-                            element.name == 'Save Annotations' ||
-                            element.name == 'Load Annotations'
-                        ) {
-                            return <div className={getDropDownMenuContentOption(element.disabled)}
-                                onClick={wrapOnClick(element.onClick, element.disabled)}
-                                key={index}
-                            >
-                                <div className="Marker"/>
-                                <img src={element.imageSrc} alt={element.imageAlt}/>
-                                {element.name}
-                            </div>
-                        }
-                        else {
-                            return <></>
-                        }
-                    }
-                    else {
-                        if (element.name == 'Edit Labels' ||
-                            element.name == 'Save Annotations' ||
-                            element.name == 'Load Annotations'
-                        ) {
-                            return <div className={getDropDownMenuContentOption(element.disabled)}
-                                onClick={wrapOnClick(element.onClick, element.disabled)}
-                                key={index}
-                            >
-                                <div className="Marker"/>
-                                <img src={element.imageSrc} alt={element.imageAlt}/>
-                                {element.name}
-                            </div>
-                        }
-                        else {
-                            return <></>
-                        }
-                    }
-
-                    
-                })}
+                    return <div className={getDropDownMenuContentOption(element.disabled)}
+                        onClick={wrapOnClick(element.onClick, element.disabled)}
+                        key={index}
+                    >
+                        <div className="Marker"/>
+                        <img src={element.imageSrc} alt={element.imageAlt}/>
+                        {element.name}
+                    </div>})}
             </div>
         } else {
             return null;

@@ -120,9 +120,8 @@ const DropDownMenu: React.FC<IProps> = ({ updatePreventCustomCursorStatus }) => 
                 {data.children.map((element: DropDownMenuNode, index: number) => {
                     console.log(element.name)
                     console.log(currentUserRole)
-                    console.log(imagesData)
 
-                    if (imagesData == null) {
+                    if (imagesData) {
                         return <div className={getDropDownMenuContentOption(element.disabled)}
                             onClick={wrapOnClick(element.onClick, element.disabled)}
                             key={index}
