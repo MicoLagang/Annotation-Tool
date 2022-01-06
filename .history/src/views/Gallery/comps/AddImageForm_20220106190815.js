@@ -27,7 +27,6 @@ import Typography from "@material-ui/core/Typography";
 import SkipPreviousIcon from "@material-ui/icons/SkipPrevious";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 import SkipNextIcon from "@material-ui/icons/SkipNext";
-import { toast, ToastContainer } from "react-toastify";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -64,8 +63,6 @@ export default function AddImageForm(post) {
   const history = useHistory();
   const timer = (ms) => new Promise((res) => setTimeout(res, ms));
   let totalImages = 0;
-
-  let uploadedImages = 0;
 
   const teamID = localStorage.getItem("currentTeamID");
   const name = localStorage.getItem("currentProjectID");
@@ -179,32 +176,23 @@ export default function AddImageForm(post) {
 
           batch.commit();
           totalImages = totalImages + 1;
-          uploadedImages = uploadedImages + 1;
           // collectionRef.add({ url, createdAt, name });
           setUrl((prevState) => [...prevState, url]);
           setUploadedImageName((prevState) => [
             ...prevState,
             { url: url, name: image.name },
           ]);
-
-          console.log(uploadedImages);
-          console.log(images.length);
-
-          if (uploadedImages == images.length) {
-            toast.success("Images uploaded successfully");
-            setTimeout(function() {
-              history.push("/myTeam/gallery/folder/imagesfolder");
-            }, 5000);
-          }
         }
       );
+
+      console.log(index);
+      console.log(images.length);
     });
   }
 
   return (
     <>
       <TopNav />
-      <ToastContainer />
       <Container
         className="mt-5 d-flex justify-content-center"
         style={{ minHeight: "100vh" }}

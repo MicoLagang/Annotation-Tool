@@ -192,9 +192,6 @@ export default function AddImageForm(post) {
 
           if (uploadedImages == images.length) {
             toast.success("Images uploaded successfully");
-            setTimeout(function() {
-              history.push("/myTeam/gallery/folder/imagesfolder");
-            }, 5000);
           }
         }
       );
