@@ -411,12 +411,6 @@ function ImageGrid() {
     setImageToValidate();
   }
 
-  function imageAcceptAnnotation() {
-    setShowReason(false);
-    setIsAnnotationAccepted(true);
-    updateAcceptReject();
-  }
-
   function deleteFolder() {
     Swal.fire({
       title: "Are you sure to delete this folder?",
@@ -964,13 +958,6 @@ function ImageGrid() {
                                   <p>Description: {imageInfo.description}</p>
                                   <p>Uploaded by: {imageInfo.uploader}</p>
                                   <p>Validated by: {imageInfo.validated}</p>
-                                  <p>{imageInfo.date}</p>
-                                  {imageInfo.isAccepted != null &&
-                                    (imageInfo.isAccepted ? (
-                                      ""
-                                    ) : (
-                                      <p>Reason: {imageInfo.reason}</p>
-                                    ))}
                                 </>
                               )}
                             </Popover>
@@ -1078,13 +1065,6 @@ function ImageGrid() {
                             <p>Description: {imageInfo.description}</p>
                             <p>Uploaded by: {imageInfo.uploader}</p>
                             <p>Validated by: {imageInfo.validated}</p>
-                            <p>{imageInfo.date}</p>
-                            {imageInfo.isAccepted != null &&
-                              (imageInfo.isAccepted ? (
-                                ""
-                              ) : (
-                                <p>Reason: {imageInfo.reason}</p>
-                              ))}
                           </>
                         )}
                       </Popover>
@@ -1193,7 +1173,7 @@ function ImageGrid() {
                         backgroundPosition: "center",
                         backgroundSize: "cover",
                         borderStyle: "solid",
-                        borderWidth: "3px",
+                        borderWidth: "5px",
                       }}
                       type="button"
                       class="btn btn-primary"
@@ -1295,17 +1275,14 @@ function ImageGrid() {
                 <div class="modal-body">
                   <>
                     <div class="d-flex justify-content-around">
-                      {!showReason && (
-                        <button
-                          type="button"
-                          class="btn btn-success"
-                          data-bs-dismiss="modal"
-                          onClick={() => imageAcceptAnnotation()}
-                        >
-                          Accept
-                        </button>
-                      )}
-
+                      <button
+                        type="button"
+                        class="btn btn-success"
+                        data-bs-dismiss="modal"
+                        onClick={() => updateAcceptReject()}
+                      >
+                        Accept
+                      </button>
                       <button
                         onClick={() => changeAcceptReject("reject")}
                         type="button"

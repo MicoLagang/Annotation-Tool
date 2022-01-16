@@ -411,12 +411,6 @@ function ImageGrid() {
     setImageToValidate();
   }
 
-  function imageAcceptAnnotation() {
-    setShowReason(false);
-    setIsAnnotationAccepted(true);
-    updateAcceptReject();
-  }
-
   function deleteFolder() {
     Swal.fire({
       title: "Are you sure to delete this folder?",
@@ -823,13 +817,12 @@ function ImageGrid() {
                             <div
                               style={cardLink}
                               className="col-lg-3 col-md-4 col-sm-6 mb-3"
+                              onClick={() => addImage(doc)}
                             >
                               <Card
                                 key={doc.id}
                                 border={`${
-                                  doc.isAccepted != null
-                                    ? `${doc.isAccepted ? "success" : "danger"}`
-                                    : "warning"
+                                  isAnnotated(doc) ? "success" : "danger"
                                 }`}
                                 className="h-100"
                                 style={{
@@ -885,13 +878,6 @@ function ImageGrid() {
                                       </p>
                                       <p>Uploaded by: {imageInfo.uploader}</p>
                                       <p>Validated by: {imageInfo.validated}</p>
-                                      <p>{imageInfo.date}</p>
-                                      {imageInfo.isAccepted != null &&
-                                        (imageInfo.isAccepted ? (
-                                          ""
-                                        ) : (
-                                          <p>Reason: {imageInfo.reason}</p>
-                                        ))}
                                     </>
                                   )}
                                 </Popover>
@@ -964,13 +950,6 @@ function ImageGrid() {
                                   <p>Description: {imageInfo.description}</p>
                                   <p>Uploaded by: {imageInfo.uploader}</p>
                                   <p>Validated by: {imageInfo.validated}</p>
-                                  <p>{imageInfo.date}</p>
-                                  {imageInfo.isAccepted != null &&
-                                    (imageInfo.isAccepted ? (
-                                      ""
-                                    ) : (
-                                      <p>Reason: {imageInfo.reason}</p>
-                                    ))}
                                 </>
                               )}
                             </Popover>
@@ -1078,13 +1057,6 @@ function ImageGrid() {
                             <p>Description: {imageInfo.description}</p>
                             <p>Uploaded by: {imageInfo.uploader}</p>
                             <p>Validated by: {imageInfo.validated}</p>
-                            <p>{imageInfo.date}</p>
-                            {imageInfo.isAccepted != null &&
-                              (imageInfo.isAccepted ? (
-                                ""
-                              ) : (
-                                <p>Reason: {imageInfo.reason}</p>
-                              ))}
                           </>
                         )}
                       </Popover>
@@ -1193,7 +1165,7 @@ function ImageGrid() {
                         backgroundPosition: "center",
                         backgroundSize: "cover",
                         borderStyle: "solid",
-                        borderWidth: "3px",
+                        borderWidth: "5px",
                       }}
                       type="button"
                       class="btn btn-primary"
@@ -1295,17 +1267,14 @@ function ImageGrid() {
                 <div class="modal-body">
                   <>
                     <div class="d-flex justify-content-around">
-                      {!showReason && (
-                        <button
-                          type="button"
-                          class="btn btn-success"
-                          data-bs-dismiss="modal"
-                          onClick={() => imageAcceptAnnotation()}
-                        >
-                          Accept
-                        </button>
-                      )}
-
+                      <button
+                        type="button"
+                        class="btn btn-success"
+                        data-bs-dismiss="modal"
+                        onClick={() => updateAcceptReject()}
+                      >
+                        Accept
+                      </button>
                       <button
                         onClick={() => changeAcceptReject("reject")}
                         type="button"

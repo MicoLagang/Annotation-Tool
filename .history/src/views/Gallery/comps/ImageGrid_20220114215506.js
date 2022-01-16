@@ -1295,17 +1295,14 @@ function ImageGrid() {
                 <div class="modal-body">
                   <>
                     <div class="d-flex justify-content-around">
-                      {!showReason && (
-                        <button
-                          type="button"
-                          class="btn btn-success"
-                          data-bs-dismiss="modal"
-                          onClick={() => imageAcceptAnnotation()}
-                        >
-                          Accept
-                        </button>
-                      )}
-
+                      <button
+                        type="button"
+                        class="btn btn-success"
+                        data-bs-dismiss="modal"
+                        onClick={() => imageAcceptAnnotation()}
+                      >
+                        Accept
+                      </button>
                       <button
                         onClick={() => changeAcceptReject("reject")}
                         type="button"

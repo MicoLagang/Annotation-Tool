@@ -411,12 +411,6 @@ function ImageGrid() {
     setImageToValidate();
   }
 
-  function imageAcceptAnnotation() {
-    setShowReason(false);
-    setIsAnnotationAccepted(true);
-    updateAcceptReject();
-  }
-
   function deleteFolder() {
     Swal.fire({
       title: "Are you sure to delete this folder?",
@@ -1193,7 +1187,7 @@ function ImageGrid() {
                         backgroundPosition: "center",
                         backgroundSize: "cover",
                         borderStyle: "solid",
-                        borderWidth: "3px",
+                        borderWidth: "5px",
                       }}
                       type="button"
                       class="btn btn-primary"
@@ -1295,17 +1289,14 @@ function ImageGrid() {
                 <div class="modal-body">
                   <>
                     <div class="d-flex justify-content-around">
-                      {!showReason && (
-                        <button
-                          type="button"
-                          class="btn btn-success"
-                          data-bs-dismiss="modal"
-                          onClick={() => imageAcceptAnnotation()}
-                        >
-                          Accept
-                        </button>
-                      )}
-
+                      <button
+                        type="button"
+                        class="btn btn-success"
+                        data-bs-dismiss="modal"
+                        onClick={() => updateAcceptReject()}
+                      >
+                        Accept
+                      </button>
                       <button
                         onClick={() => changeAcceptReject("reject")}
                         type="button"
